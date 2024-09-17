@@ -15,7 +15,7 @@ math: true
 
 2. gathering data and training a reward model
 
-   ![](/_posts/images/diagram.png)
+   ![](/assets/images/2024-09-17-reinforcement-learning-101/diagram.png)
 
    > The underlying goal is to get a model or system that takes in a sequence of text, and returns a scalar reward which should numerically represent human preference. The system can be an end-to-end LM, or a modular system outputting a reward (e.g. a model ranks outputs, and the ranking is converted to reward). These LMs for reward modeling can be both another fine-tuned LM or a LM trained from scratch on the preference data.
 
@@ -37,7 +37,7 @@ mainly refer to https://spinningup.openai.com/en/latest/spinningup/rl\_intro3.ht
 
 最简单的策略梯度形式，左边是推导，右边是所需的引理
 
-![](/_posts/images/rlhf_240902_194227_1.jpg)![](/_posts/images/rlhf_240902_194227_2.jpg)
+![](/assets/images/2024-09-17-reinforcement-learning-101/rlhf_240902_194227_1.jpg)![](/assets/images/2024-09-17-reinforcement-learning-101/rlhf_240902_194227_2.jpg)
 
 * 优化对象：参数化的策略 $\pi_{\theta}$
 
@@ -79,11 +79,11 @@ mainly refer to https://spinningup.openai.com/en/latest/spinningup/rl\_intro3.ht
 看一个代码原型：https://github.com/openai/spinningup/blob/master/spinup/examples/pytorch/pg\_math/1\_simple\_pg.py
 
 学习一个策略，试图通过左右移动小车，维持其上连接的一个竖杆的平衡，竖杆倾斜超过给定角度（±24°）即算失败
-![](/_posts/images/cart_pole.gif)
+![](/assets/images/2024-09-17-reinforcement-learning-101/cart_pole.gif)
 
 * action space:  take values `{0, 1}` indicating the direction of the fixed force the cart is pushed with.
 * Observation space:
-![](/_posts/images/image-2.png)
+![](/assets/images/2024-09-17-reinforcement-learning-101/image-2.png)
 
 * 31行构建了一个MLP作为参数化策略，size = \[4,32,2]，输入一个4维的observation向量，输出一个2维的行动向量
   ```python
@@ -212,7 +212,7 @@ epoch:  49          loss: 452.700          return: 635.750          ep_len: 635.
 
 本节介绍policy gradient的两个常见变种，它们都起到了降低估计方差和所需轨迹样本量的效果，右边是所需的引理。
 
-![](/_posts/images/rlhf_240902_194227_3.jpg)![](/_posts/images/rlhf_240902_194227_4.jpg)
+![](/assets/images/2024-09-17-reinforcement-learning-101/rlhf_240902_194227_3.jpg)![](/assets/images/2024-09-17-reinforcement-learning-101/rlhf_240902_194227_4.jpg)
 
 * Reward-to-go (RTG)：
 
@@ -259,7 +259,7 @@ Openai spinup库的 [*vanilla policy gradient*](https://spinningup.openai.com/en
 
 > VPG trains a stochastic policy in an** on-policy **way. This means that it explores by sampling actions according to the latest version of its stochastic policy.
 
-![](/_posts/images/image-1.png)
+![](/assets/images/2024-09-17-reinforcement-learning-101/image-1.png)
 
 # Proximal Policy Optimization (PPO)
 
@@ -301,7 +301,7 @@ $$L\left(s, a, \theta_{k}, \theta\right) = \min\left(\frac{\pi_{\theta}(a \mid s
 
 看一个伪代码实现：
 
-![](/_posts/images/image.png)
+![](/assets/images/2024-09-17-reinforcement-learning-101/image.png)
 
 
 
