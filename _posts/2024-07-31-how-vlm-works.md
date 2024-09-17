@@ -23,7 +23,7 @@ math: true
 
 ## ConvNets
 
-古老的视觉模型，追溯到 [*Yann LeCun in 1998*](http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf)
+古老的视觉模型，追溯到*Yann LeCun in 1998* (http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf)
 
 主要由四个部分组成，可以进行图片分类等工作
 
