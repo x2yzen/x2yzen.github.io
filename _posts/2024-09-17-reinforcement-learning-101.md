@@ -9,7 +9,7 @@ math: true
 
 来学习一下RL的大致原理
 
-# Overview
+## Overview
 
 1. Pretraining a language model (LM),
 
@@ -29,11 +29,11 @@ math: true
 
 * The reward function is a combination of the preference model and a constraint on policy shift.
 
-# Simplest Policy Gradient
+## Simplest Policy Gradient
 
 mainly refer to https://spinningup.openai.com/en/latest/spinningup/rl\_intro3.html#id7
 
-## Theory
+### Theory
 
 最简单的策略梯度形式，左边是推导，右边是所需的引理
 
@@ -74,7 +74,7 @@ mainly refer to https://spinningup.openai.com/en/latest/spinningup/rl\_intro3.ht
 >
 > We raise this point because it is common for ML practitioners to interpret a loss function as a useful signal during training—”if the loss goes down, all is well.” In policy gradients, this intuition is wrong, and you should only care about average return. The loss function means nothing
 
-## Implementation
+### Implementation
 
 看一个代码原型：https://github.com/openai/spinningup/blob/master/spinup/examples/pytorch/pg\_math/1\_simple\_pg.py
 
@@ -206,9 +206,9 @@ epoch:  49          loss: 452.700          return: 635.750          ep_len: 635.
 
 对比训练前和训练后的策略，可以看出训练后策略显著更好地掌握了平衡，长时间将竖杆维持在规定倾斜范围（±24°）之内（1s vs. 10s）
 
-# Other Forms of the Policy Gradient
+## Other Forms of the Policy Gradient
 
-## Reward-to-go Policy Gradient and Baselines
+### Reward-to-go Policy Gradient and Baselines
 
 本节介绍policy gradient的两个常见变种，它们都起到了降低估计方差和所需轨迹样本量的效果，右边是所需的引理。
 
@@ -229,7 +229,7 @@ Intuition: The most common choice of baseline is the [on-policy value function](
 
 In practice, the on-policy value function **cannot be computed exactly**, so it has to be **approximated**. This is usually done with a **neural network** which is updated concurrently with the policy.
 
-## Advantage
+### Advantage
 
 目前为止，以上章节中的梯度公式都可以写成下述形式
 
@@ -261,7 +261,7 @@ Openai spinup库的 [*vanilla policy gradient*](https://spinningup.openai.com/en
 
 ![](/assets/images/2024-09-17-reinforcement-learning-101/image-1.png)
 
-# Proximal Policy Optimization (PPO)
+## Proximal Policy Optimization (PPO)
 
 vanilla policy gradient 在使用的过程中，会观察到一旦学习率过大，single bad step can collapse policy performance，因此诞生了PPO和TRPO (trust-region policy optimization) 这一类算法，本质上都是improve a policy without stepping so far that we accidentally cause performance collapse，要求单步迭代后的策略和迭代前差距不要过大。最容易想到的penalty当然是KL divergence，事实上也确实可以这么做，但这里先介绍一个更常用也更简单的实现：PPO-clip。
 
@@ -305,7 +305,7 @@ $$L\left(s, a, \theta_{k}, \theta\right) = \min\left(\frac{\pi_{\theta}(a \mid s
 
 
 
-# Ref
+## Ref
 
 https://huggingface.co/blog/rlhf
 
