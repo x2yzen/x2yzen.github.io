@@ -1,5 +1,5 @@
 ---
-title: reinforcement learning 101
+title: Reinforcement Learning 101
 date: 2024-09-17 12:21:00 +0800
 categories: [llm]
 tags: [rlhf]     # TAG names should always be lowercase
