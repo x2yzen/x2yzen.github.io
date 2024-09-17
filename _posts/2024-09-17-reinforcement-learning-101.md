@@ -79,19 +79,13 @@ mainly refer to https://spinningup.openai.com/en/latest/spinningup/rl\_intro3.ht
 看一个代码原型：https://github.com/openai/spinningup/blob/master/spinup/examples/pytorch/pg\_math/1\_simple\_pg.py
 
 学习一个策略，试图通过左右移动小车，维持其上连接的一个竖杆的平衡，竖杆倾斜超过给定角度（±24°）即算失败
-
-* action space:  take values `{0, 1}` indicating the direction of the fixed force the cart is pushed with.
-
-* Observation space:
-
-  ![](images/image-2.png)
-
 ![](images/cart_pole.gif)
 
-
+* action space:  take values `{0, 1}` indicating the direction of the fixed force the cart is pushed with.
+* Observation space:
+![](images/image-2.png)
 
 * 31行构建了一个MLP作为参数化策略，size = \[4,32,2]，输入一个4维的observation向量，输出一个2维的行动向量
-
   ```python
   # make core of policy network
   logits_net = mlp(sizes=[obs_dim]+hidden_sizes+[n_acts])
