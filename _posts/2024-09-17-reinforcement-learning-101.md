@@ -262,6 +262,7 @@ Openai spinup库的 [*vanilla policy gradient*](https://spinningup.openai.com/en
 ![](/assets/images/2024-09-17-reinforcement-learning-101/image-1.png)
 
 ## Proximal Policy Optimization (PPO)
+### Theory
 
 vanilla policy gradient 在使用的过程中，会观察到一旦学习率过大，single bad step can collapse policy performance，因此诞生了PPO和TRPO (trust-region policy optimization) 这一类算法，本质上都是improve a policy without stepping so far that we accidentally cause performance collapse，要求单步迭代后的策略和迭代前差距不要过大。最容易想到的penalty当然是KL divergence，事实上也确实可以这么做，但这里先介绍一个更常用也更简单的实现：PPO-clip。
 
@@ -303,7 +304,33 @@ $$L\left(s, a, \theta_{k}, \theta\right) = \min\left(\frac{\pi_{\theta}(a \mid s
 
 ![](/assets/images/2024-09-17-reinforcement-learning-101/image.png)
 
+### Implementation
 
+使用huggingface [TRL](https://huggingface.co/docs/trl/index) (Transformer Reinforcement Learning) 提供的[PPO trainer](https://huggingface.co/docs/trl/ppo_trainer)来完成一次RLHF
+
+https://github.com/huggingface/trl/blob/main/examples/notebooks/gpt2-sentiment.ipynb
+
+![](/assets/images/2024-09-17-reinforcement-learning-101/script.png)
+
+简单来说，这个项目使用[imdb影评数据库](https://huggingface.co/datasets/stanfordnlp/imdb?row=0)，截取开头的一段随机语料，然后让模型（GPT-2）续写，
+
+![](/assets/images/2024-09-17-reinforcement-learning-101/image-5.png)
+
+reward model是一个sentiment analysis model，判断review的情感色彩是积极的还是消极的，score是对应的logit
+
+```python
+text = "this movie was really bad!!"
+sentiment_pipe(text, **sent_kwargs)
+---
+[{'label': 'NEGATIVE', 'score': 2.335048198699951},
+ {'label': 'POSITIVE', 'score': -2.726576566696167}]
+```
+
+因此，这个RLHF对齐的过程实际上就是让模型尽量输出积极的评论。以下是训练过程的wandb log以及抽case，可以发现确实达成了目的
+
+![](/assets/images/2024-09-17-reinforcement-learning-101/image-3.png)
+
+![](/assets/images/2024-09-17-reinforcement-learning-101/image-4.png)
 
 ## Ref
 
