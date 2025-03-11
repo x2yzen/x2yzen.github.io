@@ -56,7 +56,7 @@ $)项 -> 这个就是 clip 的意思，用这个超参给收益加上一个 cap�
 
 ## Implement
 
-![](/assets/images/2025-03-04-mathematical-foundations-of-reinforcement-learningEEjCb2vgWo0OETxAd3yj6VjQpNg.png)
+![](/assets/images/2025-03-04-mathematical-foundations-of-reinforcement-learning/EEjCb2vgWo0OETxAd3yj6VjQpNg.png)
 
 参考 trl-ppo_trainer（ [https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117](https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117)）的具体实现：
 
@@ -172,7 +172,7 @@ return (values * mask).sum() / mask.sum()
 
 由于deepseek-R1（https://arxiv.org/abs/2501.12948）而闻名于世的新概念，实际上的改动也非常小，观察下式：
 
-![](/assets/images/2025-03-04-mathematical-foundations-of-reinforcement-learningWcblbZUKwofOGoxqewhj6ea8pEb.png)
+![](/assets/images/2025-03-04-mathematical-foundations-of-reinforcement-learning/WcblbZUKwofOGoxqewhj6ea8pEb.png)
 
 实际上对比CLIP-PPO就只有两点区别：
 
