@@ -59,7 +59,7 @@ $)项 -> 这个就是 clip 的意思，用这个超参给收益加上一个 cap�
 
 ### Implementation
 
-![](static/SO1HbDlfmosLJJx46ZMjVJSkprf.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/SO1HbDlfmosLJJx46ZMjVJSkprf.png)
 
 参考 trl-ppo_trainer（ [https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117](https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117)）的具体实现：
 
@@ -163,29 +163,29 @@ return (values * mask).sum() / mask.sum()
 
 使用[yelp_review_full](https://huggingface.co/datasets/Yelp/yelp_review_full)语料库，截取开头让模型续写，目标是通过RLHF来强行输出好评（即使原来是0分也得圆回来=。=）。概念验证方便起见，模型选择了比较新的小尺寸模型[Qwen2.5-1.5B-base](https://huggingface.co/Qwen/Qwen2.5-1.5B)，硬件是Tesla L4 24G *1
 
-![](static/OrXmbRuvgoo9jrxFJPHjlnUppYf.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/OrXmbRuvgoo9jrxFJPHjlnUppYf.png)
 
 在RL之前先做了一个SFT阶段，用同样的数据集，使用r=128 Lora微调了Qwen2.5-1.5B-base大约~1%的参数，让模型熟悉yelp review的画风，经验表明这样续写出来会更自然一些，从指标看也有一定的效果（[script](https://code.byted.org/renxinyuyang/llm-trials/blob/dev/sft-lora.py), [run log](https://wandb.ai/x2yzen-freelance/huggingface/runs/ymr65k8x?nw=nwuserx2yzen)）
 
-![](static/MYI7bNvaooMmnPxkTSrjysOOpHf.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/MYI7bNvaooMmnPxkTSrjysOOpHf.png)
 
 在RL阶段，使用一个现成的文本情感分类模型（[distilbert-base-multilingual-cased-sentiments-student](https://huggingface.co/lxyuan/distilbert-base-multilingual-cased-sentiments-student)）作为RM，以POSITIVE label的logit作为reward，使用上文读过的 [TRL](https://huggingface.co/docs/trl/index) (Transformer Reinforcement Learning) 提供的[PPO trainer](https://huggingface.co/docs/trl/ppo_trainer)来完成一次RLHF，让上一步中微调过的Qwen2.5-1.5B进行对齐（[script](https://code.byted.org/renxinyuyang/llm-trials/blob/dev/sentiment-rl.py), [run log](https://wandb.ai/x2yzen-freelance/trl/runs/g82qp1tv?nw=nwuserx2yzen)）
 
 可以看到随着训练的进行，模型输出的reward分数逐渐增加并趋于稳定，表明模型更稳定地输出了积极的回复
 
-![](static/M2GEb5jbxoejONx3ntljxTj8pFe.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/M2GEb5jbxoejONx3ntljxTj8pFe.png)
 
 而与原始模型的差异也经过一段上升后保持稳定
 
-![](static/MKusbh29GocdW9xhfqEj3D8upsh.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/MKusbh29GocdW9xhfqEj3D8upsh.png)
 
 从指标上看整体是符合预期的，来抽一些典型的case，看看训练前和训练后模型对同一个输入的反馈是如何变化的：
 
-![](static/EzqpbHpaUoszHSxJn4xjfWV3pmc.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/EzqpbHpaUoszHSxJn4xjfWV3pmc.png)
 
-![](static/Andxb6lhGo4qqoxya1ejCim3pne.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/Andxb6lhGo4qqoxya1ejCim3pne.png)
 
-![](static/SUHpblFUcoCuaUx4WhVjbmfBpsc.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/SUHpblFUcoCuaUx4WhVjbmfBpsc.png)
 
 ### Discussion
 
@@ -199,7 +199,7 @@ return (values * mask).sum() / mask.sum()
 
 由于deepseek-R1（https://arxiv.org/abs/2501.12948）而闻名于世的新概念，实际上的改动也非常小，观察下式：
 
-![](static/IuZobftE6oXxNox62QDjozd3pGg.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/IuZobftE6oXxNox62QDjozd3pGg.png)
 
 实际上对比CLIP-PPO就只有两点区别：
 
