@@ -1,19 +1,20 @@
-
 ---
-title: Transformer from scratch
+title: Transformer from Scratch
 date: 2025-01-31 08:00:00 +0800
-categories: [llm]
-tags: [llm]     # TAG names should always be lowercase
+categories: [language_model]
+tags: [llm] 
 pin: true
 math: true
 ---
 
-# Original design
+尽量少依赖地构建 transformer 原型
+
+## Original design
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/SWXWbBautoe3QHx7GTijr8bTpxi.png)
 ![](/assets/images/2025-01-31-transformer-from-scratch/OITebUeGaoNz7axNMTFju39lpAb.png)
 
-# Demo implementation
+### Demo implementation
 
 ```python
 import torch
@@ -244,17 +245,17 @@ if __name__ == "__main__":
 
 *或者参考这个项目：[https://github.com/jingyaogong/minimind](https://github.com/jingyaogong/minimind)
 
-# Explanation step by step
+### Explanation step by step
 
 对照以下笔记和代码运行的 debug 断点，理解每一个代码模块的作用
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/E0RWbBIeAoWKtmx7ydwjlocmpCg.jpg)
 
-# Positional embedding
+## Positional embedding
 
 Ref: Sinusoidal and RoPE positional embedding ([youtube](https://www.youtube.com/watch?v=GQPOtyITy54))
 
-## Absolute Positional Embedding
+### Absolute Positional Embedding
 
 The position of each token is explicitly represented by a unique embedding vector. This vector is either added to or concatenated with the word embeddings before being input into the transformer layers.Sinusoidal encoding is a common implementation
 
@@ -268,15 +269,15 @@ $$
 
 As could be seen in the picture, the change for each position is a bit erratic and difficult to find patterns
 
-## Relative embedding
+### Relative embedding
 
-### T5 relative bias
+#### T5 relative bias
 
 add pair-wise distance embedding to the attn matrix, the addition is the same as long as the relative position between the token pair keeps the same (e.g. appending prefix or suffix does not effect the embeding)
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/QID5bZloSoCo2IxiufAjeNW9pVf.png)
 
-### RoPE
+#### RoPE
 
 - split q and k vectors, 2 dimensions each (tot. d_model/2 slices)
 - assign each slice a unique \theta value
@@ -307,7 +308,7 @@ The relative (angular) position between tokens is preserved and is more predicta
 ![](/assets/images/2025-01-31-transformer-from-scratch/VLK9bcvTqo8hbVxsnNwjgFmepOh.png)
 ![](/assets/images/2025-01-31-transformer-from-scratch/LYD9bKopwo4KmwxnGGujJ4P0p2c.png)
 
-## Position Interpolation
+### Position Interpolation
 
 讨论基于 RoPE 进行 context window extension 的方法。总的来说各类方法都可以概述为：
 
@@ -352,7 +353,7 @@ $$
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/S4RybsiuloIV3exV91CjnSgRptw.png)
 
-# Mixture-of-Experts (MoE)
+## Mixture-of-Experts (MoE)
 
 ([ref](https://huggingface.co/blog/moe#what-is-a-mixture-of-experts-moe))
 
@@ -365,7 +366,7 @@ MoEs:
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/R0sSb2RsCo8zgVxgnYMj5UrCpfg.png)
 
-## Motivation
+### Motivation
 
 最主要的目的是想扩大模型容量（以参数量计），但在计算量上妥协。i.e. scaling model capacity without proportional compute cost
 
@@ -375,19 +376,18 @@ MoEs:
   - For example, in a model with 100 experts where only 2 are active per input, the computational cost is equivalent to a much smaller dense model.
   - This enables training and inference on much larger models than would be feasible with dense architectures.
 
-## 主要结构
+### 主要结构
 
 - Sparse MoE layers are used instead of dense feed-forward network (FFN) layers.
 - A gate network or router, that determines which tokens are sent to which expert
 
-## 实现细节
+### 实现细节
 
 - 怎么处理 top-k masking 带来的 indifferentiable：When performing backpropagation in this setup, the top-k hard masking step is effectively ignored during the gradient computation. Instead, the loss propagates gradients back through the original scores (before the masking)
 - Load balancing loss：为了避免 expert 之间分到的 token sample 不均衡，会额外加上一个 load balance loss，经常被定义为每个 batch 中每个 expert 被选到的频率与均匀分布的 kl-div，在最后一层累加在一块，再和 target loss 加和反向传播
   ![](/assets/images/2025-01-31-transformer-from-scratch/Pr5ybDr8ooKyAHxRnmkjR0tEpZe.png)
 
-  ```python
-  ```
+```
 
 # Compute the main task loss
 
@@ -403,7 +403,7 @@ total_loss = main_loss + 0.1 * total_balance_loss  # Weight balance loss as need
 
 ```
 
-## fine-tuning MoEs
+### fine-tuning MoEs
 
 - more **prone to overfitting***, so we can explore** higher regularization (e.g. dropout)** within the experts themselves (e.g. we can have one dropout rate for the dense layers and another, higher, dropout for the sparse layers). ***reason**: each expert sees a smaller fraction of the overall dataset during training and has less diverse data to learn from. It may overfit to the specific patterns in its assigned subset, leading to poorer generalization; the  sparse model typically has high model capacity per input
 
@@ -413,7 +413,7 @@ total_loss = main_loss + 0.1 * total_balance_loss  # Weight balance loss as need
 
 - different fine-tuning **hyperparameter setups** - e.g., sparse models tend to benefit more from smaller batch sizes and higher learning rates.
 
-# Useful Resources
+## Useful Resources
 
 - The paper "attention is all you need" ([arxiv](https://arxiv.org/abs/1706.03762))
 
@@ -421,4 +421,3 @@ total_loss = main_loss + 0.1 * total_balance_loss  # Weight balance loss as need
 
 - The original demo implementation ([link](https://www.datacamp.com/tutorial/building-a-transformer-with-py-torch))
 
-```

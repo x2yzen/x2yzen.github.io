@@ -1,33 +1,13 @@
 ---
-title: Reinforcement Learning 101
+title: Policy Gradient Case Study
 date: 2024-09-17 12:21:00 +0800
-categories: [llm]
-tags: [rlhf]     # TAG names should always be lowercase
+categories: [reinforcement_learning]
+tags: [rl]     # TAG names should always be lowercase
 pin: true
 math: true
 ---
 
-来学习一下RL的大致原理
-
-## Overview
-
-1. Pretraining a language model (LM),
-
-2. gathering data and training a reward model
-
-   ![](/assets/images/2024-09-17-reinforcement-learning-101/diagram.png)
-
-   > The underlying goal is to get a model or system that takes in a sequence of text, and returns a scalar reward which should numerically represent human preference. The system can be an end-to-end LM, or a modular system outputting a reward (e.g. a model ranks outputs, and the ranking is converted to reward). These LMs for reward modeling can be both another fine-tuned LM or a LM trained from scratch on the preference data.
-
-3. fine-tuning the LM with reinforcement learning.
-
-* First, the policy is a language model that takes in a prompt and returns a sequence of text (or just probability distributions over text)
-
-* The action space of this policy is all the tokens corresponding to the vocabulary of the language model (often on the order of 50k tokens)
-
-* the observation space is the distribution of possible input token sequences, which is also quite large given previous uses of RL (the dimension is approximately the size of vocabulary ^ length of the input token sequence)
-
-* The reward function is a combination of the preference model and a constraint on policy shift.
+推导 policy gradient 的常见形态，并用于一个小车控制平衡的demo
 
 ## Simplest Policy Gradient
 
@@ -260,85 +240,3 @@ Openai spinup库的 [*vanilla policy gradient*](https://spinningup.openai.com/en
 > VPG trains a stochastic policy in an** on-policy **way. This means that it explores by sampling actions according to the latest version of its stochastic policy.
 
 ![](/assets/images/2024-09-17-reinforcement-learning-101/image-1.png)
-
-## Proximal Policy Optimization (PPO)
-### Theory
-
-vanilla policy gradient 在使用的过程中，会观察到一旦学习率过大，single bad step can collapse policy performance，因此诞生了PPO和TRPO (trust-region policy optimization) 这一类算法，本质上都是improve a policy without stepping so far that we accidentally cause performance collapse，要求单步迭代后的策略和迭代前差距不要过大。最容易想到的penalty当然是KL divergence，事实上也确实可以这么做，但这里先介绍一个更常用也更简单的实现：PPO-clip。
-
-$$\theta_{k+1} = \arg\max_{\theta} \mathbb{E}_{s, a \sim \pi_{\theta_k}} \left[ \mathbb{E}_{\theta_k} \left[ L\left(s, a, \theta_k, \theta\right) \right] \right]$$
-
-其中
-
-$$L\left(s, a, \theta_{k}, \theta\right) = \min\left(\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)} A^{\pi_{\theta_{k}}}(s, a), \quad g\left(\epsilon, A^{\pi_{\theta_{k}}}(s, a)\right)\right)$$
-
-$$g(\epsilon, A) = \left\{
-\begin{array}{ll}
-(1 + \epsilon) A & \text{if } A \geq 0, \\
-(1 - \epsilon) A & \text{if } A < 0.
-\end{array}
-\right.$$
-
-看起来挺复杂，拆解一下来理解：
-
-如果当前(s,a)的advantage>0，上面的式子变成：
-
-$$L\left(s, a, \theta_{k}, \theta\right) = \min\left(\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)}, (1+\epsilon)\right) A^{\pi_{\theta_{k}}}(s, a)$$
-
-对比一下VPG的式子，主要有两点不同：
-
-1. $\pi_{\theta}$相关项由当前步变成了当前步与下一步的概率比值（多了一个分母），并且去掉了log scale -> 从intuition上，仍然是使用advantage来boost正确的action发生的概率（准确地说，相对于上一版策略的相对概率）；相对值的引入以及logscale的删除在数学推导上导致什么结果，还没有严密地看过，先留在这。
-
-   > Quote from gpt-o1: The PPO formula leads to a valid optimization objective by providing a surrogate loss function that approximates the policy gradient while incorporating mechanisms to ensure stability and efficiency. The removal of the logarithm and the introduction of the probability ratio and clipping are deliberate modifications to address practical challenges in policy optimization.
-   >
-   > * **Theoretical Justification**: PPO's objective can be justified as a practical approximation to optimizing the expected return with constraints, similar to TRPO.
-   >
-   > * **Practical Effectiveness**: PPO strikes a balance between theoretical soundness and empirical performance, making it a widely adopted algorithm in reinforcement learning.
-
-2. 多了一个$\epsilon
-   $项 -> 这个就是clip的意思，用这个超参给收益加上一个cap，避免步子太大。
-
-如果当前(s,a)的advantage < 0，推导是类似的，这个目标函数会抑制不正确的action发生的概率，就不赘述了。
-
-看一个伪代码实现：
-
-![](/assets/images/2024-09-17-reinforcement-learning-101/image.png)
-
-### Implementation
-
-使用huggingface [TRL](https://huggingface.co/docs/trl/index) (Transformer Reinforcement Learning) 提供的[PPO trainer](https://huggingface.co/docs/trl/ppo_trainer)来完成一次RLHF
-
-https://github.com/huggingface/trl/blob/main/examples/notebooks/gpt2-sentiment.ipynb
-
-![](/assets/images/2024-09-17-reinforcement-learning-101/script.png)
-
-简单来说，这个项目使用[imdb影评数据库](https://huggingface.co/datasets/stanfordnlp/imdb?row=0)，截取开头的一段随机语料，然后让模型（GPT-2）续写，
-
-![](/assets/images/2024-09-17-reinforcement-learning-101/image-5.png)
-
-reward model是一个sentiment analysis model，判断review的情感色彩是积极的还是消极的，score是对应的logit
-
-```python
-text = "this movie was really bad!!"
-sentiment_pipe(text, **sent_kwargs)
----
-[{'label': 'NEGATIVE', 'score': 2.335048198699951},
- {'label': 'POSITIVE', 'score': -2.726576566696167}]
-```
-
-因此，这个RLHF对齐的过程实际上就是让模型尽量输出积极的评论。以下是训练过程的wandb log以及抽case，可以发现确实达成了目的
-
-![](/assets/images/2024-09-17-reinforcement-learning-101/image-3.png)
-
-![](/assets/images/2024-09-17-reinforcement-learning-101/image-4.png)
-
-## Ref
-
-https://huggingface.co/blog/rlhf
-
-https://huggingface.co/learn/deep-rl-course/en/unitbonus3/rlhf
-
-https://spinningup.openai.com/en/latest/algorithms/ppo.html
-
-https://spinningup.openai.com/en/latest/spinningup/rl\_intro3.html
-
