@@ -65,12 +65,13 @@ $)项 -> 这个就是 clip 的意思，用这个超参给收益加上一个 cap�
 
 1. 从 655 行的 step 函数开始看起，输入是：
 
-   1. queries (batch_size, q_seq_len)
-   2. responses  (batch_size, resp_seq_len)
-   3. scores (batch_size,)
+   - queries (batch_size, q_seq_len)
+   - responses  (batch_size, resp_seq_len)
+   - scores (batch_size,)
 2. 747 行 [AutoModelForCausalLMWithValueHead](https://github.com/huggingface/trl/blob/v0.11.2/trl/models/modeling_value_head.py#L61) 进行 forward，计算出了每一个样本（q+resp）每一位的 conditional probability _all_logprobs _(batch_size, q_seq_len+resp_seq_len)和_values _(batch_size, q_seq_len+resp_seq_len)，当然，由于 q 部分的数字都不做数，在后续计算的时候它们会被_mask_掩盖掉
 
-   ```
+
+```python
 with torch.no_grad():
 all_logprobs, logits_or_none, values, masks = self.batched_forward_pass(
 self.model,
@@ -84,12 +85,14 @@ return_logits=full_kl_penalty,
 ```
 
 3. 777行的compute_reward函数计算出了每个样本中，每一个位置的rewards (batch_size, q_seq_len+resp_seq_len)
-	```
+
+```python
 rewards, non_score_reward, kls = self.compute_rewards(scores, all_logprobs, ref_logprobs, masks)
 ```
 
 具体来看，对于每个样本，non_score_reward (q_seq_len+resp_seq_len,) 由当前模型与参考模型（没有经过RL的模型）下该样本的logprob差异得到（最简单的做法就是按位减法），第11行在最后一个mask非0位（也就是resp的结尾）加上了reward model提供的score，成为了最终的reward——容易理解，由于目前的rewards model只对一个完成的序列进行打分，因此在最后一个状态之前，reward都只有惩罚项（与原始分布的区别越大，负的越多），直到轨迹达到完成状态，这个状态额外加上一个reward model给出的评分
-```
+
+```python
 for score, logprob, ref_logprob, mask in zip(scores, logprobs, ref_logprobs, masks):
 # compute KL penalty (from difference in logprobs)
 kl = self._kl_penalty(logprob, ref_logprob)
@@ -114,8 +117,7 @@ $$\hat{A}_{t}^{(1)} := \delta_{t}^{V} = r_t + \gamma V(s_{t+1}) - V(s_t)$$
 进入下一个循环，计算倒数第二个状态，它的nextvalues等于最终状态的value，delta也按照上式进行估计，而L5则体现了GAE估计量（
 $\sum_{l=0}^{\infty} (\gamma \lambda)^l \delta_{t+l}^V$）l上限取1的形式，也就是说一定程度上使用$\delta_{t+1}^V$和$\delta_{t}^V$加权的方式进行了bias和variance的tradeoff。后续循环逻辑类似，这样就得到了每个样本每一位的advantages (batch_size, q_seq_len+resp_seq_len)
 
-```
-
+```python
 lastgaelam = 0
 for t in reversed(range(gen_len)):
 nextvalues = values[:, t + 1] if t < gen_len - 1 else 0.0
@@ -126,7 +128,7 @@ advantages_reversed.append(lastgaelam)
 ```
 
 5. 832行开始实际的训练
-	```
+```python
 train_stats = self.train_minibatch(...)
 ```
 
@@ -134,7 +136,8 @@ train_stats = self.train_minibatch(...)
 - 第一项是value function loss，衡量每个样本每一位上value function的对rtg预测的准确程度，并且进行了clip；
 - 另一项是policy gradient loss，计算的是每个样本每一位的$\mathbb{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{T}\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)}A^{\pi_{\theta}}\left(s_{t}, a_{t}\right)\right]$，并且进行了clip；
 - masked_mean函数以所有mask非0位取平均的方式，将上述loss转化为标量
-```
+
+```python
 vf_losses1 = (vpreds - returns) ** 2
 vf_losses2 = (vpredclipped - returns) ** 2
 vf_loss = 0.5 * masked_mean(torch.max(vf_losses1, vf_losses2), mask)
