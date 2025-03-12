@@ -1,6 +1,6 @@
 ---
 title: Reinforcement Learning in Language Models
-date: 2025-03-04 17:00:00 +0800
+date: 2025-03-12 17:00:00 +0800
 categories: [language_models]
 tags: [llm,rl]
 pin: false
