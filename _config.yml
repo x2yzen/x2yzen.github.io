@@ -14,9 +14,9 @@ timezone: Asia/Hong_Kong
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: ZenSpace # the main title
+title: concertyy # the main title
 
-tagline: Random Thoughts on Random Stuffs # it will display as the subtitle
+tagline: orchestra of random thoughts # it will display as the subtitle
 
 description: "" # used by seo meta and the atom feed
 
@@ -33,7 +33,7 @@ url: ""
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: rexzen
+  name: Rex
   email: rxyysdx@gmail.com # change to your email address
   links:
     # The first element serves as the copyright owner's link
@@ -57,7 +57,7 @@ webmaster_verifications:
 # Web Analytics Settings
 analytics:
   google:
-    id: # fill in your Google Analytics ID
+    id: G-F719R3KWTZ
   goatcounter:
     id: # fill in your GoatCounter ID
   umami:

@@ -1,17 +1,19 @@
 ---
 title: Mathematical Foundations of Reinforcement Learning
 date: 2025-03-04 17:00:00 +0800
-categories: [rl]
-tags: [rl]     # TAG names should always be lowercase
+categories: [reinforcement_learning]
+tags: [rl]
 pin: true
 math: true
 ---
 
-# Mathematical Foundations of Reinforcement Learning
-
 # Overview
 
-感觉对强化学习相关内容的理解一直是似是而非的，一直想找个机会理一下。参考公开课 _Mathematical Foundations of Reinforcement Learning _([Youtube series](https://www.youtube.com/watch?v=6M-hpwj6Kb8&list=PLEhdbSEZZbDYwsXT1NeBZbmPCbIIqlgLS&index=13) and[ the book](https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning))的内容，这门课一个比较好的地方是把强化学习的很多概念比较有效地串起来了，总结来说：
+Mathematical Foundations of Reinforcement Learning([Youtube series](https://www.youtube.com/watch?v=6M-hpwj6Kb8&list=PLEhdbSEZZbDYwsXT1NeBZbmPCbIIqlgLS&index=13) and[ the book](https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning))的笔记。  
+
+这门课一个比较好的地方是把强化学习的很多概念比较有效地串起来了，总结来说：
+
+![](/assets/images/2025-03-04-mathematical-foundations-of-reinforcement-learning/wb1.png)
 
 1. 强化学习的核心问题是找到最优策略（或者对偶地，最优价值函数），也就是求解_Bellman optimal equation (BOE）_；下面都是求解方法
 2. BOE 的等号两边涉及策略和价值函数两个相互 dependent 的变量，采用迭代直至收敛的方法来求解 <- _value/policy iteration_
