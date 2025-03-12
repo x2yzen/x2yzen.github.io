@@ -3,7 +3,7 @@ title: Policy Gradient Case Study
 date: 2024-09-17 12:21:00 +0800
 categories: [reinforcement_learning]
 tags: [rl]     # TAG names should always be lowercase
-pin: true
+pin: false
 math: true
 ---
 

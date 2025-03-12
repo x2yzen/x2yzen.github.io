@@ -3,7 +3,7 @@ title: Transformer from Scratch
 date: 2025-01-31 08:00:00 +0800
 categories: [language_model]
 tags: [llm] 
-pin: true
+pin: false
 math: true
 ---
 

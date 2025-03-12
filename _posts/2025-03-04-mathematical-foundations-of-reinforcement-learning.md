@@ -3,11 +3,11 @@ title: Mathematical Foundations of Reinforcement Learning
 date: 2025-03-04 17:00:00 +0800
 categories: [reinforcement_learning]
 tags: [rl]
-pin: true
+pin: false
 math: true
 ---
 
-# Overview
+## Overview
 
 Mathematical Foundations of Reinforcement Learning([Youtube series](https://www.youtube.com/watch?v=6M-hpwj6Kb8&list=PLEhdbSEZZbDYwsXT1NeBZbmPCbIIqlgLS&index=13) and[ the book](https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning))的笔记。  
 

@@ -1,9 +1,9 @@
 ---
 title: How VLM Works
 date: 2024-07-31 08:00:00 +0800
-categories: [llm]
+categories: [language_model]
 tags: [vlm]     # TAG names should always be lowercase
-pin: true
+pin: false
 math: true
 ---
 梳理视觉模型的发展历程。
