@@ -1,7 +1,7 @@
 ---
 title: Reinforcement Learning in Language Models
 date: 2025-03-12 17:00:00 +0800
-categories: [language_models]
+categories: [language_model]
 tags: [llm,rl]
 pin: false
 math: true
@@ -64,14 +64,12 @@ $)项 -> 这个就是 clip 的意思，用这个超参给收益加上一个 cap�
 参考 trl-ppo_trainer（ [https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117](https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117)）的具体实现：
 
 1. 从 655 行的 step 函数开始看起，输入是：
-
    - queries (batch_size, q_seq_len)
    - responses  (batch_size, resp_seq_len)
    - scores (batch_size,)
 2. 747 行 [AutoModelForCausalLMWithValueHead](https://github.com/huggingface/trl/blob/v0.11.2/trl/models/modeling_value_head.py#L61) 进行 forward，计算出了每一个样本（q+resp）每一位的 conditional probability _all_logprobs _(batch_size, q_seq_len+resp_seq_len)和_values _(batch_size, q_seq_len+resp_seq_len)，当然，由于 q 部分的数字都不做数，在后续计算的时候它们会被_mask_掩盖掉
 
-
-```python
+	```python
 with torch.no_grad():
 all_logprobs, logits_or_none, values, masks = self.batched_forward_pass(
 self.model,
@@ -79,38 +77,34 @@ queries,
 responses,
 model_inputs,
 response_masks=response_masks,
-return_logits=full_kl_penalty,
-)
-
-```
+return_logits=full_kl_penalty,)
+	```
 
 3. 777行的compute_reward函数计算出了每个样本中，每一个位置的rewards (batch_size, q_seq_len+resp_seq_len)
-
-```python
-rewards, non_score_reward, kls = self.compute_rewards(scores, all_logprobs, ref_logprobs, masks)
-```
-
+	```python
+	rewards, non_score_reward, kls = self.compute_rewards(scores, all_logprobs, ref_logprobs, masks)
+	```
 具体来看，对于每个样本，non_score_reward (q_seq_len+resp_seq_len,) 由当前模型与参考模型（没有经过RL的模型）下该样本的logprob差异得到（最简单的做法就是按位减法），第11行在最后一个mask非0位（也就是resp的结尾）加上了reward model提供的score，成为了最终的reward——容易理解，由于目前的rewards model只对一个完成的序列进行打分，因此在最后一个状态之前，reward都只有惩罚项（与原始分布的区别越大，负的越多），直到轨迹达到完成状态，这个状态额外加上一个reward model给出的评分
 
-```python
-for score, logprob, ref_logprob, mask in zip(scores, logprobs, ref_logprobs, masks):
-# compute KL penalty (from difference in logprobs)
-kl = self._kl_penalty(logprob, ref_logprob)
-kls.append(kl)
-non_score_reward = -self.kl_ctl.value * kl
-non_score_rewards.append(non_score_reward)
-reward = non_score_reward.clone()
-last_non_masked_index = mask.nonzero()[-1]
-
-# reward is preference model score + KL penalty
-reward[last_non_masked_index] += score
-rewards.append(reward)
-```
+	```python
+	for score, logprob, ref_logprob, mask in zip(scores, logprobs, ref_logprobs, masks):
+	# compute KL penalty (from difference in logprobs)
+	kl = self._kl_penalty(logprob, ref_logprob)
+	kls.append(kl)
+	non_score_reward = -self.kl_ctl.value * kl
+	non_score_rewards.append(non_score_reward)
+	reward = non_score_reward.clone()
+	last_non_masked_index = mask.nonzero()[-1]
+	
+	# reward is preference model score + KL penalty
+	reward[last_non_masked_index] += score
+	rewards.append(reward)
+	```
 
 4. 回到step函数，781行compute_advantages函数计算了关键的advantages
-	```
+	```python
 values, advantages, returns = self.compute_advantages(values, rewards, masks)
-```
+	```
 
 具体来看：loop从每个样本的最后一个状态开始，由于已经没有下一个state，因此第2行nextvalues为0，按照前一节讨论过的GAE，该状态的delta直接估计为回报减去本状态的价值（第4行），而第5行中由于lastgaelam初始值为0，该状态的advantage直接用delta估计
 $$\hat{A}_{t}^{(1)} := \delta_{t}^{V} = r_t + \gamma V(s_{t+1}) - V(s_t)$$
