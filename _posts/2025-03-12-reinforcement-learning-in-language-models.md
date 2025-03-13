@@ -108,8 +108,8 @@ values, advantages, returns = self.compute_advantages(values, rewards, masks)
 
 	具体来看：loop从每个样本的最后一个状态开始，由于已经没有下一个state，因此第2行nextvalues为0，按照前一节讨论过的GAE，该状态的delta直接估计为回报减去本状态的价值（第4行），而第5行中由于lastgaelam初始值为0，该状态的advantage直接用delta估计
 	$$\hat{A}_{t}^{(1)} := \delta_{t}^{V} = r_t + \gamma V(s_{t+1}) - V(s_t)$$
-	进入下一个循环，计算倒数第二个状态，它的nextvalues等于最终状态的value，delta也按照上式进行估计，而L5则体现了GAE估计量（
-	$\sum_{l=0}^{\infty} (\gamma \lambda)^l \delta_{t+l}^V$）l上限取1的形式，也就是说一定程度上使用$\delta_{t+1}^V$和$\delta_{t}^V$加权的方式进行了bias和variance的tradeoff。后续循环逻辑类似，这样就得到了每个样本每一位的advantages (batch_size, q_seq_len+resp_seq_len)
+	进入下一个循环，计算倒数第二个状态，它的nextvalues等于最终状态的value，delta也按照上式进行估计，而L5则体现了GAE估计量 
+	$$\sum_{l=0}^{\infty} (\gamma \lambda)^l \delta_{t+l}^V$$	l上限取1的形式，也就是说一定程度上使用$$\delta_{t+1}^V$$和$$\delta_{t}^V$$加权的方式进行了bias和variance的tradeoff。后续循环逻辑类似，这样就得到了每个样本每一位的advantages (batch_size, q_seq_len+resp_seq_len)
 
 	```python
 	lastgaelam = 0
@@ -128,7 +128,9 @@ values, advantages, returns = self.compute_advantages(values, rewards, masks)
 
 	主要关注一下loss的计算的方式，分为两项：
 	- 第一项是value function loss，衡量每个样本每一位上value function的对rtg预测的准确程度，并且进行了clip；
-	- 另一项是policy gradient loss，计算的是每个样本每一位的$\mathbb{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{T}\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)}A^{\pi_{\theta}}\left(s_{t}, a_{t}\right)\right]$，并且进行了clip；
+	- 另一项是policy gradient loss，计算的是每个样本每一位的
+	$$\mathbb{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{T}\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)}A^{\pi_{\theta}}\left(s_{t}, a_{t}\right)\right]$$
+	并且进行了clip；
 	- masked_mean函数以所有mask非0位取平均的方式，将上述loss转化为标量
 
 	```python
