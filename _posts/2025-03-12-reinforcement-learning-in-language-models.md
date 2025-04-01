@@ -205,7 +205,46 @@ values, advantages, returns = self.compute_advantages(values, rewards, masks)
 
 2. 去掉了为了估计advantage所需要的value net（复杂，昂贵，且容易被hack），用多个回答采样的reward归一化均值代替来计算advantage，而是回归了比较原始的monte carlo思想，advantage改由该样本回报相对多个样本平均回报的差值来估计，就得到了_GRPO_
 
-### Implementation
+### Implementation 
+TRL已经include [GRPOTrainer](https://huggingface.co/docs/trl/v0.16.0/grpo_trainer#quick-start)实现，分为四个阶段，非常清晰
 
-WIP
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/Z20cbBDPGoqmZJxAuj6jJB3ppfe.png)
+
+1. generating completions: sample a batch of prompts and generate a set of _G_ (default 8) completions for each prompt (denoted as _oi_).
+
+2. computing the advantage: 
+	- for each of the _G_ sequences, compute the reward using a reward model.
+	- calculated relative comparisons and do normalization
+		![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/U7OobR0PAoAkGkxLLOqjoAm4p2b.png)
+
+3. estimating the KL divergence: KL divergence is estimated using the approximator introduced by <u>Schulman et al. (2020)</u>. 
+	![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/FOydbG8gLoEuILxi3IpjDVapp6g.png)
+
+4. computing the loss
+	![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/LcERbtbfSo32zmxzjEKjIZzqpKh.png)
+
+使用也比较简单，在实际的训练中还要考虑到和分布式框架（deepspeed）和推理框架（vllm）的结合以提升效率
+
+```python
+# train_grpo.py
+
+from datasets import load_dataset
+from trl import GRPOConfig, GRPOTrainer
+
+dataset = load_dataset("trl-lib/tldr", split="train")
+
+# Define the reward function, which rewards completions that are close to 20 characters
+
+def reward_len(completions, **kwargs):
+return [-abs(20 - len(completion)) for completion in completions]
+
+training_args = GRPOConfig(output_dir="Qwen2-0.5B-GRPO", logging_steps=10)
+trainer = GRPOTrainer(
+model="Qwen/Qwen2-0.5B-Instruct",
+reward_funcs=reward_len,
+args=training_args,
+train_dataset=dataset,
+)
+trainer.train()
+```
 
