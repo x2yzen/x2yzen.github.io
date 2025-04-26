@@ -246,5 +246,69 @@ args=training_args,
 train_dataset=dataset,
 )
 trainer.train()
+```  
+
+### Demo
+
+#### dataset
+
+使用一个[countdown游戏的数据集](https://huggingface.co/datasets/Jiayi-Pan/Countdown-Tasks-3to4)，规则类似24点，由3个数字使用简单的四则运算构成目标数字
+
+![](static/XHGObV0asofIhEx87A0jAheGp5f.png)
+
+使用数据集构造训练用的prompt，格式如下
+
 ```
 
+## ROLE
+
+You are a helpful assistant. You first thinks about the reasoning process in the mind and then provides the user with the answer to the question.
+
+## QUESTION
+
+Using the numbers [79, 17, 60], create an equation that equals 36.
+
+# REQUIREMENTS
+
+1. You can use basic arithmetic operations (+, -, *, /) and each number can only be used once.
+2. First show your thinking process between <think> </think> tags. And return the final answer equation between <answer> </answer> tags
+3. Be concise and clear, your output length is limited to ~300 words.
+   output example: '<think>your thinking process</think> thus the answer is <answer> (1 + 2) / 3 </answer>'
+
+```
+
+#### reward 
+
+基于模型输出字符串的正则完成，简单来说
+
+1. 格式得分：判断输出是否包含必要的 '<answer> </answer>'格式，是则得0.1分，否则直接0分；
+
+2. 正确性得分：提取 '<answer> </answer>'标签内的算式并eval，如果符合题目要求且结果正确，得0.9分
+
+综合效果：完全作对得1分，格式正确但算式不对得0.1分，其余得0分
+
+#### training
+
+训练概况：
+
+- model：[Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)
+
+- epoch=1
+
+- batch_size = 16 * 8
+
+- learning_rate = 2e-6
+
+- 资源占用: H20*8*50hrs
+
+- log：[wandb](https://wandb.ai/anUsualTeamName/o1-replica/runs/fz4w9xpj/workspace?nw=nwuserx2yzen)
+
+观察训练指标，基本符合预期
+
+![](static/Ghkib7DOhoL4mXxGdykjQGb1p1c.png)
+
+抽case分析也可以比较直观地感觉到经过1个epoch的训练，模型对本任务的形式和内容都有了更好的处理
+
+![](static/QZ9jbPq3foXatzxLEfxjLSIJpZd.png)
+
+![](static/Wy1hbPux4opfMFxkrvdjE3KCpgc.png)
