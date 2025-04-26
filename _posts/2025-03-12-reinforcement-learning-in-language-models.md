@@ -254,7 +254,7 @@ trainer.train()
 
 使用一个[countdown游戏的数据集](https://huggingface.co/datasets/Jiayi-Pan/Countdown-Tasks-3to4)，规则类似24点，由3个数字使用简单的四则运算构成目标数字
 
-![](static/XHGObV0asofIhEx87A0jAheGp5f.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/XHGObV0asofIhEx87A0jAheGp5f.png)
 
 使用数据集构造训练用的prompt，格式如下
 
@@ -305,10 +305,10 @@ Using the numbers [79, 17, 60], create an equation that equals 36.
 
 观察训练指标，基本符合预期
 
-![](static/Ghkib7DOhoL4mXxGdykjQGb1p1c.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/Ghkib7DOhoL4mXxGdykjQGb1p1c.png)
 
 抽case分析也可以比较直观地感觉到经过1个epoch的训练，模型对本任务的形式和内容都有了更好的处理
 
-![](static/QZ9jbPq3foXatzxLEfxjLSIJpZd.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/QZ9jbPq3foXatzxLEfxjLSIJpZd.png)
 
-![](static/Wy1hbPux4opfMFxkrvdjE3KCpgc.png)
+![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/Wy1hbPux4opfMFxkrvdjE3KCpgc.png)
