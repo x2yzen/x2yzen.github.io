@@ -43,16 +43,16 @@ AlphaGo 一共训练了 3 个主要函数：
 1. 给定一个初始状态 S0
 2. 对于每个合法的 action，记录 3 个数值：
 
-   a. 使用 SL network 计算的 P(s,a) <- 以人类行为模仿模型当做 prior
-   b. 本次模拟中该 action 被选定的总次数 N(s,a) <- 初始值为 0
-   c. 该 action 的价值 Q(s,a) <- 初始值为 0
+   a. 使用 SL network 计算的 P(s,a) <- 以人类行为模仿模型当做 prior  
+   b. 本次模拟中该 action 被选定的总次数 N(s,a) <- 初始值为 0  
+   c. 该 action 的价值 Q(s,a) <- 初始值为 0  
 3. 按照下式选择一个 action，来到状态 Sl <- 随着轮次的增多，prior 被逐渐削弱
 
 ![](/assets/images/2025-05-09-ai-zen-of-go-game/UOfrb6RrRoCw42x41ItjbKKxpge.png)
 
 4. 评估状态 Sl 的价值，也由两部分加权组成：
-   a. 价值网络的打分
-   b. 用 SL network 快速 rollout 的结果
+   a. 价值网络的打分  
+   b. 用 SL network 快速 rollout 的结果  
 
 ![](/assets/images/2025-05-09-ai-zen-of-go-game/QOr5b54NKo2zYpxqDIujFmlhpRf.png)
 
@@ -69,17 +69,17 @@ AlphaGo 一共训练了 3 个主要函数：
 - MCTS 这种显式的前向搜索无疑是奏效的 <-深度强化学习出的网络本身只能打败业余选手，但加上 MCTS 之后甚至可以击败李世石
 - 当前语言模型的 inference-time scale 其实就是当前版本的 MCTS，都是推理时条件计算的一种形式，用结构化或非结构化的额外计算过程来增强模型在面对复杂任务时的鲁棒性与能力边界
 
-## Mastering the game of Go without human knowledge
+### Mastering the game of Go without human knowledge
 
 [https://www.nature.com/articles/nature24270](https://www.nature.com/articles/nature24270)
 
-# Code
+## Code
 
 demo implementation of alphago-zero in gomoku
 
 [https://github.com/junxiaosong/AlphaZero_Gomoku](https://github.com/junxiaosong/AlphaZero_Gomoku)
 
-# Fun fact
+## Fun fact
 
 [🎯 亲历 AlphaGo 奇点后，我成了"人奸" - 樊麾/东东枪/北冥乘海生](https://www.xiaoyuzhoufm.com/episode/675ec9c27d8426f692408889)
 
