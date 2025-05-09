@@ -43,24 +43,24 @@ AlphaGo 一共训练了 3 个主要函数：
 1. 给定一个初始状态 S0
 2. 对于每个合法的 action，记录 3 个数值：
 
-   1. 使用 SL network 计算的 P(s,a) <- 以人类行为模仿模型当做 prior
-   2. 本次模拟中该 action 被选定的总次数 N(s,a) <- 初始值为 0
-   3. 该 action 的价值 Q(s,a) <- 初始值为 0
+   a. 使用 SL network 计算的 P(s,a) <- 以人类行为模仿模型当做 prior
+   b. 本次模拟中该 action 被选定的总次数 N(s,a) <- 初始值为 0
+   c. 该 action 的价值 Q(s,a) <- 初始值为 0
 3. 按照下式选择一个 action，来到状态 Sl <- 随着轮次的增多，prior 被逐渐削弱
 
 ![](/assets/images/2025-05-09-ai-zen-of-go-game/UOfrb6RrRoCw42x41ItjbKKxpge.png)
 
-1. 评估状态 Sl 的价值，也由两部分加权组成：
-   1. 价值网络的打分
-   2. 用 SL network 快速 rollout 的结果
+4. 评估状态 Sl 的价值，也由两部分加权组成：
+   a. 价值网络的打分
+   b. 用 SL network 快速 rollout 的结果
 
 ![](/assets/images/2025-05-09-ai-zen-of-go-game/QOr5b54NKo2zYpxqDIujFmlhpRf.png)
 
-1. 更新 N(s,a) +=1，Q(s,a)+=V(SL) <- 由于任何非终局 action 都没有 immadiate reward，所以行为价值就等于下一个状态的状态价值
+5. 更新 N(s,a) +=1，Q(s,a)+=V(SL) <- 由于任何非终局 action 都没有 immadiate reward，所以行为价值就等于下一个状态的状态价值
 
 ![](/assets/images/2025-05-09-ai-zen-of-go-game/AhSubNlO0oKfXTxqAD2jSzxYpCd.png)
 
-1. 重复 1-5 数千次，最后选择被最多选到的位置实际落子
+6. 重复 1-5 数千次，最后选择被最多选到的位置实际落子
 
 讨论：
 
