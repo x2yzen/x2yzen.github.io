@@ -6,30 +6,31 @@ tags: [vlm]     # TAG names should always be lowercase
 pin: false
 math: true
 ---
-梳理视觉模型的发展历程。
 
-首先明确定义：Vision-language models (VLMs) that take images and texts as inputs and output texts，因此各种文生图的模型不在此列，主要用于图片理解（从最简单的分类到复杂的adhoc QA）。
+Tracing the evolutionary journey of vision models.
+
+First, let's establish clear definitions: Vision-language models (VLMs) that take images and texts as inputs and output texts. Therefore, various text-to-image models are excluded here—our focus is primarily on image understanding (from simple classification to complex ad-hoc QA).
 
 ![](/assets/images/2024-07-31-how-vlm-works/image.png)
 
 **TL;DR**
 
-| 代表模型                        | 主要贡献                                                        | 能力         |
-| --------------------------- | ----------------------------------------------------------- | ---------- |
-| convnets(1998)              | 上古视觉模型                                                      | 图片分类（预设种类） |
-| ViT(2021)                   | 用语言模型（TF encoder）在视觉领域打平convnets                            | 图片分类（预设种类） |
-| CLIP(2021)                  | 提出图片编码（ViT）+ 文字编码 + connector迁移学习（cos similarity matrix）的范式 | 图片分类（任意种类） |
-| KOSMOS、QWEN-VL etc. (2023-) | SOTA VLM，使用TF decoder代替cos similarity matrix，行使connector的职责 | 任意问答       |
+| Representative Model        | Main Contribution                                                  | Capability                    |
+| --------------------------- | ------------------------------------------------------------------ | ----------------------------- |
+| ConvNets (1998)            | Ancient vision models                                              | Image classification (preset categories) |
+| ViT (2021)                 | Used language models (TF encoder) to match ConvNets in vision     | Image classification (preset categories) |
+| CLIP (2021)                | Proposed image encoding (ViT) + text encoding + connector transfer learning paradigm (cos similarity matrix) | Image classification (arbitrary categories) |
+| KOSMOS, QWEN-VL etc. (2023-) | SOTA VLM, using TF decoder instead of cos similarity matrix as connector | Arbitrary Q&A               |
 
 ## ConvNets
 
-古老的视觉模型，追溯到*Yann LeCun in 1998* (http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf)
+Ancient vision models, tracing back to *Yann LeCun in 1998* (http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf)
 
-主要由四个部分组成，可以进行图片分类等工作
+Mainly composed of four components, capable of image classification tasks:
 
 ![](/assets/images/2024-07-31-how-vlm-works/conv.png)![](/assets/images/2024-07-31-how-vlm-works/image-1.png)![](/assets/images/2024-07-31-how-vlm-works/image-2.png)
 
-很多[blog](https://medium.com/neuronio/understanding-convnets-cnn-712f2afe4dd3)讲得很清晰，原理和SOTA的VLM关系较弱，就不赘述了。总之这个阶段模型的效果是**给定一张图片，对训练中见过的category进行分类。**
+Many [blogs](https://medium.com/neuronio/understanding-convnets-cnn-712f2afe4dd3) explain this clearly. Since the principles have weak correlation with SOTA VLMs, I won't elaborate. In essence, models at this stage could **classify images into categories seen during training, given an input image.**
 
 ## ViT
 
@@ -37,23 +38,22 @@ math: true
 
 https://arxiv.org/abs/2010.11929
 
-https://huggingface.co/docs/transformers/en/model\_doc/vit
+https://huggingface.co/docs/transformers/en/model_doc/vit
 
-对比convnets，主要的贡献是发现**TF在图片特征提取上可以和ConvNets在达到几乎一样的效率**，本质上是使用self-attention block代替了convnets中的各种kernel。考虑到TF在自然语言处理中的突出效果，作为特征提取器，ViT显然比ConvNets具备更好的泛用性
+Compared to ConvNets, the main contribution is discovering that **Transformers can achieve nearly identical efficiency as ConvNets in image feature extraction**, essentially replacing various kernels in ConvNets with self-attention blocks. Considering Transformers' outstanding performance in natural language processing, ViT obviously has better generalizability than ConvNets as a feature extractor.
 
-> *Reliance on CNNs is not necessary and a pure transformer applied directly to sequences of image patches can perform very well on image classification tasks *
+> *Reliance on CNNs is not necessary and a pure transformer applied directly to sequences of image patches can perform very well on image classification tasks*
 
-架构确实相当简单：其实就是把一张完整的图片切割为patch sequence，通过embedding layer的映射，类比为文字的token sequence塞进TF encoder，通过自注意力机制编码以后把产物拿来过MLP分类
+The architecture is remarkably simple: essentially cutting a complete image into patch sequences, mapping them through embedding layers, treating them analogously to text token sequences fed into TF encoders, encoding through self-attention mechanisms, then using the output for MLP classification.
 
-* Input: \[class] + pic\_patch\_seq + pos\_embedding
-
-* Arch: multi-head self-attention block (no causal mask) \* L -> \[class] embedding -> MLP\_head -> label cross entropy loss
+* Input: [class] + pic_patch_seq + pos_embedding
+* Arch: multi-head self-attention block (no causal mask) * L -> [class] embedding -> MLP_head -> label cross entropy loss
 
 ![](/assets/images/2024-07-31-how-vlm-works/image-3.png)
 
 ![](/assets/images/2024-07-31-how-vlm-works/image-4.png)
 
-看一个[code sample](https://github.com/BrianPulfer/PapersReimplementations/blob/main/src/cv/vit/vit_torch.py)
+See this [code sample](https://github.com/BrianPulfer/PapersReimplementations/blob/main/src/cv/vit/vit_torch.py)
 
 ## CLIP
 
@@ -63,31 +63,26 @@ https://arxiv.org/abs/2103.00020
 
 https://huggingface.co/openai/clip-vit-large-patch14-336
 
-建立在ViT之上，主要的贡献是在模型架构上，**CLIP不仅对图片进行特征提取，而是设计了一个visual encoder（实际上就是ViT） + text encoder + connector的paradigm，尝试transfer两个模型分别从图片和对应的自然语言中学习到的知识，**最终达成的效果是，图片分类模型获得了**zero-shot** 泛化能力，i.e. 不再局限于训练时见过的category，给定图片和任意几个描述选项，模型可以进行分类预测；反过来，也可以通过任意给定的文字描述进行image search。
+Building on ViT, the main contribution lies in model architecture. **CLIP doesn't just extract features from images, but designs a paradigm of visual encoder (essentially ViT) + text encoder + connector, attempting to transfer knowledge learned by two models from images and corresponding natural language respectively.** The final effect achieved is that image classification models gained **zero-shot** generalization capability—no longer limited to categories seen during training. Given an image and arbitrary descriptive options, the model can make classification predictions. Conversely, it can also perform image search through arbitrary given text descriptions.
 
 ![](/assets/images/2024-07-31-how-vlm-works/image-5.png)
 
-paper abstract (could be skipped)
+Paper abstract (could be skipped)
 
 ![](/assets/images/2024-07-31-how-vlm-works/clip.png)
 
-训练过程简单概括为：
+The training process can be summarized as:
 
-1. 准备匹配的图片和文字（caption）N对
-
-2. 分别过text encoder和vision encoder转换为embedding vector
-
-3. 将两份embedding vector通过MLP投射到同一空间
-
-4. 两两计算点积（N\*N）
-
-5. 按照图片与文字匹配与否（N out of N\*N）计算分类loss并反向传播，训练encoder
-
-6. （预测阶段）给定一张新的图片，并写出几个备选的文字描述，通过同样的流水线，点积最大的那个pair就是对新图片的最可能的预测描述
+1. Prepare N pairs of matching images and text (captions)
+2. Convert to embedding vectors through text encoder and vision encoder respectively
+3. Project both embedding vectors to the same space through MLP
+4. Calculate dot products pairwise (N*N)
+5. Calculate classification loss based on whether images and text match (N out of N*N) and backpropagate to train encoders
+6. (Prediction phase) Given a new image and several candidate text descriptions, use the same pipeline—the pair with maximum dot product is the most likely prediction for the new image
 
 ![](/assets/images/2024-07-31-how-vlm-works/filename.png)
 
-后续很多工作都是建立在类似的架构上，特别是充分尝试各种形式的connector。
+Many subsequent works build on similar architectures, particularly exploring various forms of connectors extensively.
 
 ## KOSMOS-1 & QWEN-VL etc.
 
@@ -103,29 +98,31 @@ https://arxiv.org/abs/2308.12966
 
 https://huggingface.co/Qwen/Qwen-VL
 
-以KOSMOS为例，在CLIP的基础上，KOSMOS主要的贡献是在**使用TF decoder（而不是简单的dot product matrix）作为fusion connector，使用attention机制（而不是cos similarity）来互相transfer图片和文字中的知识。**从使用效果上，由于connector变成了一个自回归的生成模型，KOSMOS跳出了分类器的范畴，可以支持各种各样的adhoc-QA。
+Using KOSMOS as an example, building on CLIP, KOSMOS's main contribution is **using TF decoder (rather than simple dot product matrix) as fusion connector, using attention mechanisms (rather than cos similarity) to mutually transfer knowledge between images and text.** In terms of usage, since the connector becomes an autoregressive generative model, KOSMOS transcends the classifier paradigm and can support various ad-hoc QAs.
 
 ![](/assets/images/2024-07-31-how-vlm-works/image-6.png)
 
-KOSMOS使用图文混排数据（而不只是图文pair数据）作为训练语料，对其中的image和text分别embedding之后再次穿插在一起，随后TF decoder使用标准的&统一的方式处理多种模态的embedding token（i.e. causal-mask -> self attention block\*N -> MLP -> predict-the-next token，note. 除了文字以外的其它模态的embedding token不会被计入loss function，这意味着模型不会以生成图片模态作为目标，output只能有文字模态）。
+KOSMOS uses interleaved image-text data (not just image-text pairs) as training corpus. After separately embedding images and text, they're interspersed together, then TF decoder processes multi-modal embedding tokens in a standard & unified manner (i.e., causal-mask -> self attention block*N -> MLP -> predict-the-next token. Note: embedding tokens of modalities other than text are not included in the loss function, meaning the model won't target generating image modalities—output can only be text modality).
 
-由于这篇文章（竟然）没有绘图，因此自己画了一个架构简图（省略了一些feature resampler之类的细节）。看一个[code sample](https://github.com/bjoernpl/KOSMOS_reimplementation/blob/main/kosmos.py)。
+Since this paper (surprisingly) lacks diagrams, I drew a simplified architecture diagram (omitting details like feature resampler). See this [code sample](https://github.com/bjoernpl/KOSMOS_reimplementation/blob/main/kosmos.py).
+
 ![](/assets/images/2024-07-31-how-vlm-works/k1.png)
 
-paper abstract (could be skipped):
+Paper abstract (could be skipped):
 
 ![](/assets/images/2024-07-31-how-vlm-works/k2.png)
 ![](/assets/images/2024-07-31-how-vlm-works/k3.png)
 ![](/assets/images/2024-07-31-how-vlm-works/image-7.png)
 
-直到现在，VLM模型的大体架构已经没有明显的变动（比如QWEN-VL最大的变动就是使用QWEN-7B代替MAGNETO），多数是在上述结构上做一些微调（加上feature sampling/compress，layer norm位置调整等等）。
+Until now, the overall architecture of VLM models hasn't changed significantly (for instance, QWEN-VL's biggest change is using QWEN-7B instead of MAGNETO). Most work involves fine-tuning the above structure (adding feature sampling/compression, layer norm position adjustments, etc.).
 
-构建规模越来越大的训练数据集，探索各类数据的配比，以及研究如何使图片理解和语言创作的能力各自发展，互不打架（很难，因为它们共享一个语言基座）等成为了模型效果提高的关键（也同时是最新的玄学课题）。
+Building increasingly large training datasets, exploring optimal data ratios, and researching how to develop image understanding and language generation capabilities independently without interference (challenging, since they share a language foundation) have become key to improving model performance (and simultaneously the latest mystical subjects).
 
 ***
+
 ## Others
 
-### Idefics2&#x20;
+### Idefics2
 
 *HuggingFace @ 2024*
 
@@ -142,7 +139,7 @@ https://huggingface.co/internlm/internlm-xcomposer2-vl-7b
 ![](/assets/images/2024-07-31-how-vlm-works/diagram.png)
 
 ### InternVL
+
 https://arxiv.org/abs/2312.14238
 
 https://huggingface.co/OpenGVLab/InternVL-Chat-V1-5
-

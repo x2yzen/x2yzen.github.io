@@ -7,31 +7,31 @@ pin: false
 math: true
 ---
 
-整理在语言模型中使用的强化学习技术
+A comprehensive overview of reinforcement learning techniques used in language models
 
 ## Overview
 
 ![](/assets/images/2025-03-04-mathematical-foundations-of-reinforcement-learning/wb1.png)
 
-1. PPO 和 GRPO 都是演进了非常多步的 RL 算法变种，不好理解的原因是它们与各种 RL 教程的原始形态（走格子 +Bellman equation）相距太远，但确实只有原始形态的算法才具备最好的 intuition
-2. 从结果出发向前推，需要弥补至少两个 gap 才能将故事线串起来
+1. PPO and GRPO are RL algorithm variants that have evolved through many iterations. They're difficult to understand because they're quite far from the original forms taught in RL tutorials (grid-walking + Bellman equations), but those original forms indeed provide the best intuition.
+2. Working backwards from the results, we need to bridge at least two gaps to connect the storyline:
 
-   - LM RL -> deep RL：LM 通常被视为 deep RL 里的 policy，因此 PPO 和 GRPO 都属于 deep RL 中 policy-gradient 家族的方法；
-   - deep RL -> classic RL：deep RL 的策略函数是参数化的，optimality 表示为某个标量函数，通过梯度优化算法驱动对最优策略的搜索；而容易理解的经典 RL 策略是表格化的，optimality 表示为 Bellman optimal condition，通过迭代方法驱动最优策略的探索；他们之间通过 policy gradient 梯度计算时需要的对价值函数的估计方法(TD-learning->Monte carlo learning -> iterative methods -> BOE)连接起来
+   - LM RL → deep RL: Language models are typically viewed as policies in deep RL, so both PPO and GRPO belong to the policy-gradient family of methods in deep RL
+   - deep RL → classic RL: Deep RL uses parameterized policy functions with optimality expressed as scalar functions, driven by gradient optimization algorithms to search for optimal policies; while the easily understood classic RL uses tabular policies with optimality expressed as Bellman optimal conditions, driven by iterative methods to explore optimal policies. They connect through value function estimation methods needed for policy gradient calculations (TD-learning → Monte Carlo learning → iterative methods → BOE)
 
 ## Proximal Policy Optimization (PPO)
 
-从_advantage actor-critic (A2C)_开始，加上 KL-Div 作为惩罚项或者 CLIP，控制迭代后的目标函数和原函数差别不要太大，就得到了 Proximal Policy Optimization (PPO)  
+Starting from _advantage actor-critic (A2C)_, adding KL divergence as a penalty term or CLIP to control that the objective function after iteration doesn't differ too much from the original function, we get Proximal Policy Optimization (PPO).
 
 ### Theory
 
-之前的 actor-critic 算法将优化目标单一地定为追求 reward model 的最大化，在语言模型的语境下会导致一些问题，reward model 训练样本量远少于 pretrain，它的知识可能是稀疏并且无规律的，比较容易被 hack，比如经常可以发现一段无意义的语句（thethethethethe...或者一堆 emoji）会莫名其妙地获得 reward model 的青睐，而将语言模型无限制地向 reward model 优化，最终也会导致胡言乱语，因此诞生了 PPO 和 TRPO (trust-region policy optimization) 这一类算法，本质上都是要求 RL 迭代后的策略和迭代前差距不要过大。最容易想到的 penalty 当然是用 KL divergence 作为惩罚项，事实上也确实可以这么做，先介绍一个更常用也更简单的实现：PPO-clip（据说 openai 比较惯用这种形式）。
+Previous actor-critic algorithms focused solely on maximizing reward model outputs, which causes problems in the language model context. Reward models are trained on far fewer samples than pretraining, so their knowledge can be sparse and irregular, making them easy to hack. For example, meaningless sequences (thethethethe... or lots of emojis) often mysteriously gain favor from reward models. Optimizing language models toward reward models without constraints eventually leads to nonsensical outputs. This gave birth to PPO and TRPO (trust-region policy optimization), algorithms that essentially require the post-iteration policy to not differ too much from the pre-iteration policy. The most obvious penalty would be using KL divergence as a penalty term, which can indeed be done. Let's first introduce a more commonly used and simpler implementation: PPO-clip (reportedly favored by OpenAI).
 
 $$
 \theta_{k+1} = \arg\max_{\theta} \mathbb{E}_{s, a \sim \pi_{\theta_k}} \left[ \mathbb{E}_{\theta_k} \left[ L\left(s, a, \theta_k, \theta\right) \right] \right]
 $$
 
-其中
+where
 
 $$
 L\left(s, a, \theta_{k}, \theta\right) = \min\left(\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)} A^{\pi_{\theta_{k}}}(s, a), \quad g\left(\epsilon, A^{\pi_{\theta_{k}}}(s, a)\right)\right)
@@ -46,28 +46,28 @@ g(\epsilon, A) = \left\{
 \right.
 $$
 
-看起来挺复杂，拆解一下来理解：
+This looks complex, so let's break it down:
 
-如果当前(s,a)的 advantage>0，上面的式子变成：
+If the current (s,a) advantage > 0, the equation becomes:
 
 $$
 L\left(s, a, \theta_{k}, \theta\right) = \min\left(\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)}, (1+\epsilon)\right) A^{\pi_{\theta_{k}}}(s, a)
 $$
 
-对比一下式(10.7)，几乎完全一样（求梯度后分母可以收进去变成 log），主要的不同其实就是多了一个 min($\epsilon
-$)项 -> 这个就是 clip 的意思，用这个超参给收益加上一个 cap，避免步子太大。
+Comparing to equation (10.7), it's almost identical (after taking gradients, the denominator can be absorbed to become log). The main difference is the additional min($\epsilon$) term → this is the "clip" meaning, using this hyperparameter to cap the gains and avoid taking steps that are too large.
 
 ### Implementation
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/SO1HbDlfmosLJJx46ZMjVJSkprf.png)
 
-参考 trl-ppo_trainer（ [https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117](https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117)）的具体实现：
+Referring to the specific implementation of trl-ppo_trainer ([https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117](https://github.com/huggingface/trl/blob/main/trl/trainer/ppo_trainer.py#L117)):
 
-1. 从 655 行的 step 函数开始看起，输入是：
+1. Starting from the step function at line 655, the inputs are:
    - queries (batch_size, q_seq_len)
-   - responses  (batch_size, resp_seq_len)
+   - responses (batch_size, resp_seq_len)
    - scores (batch_size,)
-2. 747 行 [AutoModelForCausalLMWithValueHead](https://github.com/huggingface/trl/blob/v0.11.2/trl/models/modeling_value_head.py#L61) 进行 forward，计算出了每一个样本（q+resp）每一位的 conditional probability _all_logprobs _(batch_size, q_seq_len+resp_seq_len)和_values _(batch_size, q_seq_len+resp_seq_len)，当然，由于 q 部分的数字都不做数，在后续计算的时候它们会被_mask_掩盖掉
+
+2. Line 747: [AutoModelForCausalLMWithValueHead](https://github.com/huggingface/trl/blob/v0.11.2/trl/models/modeling_value_head.py#L61) performs forward pass, computing conditional probability _all_logprobs_ (batch_size, q_seq_len+resp_seq_len) and _values_ (batch_size, q_seq_len+resp_seq_len) for each position of each sample (q+resp). Of course, since the q part doesn't count, these values will be masked out in subsequent calculations.
 
 	```python
 with torch.no_grad():
@@ -80,11 +80,12 @@ response_masks=response_masks,
 return_logits=full_kl_penalty,)
 	```
 
-3. 777行的compute_reward函数计算出了每个样本中，每一个位置的rewards (batch_size, q_seq_len+resp_seq_len)
+3. Line 777's compute_reward function calculates rewards for each position in each sample (batch_size, q_seq_len+resp_seq_len):
 	```python
 	rewards, non_score_reward, kls = self.compute_rewards(scores, all_logprobs, ref_logprobs, masks)
 	```
-具体来看，对于每个样本，non_score_reward (q_seq_len+resp_seq_len,) 由当前模型与参考模型（没有经过RL的模型）下该样本的logprob差异得到（最简单的做法就是按位减法），第11行在最后一个mask非0位（也就是resp的结尾）加上了reward model提供的score，成为了最终的reward——容易理解，由于目前的rewards model只对一个完成的序列进行打分，因此在最后一个状态之前，reward都只有惩罚项（与原始分布的区别越大，负的越多），直到轨迹达到完成状态，这个状态额外加上一个reward model给出的评分
+
+	Specifically, for each sample, non_score_reward (q_seq_len+resp_seq_len,) is derived from the logprob difference between the current model and reference model (model without RL). The simplest approach is element-wise subtraction. Line 11 adds the reward model score at the last non-zero mask position (end of response) to get the final reward. This is intuitive: since current reward models only score complete sequences, before the final state, rewards only contain penalty terms (the greater the difference from original distribution, the more negative), until the trajectory reaches completion, where this state gets an additional score from the reward model.
 
 	```python
 	for score, logprob, ref_logprob, mask in zip(scores, logprobs, ref_logprobs, masks):
@@ -101,15 +102,17 @@ return_logits=full_kl_penalty,)
 	rewards.append(reward)
 	```
 
-4. 回到step函数，781行compute_advantages函数计算了关键的advantages
+4. Back to the step function, line 781's compute_advantages function calculates the crucial advantages:
 	```python
 values, advantages, returns = self.compute_advantages(values, rewards, masks)
 	```
 
-	具体来看：loop从每个样本的最后一个状态开始，由于已经没有下一个state，因此第2行nextvalues为0，按照前一节讨论过的GAE，该状态的delta直接估计为回报减去本状态的价值（第4行），而第5行中由于lastgaelam初始值为0，该状态的advantage直接用delta估计
+	Specifically: the loop starts from the last state of each sample. Since there's no next state, line 2 sets nextvalues to 0. Following the previously discussed GAE, this state's delta is directly estimated as reward minus current state value (line 4). In line 5, since lastgaelam's initial value is 0, this state's advantage is directly estimated using delta:
 	$$\hat{A}_{t}^{(1)} := \delta_{t}^{V} = r_t + \gamma V(s_{t+1}) - V(s_t)$$
-	进入下一个循环，计算倒数第二个状态，它的nextvalues等于最终状态的value，delta也按照上式进行估计，而L5则体现了GAE估计量 
-	$$\sum_{l=0}^{\infty} (\gamma \lambda)^l \delta_{t+l}^V$$	l上限取1的形式，也就是说一定程度上使用$$\delta_{t+1}^V$$和$$\delta_{t}^V$$加权的方式进行了bias和variance的tradeoff。后续循环逻辑类似，这样就得到了每个样本每一位的advantages (batch_size, q_seq_len+resp_seq_len)
+	
+	Moving to the next loop calculating the second-to-last state, its nextvalues equals the final state's value, delta is estimated according to the above formula, while L5 reflects the GAE estimator
+	$$\sum_{l=0}^{\infty} (\gamma \lambda)^l \delta_{t+l}^V$$
+	with upper limit l=1, meaning it uses weighted combination of $$\delta_{t+1}^V$$ and $$\delta_{t}^V$$ for bias-variance tradeoff. Subsequent loops follow similar logic, yielding advantages for each position of each sample (batch_size, q_seq_len+resp_seq_len).
 
 	```python
 	lastgaelam = 0
@@ -118,20 +121,19 @@ values, advantages, returns = self.compute_advantages(values, rewards, masks)
 	delta = rewards[:, t] + self.config.gamma * nextvalues - values[:, t]
 	lastgaelam = delta + self.config.gamma * self.config.lam * lastgaelam
 	advantages_reversed.append(lastgaelam)
-	
 	```
 
-5. 832行开始实际的训练
+5. Line 832 begins actual training:
 	```python
 	train_stats = self.train_minibatch(...)
 	```
 
-	主要关注一下loss的计算的方式，分为两项：
-	- 第一项是value function loss，衡量每个样本每一位上value function的对rtg预测的准确程度，并且进行了clip；
-	- 另一项是policy gradient loss，计算的是每个样本每一位的
+	Focus on loss calculation, which has two components:
+	- First is value function loss, measuring how accurately the value function predicts returns-to-go for each position of each sample, with clipping applied
+	- Second is policy gradient loss, computing for each position of each sample:
 	$$\mathbb{E}_{\tau \sim \pi_{\theta}}\left[\sum_{t=0}^{T}\frac{\pi_{\theta}(a \mid s)}{\pi_{\theta_{k}}(a \mid s)}A^{\pi_{\theta}}\left(s_{t}, a_{t}\right)\right]$$
-	并且进行了clip；
-	- masked_mean函数以所有mask非0位取平均的方式，将上述loss转化为标量
+	with clipping applied
+	- The masked_mean function converts these losses to scalars by averaging over all non-zero mask positions
 
 	```python
 	vf_losses1 = (vpreds - returns) ** 2
@@ -159,25 +161,25 @@ values, advantages, returns = self.compute_advantages(values, rewards, masks)
 
 ### Demo
 
-使用[yelp_review_full](https://huggingface.co/datasets/Yelp/yelp_review_full)语料库，截取开头让模型续写，目标是通过RLHF来强行输出好评（即使原来是0分也得圆回来=。=）。概念验证方便起见，模型选择了比较新的小尺寸模型[Qwen2.5-1.5B-base](https://huggingface.co/Qwen/Qwen2.5-1.5B)，硬件是Tesla L4 24G *1
+Using the [yelp_review_full](https://huggingface.co/datasets/Yelp/yelp_review_full) corpus, truncating the beginning and having the model continue writing, with the goal of using RLHF to force positive reviews (even if the original was 0 stars, it has to be spun positively =.=). For proof of concept convenience, I chose the relatively new small model [Qwen2.5-1.5B-base](https://huggingface.co/Qwen/Qwen2.5-1.5B), running on Tesla L4 24G *1.
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/OrXmbRuvgoo9jrxFJPHjlnUppYf.png)
 
-在RL之前先做了一个SFT阶段，用同样的数据集，使用r=128 Lora微调了Qwen2.5-1.5B-base大约~1%的参数，让模型熟悉yelp review的画风，经验表明这样续写出来会更自然一些，从指标看也有一定的效果（[script](https://code.byted.org/renxinyuyang/llm-trials/blob/dev/sft-lora.py), [run log](https://wandb.ai/x2yzen-freelance/huggingface/runs/ymr65k8x?nw=nwuserx2yzen)）
+Before RL, I did an SFT stage using the same dataset, fine-tuning ~1% of Qwen2.5-1.5B-base parameters with r=128 LoRA to familiarize the model with Yelp review style. Experience shows this makes continuations more natural, and metrics show some effectiveness ([script](https://code.byted.org/renxinyuyang/llm-trials/blob/dev/sft-lora.py), [run log](https://wandb.ai/x2yzen-freelance/huggingface/runs/ymr65k8x?nw=nwuserx2yzen)).
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/MYI7bNvaooMmnPxkTSrjysOOpHf.png)
 
-在RL阶段，使用一个现成的文本情感分类模型（[distilbert-base-multilingual-cased-sentiments-student](https://huggingface.co/lxyuan/distilbert-base-multilingual-cased-sentiments-student)）作为RM，以POSITIVE label的logit作为reward，使用上文读过的 [TRL](https://huggingface.co/docs/trl/index) (Transformer Reinforcement Learning) 提供的[PPO trainer](https://huggingface.co/docs/trl/ppo_trainer)来完成一次RLHF，让上一步中微调过的Qwen2.5-1.5B进行对齐（[script](https://code.byted.org/renxinyuyang/llm-trials/blob/dev/sentiment-rl.py), [run log](https://wandb.ai/x2yzen-freelance/trl/runs/g82qp1tv?nw=nwuserx2yzen)）
+In the RL stage, I used an existing text sentiment classification model ([distilbert-base-multilingual-cased-sentiments-student](https://huggingface.co/lxyuan/distilbert-base-multilingual-cased-sentiments-student)) as RM, using the POSITIVE label logit as reward. I used [TRL](https://huggingface.co/docs/trl/index) (Transformer Reinforcement Learning)'s [PPO trainer](https://huggingface.co/docs/trl/ppo_trainer) to complete one RLHF round, aligning the fine-tuned Qwen2.5-1.5B from the previous step ([script](https://code.byted.org/renxinyuyang/llm-trials/blob/dev/sentiment-rl.py), [run log](https://wandb.ai/x2yzen-freelance/trl/runs/g82qp1tv?nw=nwuserx2yzen)).
 
-可以看到随着训练的进行，模型输出的reward分数逐渐增加并趋于稳定，表明模型更稳定地输出了积极的回复
+As training progresses, the model's output reward scores gradually increase and stabilize, indicating the model more consistently outputs positive responses.
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/M2GEb5jbxoejONx3ntljxTj8pFe.png)
 
-而与原始模型的差异也经过一段上升后保持稳定
+The difference from the original model also rises then remains stable.
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/MKusbh29GocdW9xhfqEj3D8upsh.png)
 
-从指标上看整体是符合预期的，来抽一些典型的case，看看训练前和训练后模型对同一个输入的反馈是如何变化的：
+The metrics overall meet expectations. Let's examine some typical cases to see how the model's responses to the same input changed before and after training:
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/EzqpbHpaUoszHSxJn4xjfWV3pmc.png)
 
@@ -187,43 +189,44 @@ values, advantages, returns = self.compute_advantages(values, rewards, masks)
 
 ### Discussion
 
-不同于SFT的问题->答案训练范式，RLHF是一个基于对比的训练阶段，从某种角度上说，这种训练模式的收益主要是降低了样本的获取成本，甚至将一些难以明确描述的训练标准变为可能。在很多场景里，人类标注者去“生成”一个符合偏好的训练样本是昂贵的，甚至受限于标注者的能力，难以用语言完备表述的细微标准等，是接近不可能的，但如果被提供了几个样本，由受过训练的标注者判断更偏好哪个，成本就低很多了（试想训练一个生图模型来画帅哥美女，标注者自己一张一张画帅哥速写做训练样本和只是评判下这几个模型生成的人脸哪个更帅，成本不言而喻）。
+Unlike SFT's question→answer training paradigm, RLHF is a comparison-based training stage. From one perspective, this training mode's benefit is mainly reducing sample acquisition costs, even making training standards that are difficult to explicitly describe possible. In many scenarios, having human annotators "generate" preference-compliant training samples is expensive, or even nearly impossible due to annotator limitations and subtle standards that can't be completely expressed in language. But if provided with several samples and having trained annotators judge which they prefer more, the cost is much lower (imagine training a generative model to draw handsome men and beautiful women - having annotators draw handsome sketches one by one as training samples versus just judging which of several model-generated faces is more handsome - the cost difference is obvious).
 
-在当前的LLM流水线里，一般遵从pretrain->SFT->RL的顺序，主流观点认为绝大多数模型知识和能力是在pretrain阶段获得的，SFT阶段模型只是学习特定格式（format）来回答特定问题，而RL阶段不产生新的能力也不产生新的格式，而是保证效果的稳定性。换句话说，一个问题模型有没有能力回答，很大程度上在基础模型阶段就确定了，如果智商不够不会答，后续训练希望也不大；如果智商到了，经过SFT，模型获得了更符合特定场景的回答模式，但概率模型的本质决定了这些能力和模式在每次回答时不会100%稳定；进一步地，RL阶段则通过偏好对齐，打压不符合偏好的样本出现的概率，放大了效果的稳定性，最终变成一个能够上线实际使用的ckpt。
+In current LLM pipelines, the general sequence is pretrain→SFT→RL. The mainstream view is that most model knowledge and capabilities are acquired during pretraining, SFT only teaches the model specific formats to answer specific questions, while RL doesn't create new capabilities or formats but ensures effect stability. In other words, whether a model can answer a question is largely determined at the base model stage - if the intelligence isn't sufficient, subsequent training won't help much; if intelligence is adequate, after SFT the model gains response patterns more suitable for specific scenarios, but the probabilistic model nature means these capabilities and patterns won't be 100% stable in every response. Furthermore, the RL stage uses preference alignment to suppress non-preferred sample probabilities and amplify effect stability, ultimately becoming a checkpoint ready for real-world deployment.
 
 ## Group Relative Policy Optimization (GRPO)
 
 ### Theory
 
-由于deepseek-R1（https://arxiv.org/abs/2501.12948）而闻名于世的新概念，实际上的改动也非常小，观察下式：
+This new concept became famous through deepseek-R1 (https://arxiv.org/abs/2501.12948), but the actual changes are minimal. Observe the following formula:
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/IuZobftE6oXxNox62QDjozd3pGg.png)
 
-实际上对比CLIP-PPO就只有两点区别：
+Compared to CLIP-PPO, there are only two differences:
 
-1. 除了CLIP，还加上了一个KL-Div作为惩罚项，进一步约束目标模型和参考模型差距不要过大
+1. Besides CLIP, it adds KL divergence as a penalty term to further constrain the difference between target and reference models
 
-2. 去掉了为了估计advantage所需要的value net（复杂，昂贵，且容易被hack），用多个回答采样的reward归一化均值代替来计算advantage，而是回归了比较原始的monte carlo思想，advantage改由该样本回报相对多个样本平均回报的差值来估计，就得到了_GRPO_
+2. It removes the value network needed for advantage estimation (complex, expensive, and easily hacked), replacing it with normalized reward means from multiple response samples to calculate advantage. This returns to the more primitive Monte Carlo approach, where advantage is estimated by the difference between this sample's reward and the average reward across multiple samples, yielding _GRPO_.
 
 ### Implementation 
-TRL已经include [GRPOTrainer](https://huggingface.co/docs/trl/v0.16.0/grpo_trainer#quick-start)实现，分为四个阶段，非常清晰
+
+TRL already includes [GRPOTrainer](https://huggingface.co/docs/trl/v0.16.0/grpo_trainer#quick-start) implementation, divided into four clear stages:
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/Z20cbBDPGoqmZJxAuj6jJB3ppfe.png)
 
-1. generating completions: sample a batch of prompts and generate a set of _G_ (default 8) completions for each prompt (denoted as _oi_).
+1. **generating completions**: sample a batch of prompts and generate a set of _G_ (default 8) completions for each prompt (denoted as _oi_).
 
-2. computing the advantage: 
+2. **computing the advantage**: 
 	- for each of the _G_ sequences, compute the reward using a reward model.
 	- calculated relative comparisons and do normalization
 		![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/U7OobR0PAoAkGkxLLOqjoAm4p2b.png)
 
-3. estimating the KL divergence: KL divergence is estimated using the approximator introduced by <u>Schulman et al. (2020)</u>. 
+3. **estimating the KL divergence**: KL divergence is estimated using the approximator introduced by <u>Schulman et al. (2020)</u>. 
 	![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/FOydbG8gLoEuILxi3IpjDVapp6g.png)
 
-4. computing the loss
+4. **computing the loss**
 	![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/LcERbtbfSo32zmxzjEKjIZzqpKh.png)
 
-使用也比较简单，在实际的训练中还要考虑到和分布式框架（deepspeed）和推理框架（vllm）的结合以提升效率
+Usage is relatively simple, though actual training requires consideration of integration with distributed frameworks (deepspeed) and inference frameworks (vllm) for efficiency:
 
 ```python
 # train_grpo.py
@@ -250,16 +253,15 @@ trainer.train()
 
 ### Demo
 
-#### dataset
+#### Dataset
 
-使用一个[countdown游戏的数据集](https://huggingface.co/datasets/Jiayi-Pan/Countdown-Tasks-3to4)，规则类似24点，由3个数字使用简单的四则运算构成目标数字
+Using a [countdown game dataset](https://huggingface.co/datasets/Jiayi-Pan/Countdown-Tasks-3to4), with rules similar to the 24-point game - use 3 numbers with basic arithmetic operations to create a target number.
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/XHGObV0asofIhEx87A0jAheGp5f.png)
 
-使用数据集构造训练用的prompt，格式如下
+Using the dataset to construct training prompts in the following format:
 
 ```
-
 ## ROLE
 
 You are a helpful assistant. You first thinks about the reasoning process in the mind and then provides the user with the answer to the question.
@@ -274,40 +276,33 @@ Using the numbers [79, 17, 60], create an equation that equals 36.
 2. First show your thinking process between <think> </think> tags. And return the final answer equation between <answer> </answer> tags
 3. Be concise and clear, your output length is limited to ~300 words.
    output example: '<think>your thinking process</think> thus the answer is <answer> (1 + 2) / 3 </answer>'
-
 ```
 
-#### reward 
+#### Reward 
 
-基于模型输出字符串的正则完成，简单来说
+Based on regex completion of model output strings, simply put:
 
-1. 格式得分：判断输出是否包含必要的 '<answer> </answer>'格式，是则得0.1分，否则直接0分；
+1. **Format score**: Judge whether output contains necessary '<answer> </answer>' format - if yes, get 0.1 points, otherwise 0 points directly
+2. **Correctness score**: Extract the equation within '<answer> </answer>' tags and eval it - if it meets requirements and result is correct, get 0.9 points
 
-2. 正确性得分：提取 '<answer> </answer>'标签内的算式并eval，如果符合题目要求且结果正确，得0.9分
+Combined effect: completely correct gets 1 point, correct format but wrong equation gets 0.1 points, everything else gets 0 points.
 
-综合效果：完全作对得1分，格式正确但算式不对得0.1分，其余得0分
+#### Training
 
-#### training
+Training overview:
 
-训练概况：
-
-- model：[Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)
-
+- model: [Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)
 - epoch=1
-
 - batch_size = 16 * 8
-
 - learning_rate = 2e-6
+- Resource usage: H20*8*50hrs
+- log: [wandb](https://wandb.ai/anUsualTeamName/o1-replica/runs/fz4w9xpj/workspace?nw=nwuserx2yzen)
 
-- 资源占用: H20*8*50hrs
-
-- log：[wandb](https://wandb.ai/anUsualTeamName/o1-replica/runs/fz4w9xpj/workspace?nw=nwuserx2yzen)
-
-观察训练指标，基本符合预期
+Observing training metrics, they basically meet expectations:
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/Ghkib7DOhoL4mXxGdykjQGb1p1c.png)
 
-抽case分析也可以比较直观地感觉到经过1个epoch的训练，模型对本任务的形式和内容都有了更好的处理
+Case analysis also shows that after 1 epoch of training, the model has better handling of both the form and content of this task:
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/QZ9jbPq3foXatzxLEfxjLSIJpZd.png)
 

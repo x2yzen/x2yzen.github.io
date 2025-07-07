@@ -7,7 +7,7 @@ pin: false
 math: true
 ---
 
-尽量少依赖地构建 transformer 原型
+Building a transformer prototype with minimal dependencies
 
 ## Original design
 
@@ -243,11 +243,11 @@ if __name__ == "__main__":
         print(f"Epoch: {epoch + 1}, Loss: {loss.item()}")
 ```
 
-*或者参考这个项目：[https://github.com/jingyaogong/minimind](https://github.com/jingyaogong/minimind)
+*Or check out this project: [https://github.com/jingyaogong/minimind](https://github.com/jingyaogong/minimind)
 
 ### Explanation step by step
 
-对照以下笔记和代码运行的 debug 断点，理解每一个代码模块的作用
+Use the following notes and code debugging breakpoints to understand the function of each code module
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/E0RWbBIeAoWKtmx7ydwjlocmpCg.jpg)
 
@@ -257,7 +257,7 @@ Ref: Sinusoidal and RoPE positional embedding ([youtube](https://www.youtube.com
 
 ### Absolute Positional Embedding
 
-The position of each token is explicitly represented by a unique embedding vector. This vector is either added to or concatenated with the word embeddings before being input into the transformer layers.Sinusoidal encoding is a common implementation
+The position of each token is explicitly represented by a unique embedding vector. This vector is either added to or concatenated with the word embeddings before being input into the transformer layers. Sinusoidal encoding is a common implementation
 
 $$
 PE_{(pos, 2i)} = \sin(pos / 10000^{2i/d_{model}})\newline
@@ -267,33 +267,32 @@ $$
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/T4Q8bdxjxoOl2ExCGTWjMQHtpSg.png)
 
-As could be seen in the picture, the change for each position is a bit erratic and difficult to find patterns
+As can be seen in the picture, the change for each position is somewhat erratic and difficult to find patterns
 
 ### Relative embedding
 
 #### T5 relative bias
 
-add pair-wise distance embedding to the attn matrix, the addition is the same as long as the relative position between the token pair keeps the same (e.g. appending prefix or suffix does not effect the embeding)
+Add pair-wise distance embedding to the attention matrix. The addition is the same as long as the relative position between the token pair remains the same (e.g., appending prefix or suffix does not affect the embedding)
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/QID5bZloSoCo2IxiufAjeNW9pVf.png)
 
 #### RoPE
 
-- split q and k vectors, 2 dimensions each (tot. d_model/2 slices)
-- assign each slice a unique \theta value
+- Split q and k vectors, 2 dimensions each (total d_model/2 slices)
+- Assign each slice a unique θ value
 
   $$
-  heta_{i} = b^{-2i/D}
+  \theta_{i} = b^{-2i/D}
   $$
-- apply 2-D rotation on each slice based on the position index *实际往往是通过复数乘法实现的
+- Apply 2-D rotation on each slice based on the position index *This is often implemented through complex number multiplication*
 
   $$
-  {\Theta, m}^{d} = \begin{pmatrix}
+  R_{\Theta, m}^{d} = \begin{pmatrix}
+  \cos(m\theta_i) & -\sin(m\theta_i) \\
+  \sin(m\theta_i) & \cos(m\theta_i)
+  \end{pmatrix}
   $$
-
-\cos(m\theta_i) & -\sin(m\theta_i) \\
-\sin(m\theta_i) & \cos(m\theta_i)
-\end{pmatrix}$$
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/JwomblCvcoM3Q8xsdRmjGVlhpef.png)
 
@@ -303,53 +302,53 @@ $$
 a_{m,n} = q_m^T k_n = [R_{\Theta,d}^m (W_q x_m)]^T R_{\Theta,d}^n W_k x_n = (W_q x_m)^T {R_{\Theta,d}^m}^T R_{\Theta,d}^n W_k x_n
 $$
 
-The relative (angular) position between tokens is preserved and is more predictable compared to sinusoidal encoding, yields better perplexity beyond training length.
+The relative (angular) position between tokens is preserved and is more predictable compared to sinusoidal encoding, yielding better perplexity beyond training length.
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/VLK9bcvTqo8hbVxsnNwjgFmepOh.png)
 ![](/assets/images/2025-01-31-transformer-from-scratch/LYD9bKopwo4KmwxnGGujJ4P0p2c.png)
 
 ### Position Interpolation
 
-讨论基于 RoPE 进行 context window extension 的方法。总的来说各类方法都可以概述为：
+Discussion on methods for context window extension based on RoPE. Generally, all methods can be summarized as:
 
 $$
 f'_{\mathbf{W}}(\mathbf{x}_m, m, \theta_d) = f_{\mathbf{W}}(\mathbf{x}_m, g(m), h(\theta_d))
 $$
 
-定义：
+Define:
 
 $$
 s= \frac{L'}{L} > 1
 $$
 
-由于 d 维度向量中每个位置实际旋转的角度
+Since the actual rotation angle for each position in the d-dimensional vector is
 
 $$
 m\theta_i = mb^{-2d/D}
 $$
 
-为了使得 m 能够取到比 training 时更大的值，同时乘积尽量不超限，最简单的方式是令
+To allow m to take larger values than during training while keeping the product within bounds, the simplest approach is to set
 
 $$
 g(m) = \frac{m}{s}
 $$
 
-从 embedding vector 的角度看，这个方法均匀地“拉伸”所有维度；或者从 positional encoding 的角度看，均匀地降低了所有采样频率（所有给定距离的 token pair，相对旋转角度都缩小了 s 倍），类似的方法还有令
+From the embedding vector perspective, this method uniformly "stretches" all dimensions; or from the positional encoding perspective, it uniformly reduces all sampling frequencies (for all token pairs at given distances, relative rotation angles are reduced by factor s). A similar method is to set
 
 $$
 h(\theta_d) = (b*s)^{-2d/{D}}
 $$
 
-这种覆盖全采样频率的方法还有优化的空间：引入波长的概念，表征对于 d 维度的 embedding 向量，相距多少个 token 才能够使 RoPE encoding 旋转一整周
+This approach covering all sampling frequencies still has room for optimization: introducing the concept of wavelength, which characterizes how many tokens apart two positions need to be for the RoPE encoding to rotate a full circle for the d-dimensional embedding vector
 
 $$
 \lambda_{d} = \frac{2\pi}{\theta_{d}} = 2\pi b^{\frac{2d}{|D|}}
 $$
 
-- 在短波长的维度（比如不到 L/32），positional encoding 负责捕获 token 的局部位置关系，由于 RoPE 具备周期性的，在进行 context windown extension 时，并不需要调整（e.g. embedding 无非就是从 32 整周变成了 64 整周，整体 embedding 数值 scale 没有膨胀，分布仍然是均匀的
-- 长波长的维度（比如比 L 更长）则捕获全局的 token 位置关系，在 context windown extension 时会面临更大的问题（e.g. embedding 数值 scale 可能会超过 training 时见过的上限，并显著改变在角位置上的分布），因此需要 interpolation
+- For short wavelength dimensions (e.g., less than L/32), positional encoding is responsible for capturing local positional relationships between tokens. Since RoPE has periodicity, no adjustment is needed during context window extension (e.g., embedding just goes from 32 full cycles to 64 full cycles, overall embedding numerical scale doesn't expand, distribution remains uniform)
+- Long wavelength dimensions (e.g., longer than L) capture global token positional relationships and face bigger problems during context window extension (e.g., embedding numerical scale may exceed training upper bounds and significantly change distribution in angular positions), thus requiring interpolation
 
-这就是 [YaRN](https://arxiv.org/abs/2309.00071) 的基本思想，还有少数 trick，比如 dynamic scaling（可能会破坏 kv cache）和 temperature factor，比较细节，需要时查阅原文即可。
+This is the basic idea of [YaRN](https://arxiv.org/abs/2309.00071), with additional tricks like dynamic scaling (which may break kv cache) and temperature factors. These are quite detailed and can be referenced in the original paper when needed.
 
 ![](/assets/images/2025-01-31-transformer-from-scratch/S4RybsiuloIV3exV91CjnSgRptw.png)
 
@@ -368,7 +367,7 @@ MoEs:
 
 ### Motivation
 
-最主要的目的是想扩大模型容量（以参数量计），但在计算量上妥协。i.e. scaling model capacity without proportional compute cost
+The main purpose is to expand model capacity (measured by parameter count) while compromising on computation. i.e., scaling model capacity without proportional compute cost
 
 - Dense Models: Scaling up dense models (e.g., Transformers) requires increasing both model size and compute proportionally.
 - Sparse MoE Models: Only a subset of experts is activated per input, allowing you to increase the number of experts (model capacity) without increasing the computation cost significantly.
@@ -376,42 +375,37 @@ MoEs:
   - For example, in a model with 100 experts where only 2 are active per input, the computational cost is equivalent to a much smaller dense model.
   - This enables training and inference on much larger models than would be feasible with dense architectures.
 
-### 主要结构
+### Main Structure
 
 - Sparse MoE layers are used instead of dense feed-forward network (FFN) layers.
 - A gate network or router, that determines which tokens are sent to which expert
 
-### 实现细节
+### Implementation Details
 
-- 怎么处理 top-k masking 带来的 indifferentiable：When performing backpropagation in this setup, the top-k hard masking step is effectively ignored during the gradient computation. Instead, the loss propagates gradients back through the original scores (before the masking)
-- Load balancing loss：为了避免 expert 之间分到的 token sample 不均衡，会额外加上一个 load balance loss，经常被定义为每个 batch 中每个 expert 被选到的频率与均匀分布的 kl-div，在最后一层累加在一块，再和 target loss 加和反向传播
+- How to handle the non-differentiable nature of top-k masking: When performing backpropagation in this setup, the top-k hard masking step is effectively ignored during the gradient computation. Instead, the loss propagates gradients back through the original scores (before the masking)
+- Load balancing loss: To avoid uneven token sample distribution among experts, an additional load balance loss is added, often defined as the KL divergence between the frequency each expert is selected in each batch and uniform distribution. This is accumulated in the final layer and added to the target loss for backpropagation
   ![](/assets/images/2025-01-31-transformer-from-scratch/Pr5ybDr8ooKyAHxRnmkjR0tEpZe.png)
 
-```
-
+```python
 # Compute the main task loss
-
 main_loss = nn.MSELoss()(outputs, target)
 
 # Sum all balance losses
-
 total_balance_loss = sum(all_balance_losses)
 
 # Total loss (main task + all balance losses)
-
 total_loss = main_loss + 0.1 * total_balance_loss  # Weight balance loss as needed
-
 ```
 
-### fine-tuning MoEs
+### Fine-tuning MoEs
 
-- more **prone to overfitting***, so we can explore** higher regularization (e.g. dropout)** within the experts themselves (e.g. we can have one dropout rate for the dense layers and another, higher, dropout for the sparse layers). ***reason**: each expert sees a smaller fraction of the overall dataset during training and has less diverse data to learn from. It may overfit to the specific patterns in its assigned subset, leading to poorer generalization; the  sparse model typically has high model capacity per input
+- More **prone to overfitting**, so we can explore **higher regularization (e.g. dropout)** within the experts themselves (e.g., we can have one dropout rate for the dense layers and another, higher, dropout for the sparse layers). **Reason**: each expert sees a smaller fraction of the overall dataset during training and has less diverse data to learn from. It may overfit to the specific patterns in its assigned subset, leading to poorer generalization; the sparse model typically has high model capacity per input
 
-- Whether to use **auxiliary loss** (the load balancing loss): some experiments show turning off auxiliary loss and just drop overload tokens does not significantly impact performance, as **token dropping** might be a form of regularization that helps prevent overfitting, while there are other experiments that show the opposite
+- Whether to use **auxiliary loss** (the load balancing loss): some experiments show turning off auxiliary loss and just dropping overload tokens does not significantly impact performance, as **token dropping** might be a form of regularization that helps prevent overfitting, while other experiments show the opposite
 
-- Which parameters to **freeze**: while the majority number of parameters lies in MoE layers, freeze them and only tune others reaches similar performance as tuning all the parameters.
+- Which parameters to **freeze**: while the majority of parameters lie in MoE layers, freezing them and only tuning others reaches similar performance as tuning all parameters.
 
-- different fine-tuning **hyperparameter setups** - e.g., sparse models tend to benefit more from smaller batch sizes and higher learning rates.
+- Different fine-tuning **hyperparameter setups** - e.g., sparse models tend to benefit more from smaller batch sizes and higher learning rates.
 
 ## Useful Resources
 
@@ -420,4 +414,3 @@ total_loss = main_loss + 0.1 * total_balance_loss  # Weight balance loss as need
 - Self-attention explained by excel sheets ([link](https://docs.google.com/spreadsheets/d/1QFeC5vASezY-JQKdBfrn5vDnrTQgpehUMHqFuL-sqHI/edit?usp=sharing), [github](https://github.com/ImagineAILab/ai-by-hand-excel/?tab=readme-ov-file))
 
 - The original demo implementation ([link](https://www.datacamp.com/tutorial/building-a-transformer-with-py-torch))
-

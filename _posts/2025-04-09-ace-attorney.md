@@ -1,5 +1,5 @@
 ---
-title: 逆转裁判 x LLM：成步堂再度登场
+title: Ace Attorney x LLM: Phoenix Wright Returns
 date: 2025-04-08 23:37:00 +0800
 categories: [game]
 tags: [llm,fun]
@@ -7,25 +7,36 @@ pin: false
 math: false
 ---  
 
-## 缘起
-作为一个游戏年龄几乎等于年龄的老玩家，总在这个行业里能持续找到惊喜和热情。这一波 LLM 浪潮将会怎样影响这个充满想象力的行业也一直是我想探索的问题。最近蔡浩宇的新作以及小丑牌的开发访谈激起了我一个长久以来的想法：用 LLM 技术复刻某个经典游戏，赋予它新的体验。
-## 选型
-首先，这个游戏要足够经典（不然我没有热情）；同时语言最好是游戏的核心game-play（毕竟这一波的 AI 主要还是语言模型，这样才有可能AI-Native）；最后不能太复杂（毕竟我只是一个三脚猫开发者）。这几个条件一框下去，最后我选择的其实是最先跳出来的想法：卡普空的经典法庭辩论游戏《逆転裁判》系列，one of my favorites.
-## 预览
-目前的demo复刻了《逆転裁判》第一部/第一章（“最初的逆转”）。剧情上，成步堂龙一作为新人律师登场，在好姐姐千寻的帮助下，洗脱好友矢张的杀人嫌疑；游戏机制上，将原作经典的基于选择题的法庭对质环节用AI重制，玩家需要根据手中的证物推理证词中的矛盾，戳穿AI扮演的做伪证的证人。  
-![游戏封面](/assets/images/2025-04-09-ace-attorney/title.png)  
-*AI重绘试图加上赛博朋克风格的封面，带有 AI 标志性的text rendering瑕疵*  
-![场景对话](/assets/images/2025-04-09-ace-attorney/scene.png)  
-*AI味浓重的场景原画和立绘*  
-![选择题](/assets/images/2025-04-09-ace-attorney/choice.png)  
-*传统的选择环节*  
-![AI质询](/assets/images/2025-04-09-ace-attorney/query.png)  
-*AI扮演的证人辩论环节*  
+## Origins
 
-游戏整体由renpy框架写成，大部分的美术资源，音乐资源，甚至代码都是AI完成的——需要我参与的部分主要是通过尽量细致的提示词工程驱动AI行为与剧本“合轨”，并创造额外的游戏乐趣。
-这波AI确实让普通玩家比任何时候都更接近独立游戏开发者，更有技术能力做出自己想要的东西。而from software，gamefreak这些天才的game studio也确实证实了伟大的游戏开发者不必要是高技术的程序员（<-高级黑）
+As a veteran gamer whose gaming age nearly equals my actual age, I continue to find surprises and passion in this industry. How this wave of LLMs will impact this imagination-rich field has always been something I wanted to explore. Recently, Cai Haoyu's new work and the development interviews for Balatro sparked a long-held idea of mine: use LLM technology to recreate a classic game and give it a fresh experience.
 
-## to do
-- 我正在尝试用合适的方法放出游戏的 web试玩版，并通过微调剧本，设法提高AI辩论的难度与趣味性
-- 我相信还有非常多符合上述要求的游戏可供讨论：大量机制相近的ACG游戏（e.g. *秋之回忆*），碎片化叙事驱动的游戏（e.g. *soul-like*,*锈湖*），甚至更复杂的围绕某种和语言相关的抽象概念建立世界观的游戏（e.g. *潜龙谍影-幻痛*或者*心灵杀手*）都完全有可能因为LLM的到来而焕发全新的魅力
-- 欢迎找我coffee chat，毕竟比工作中的 AI应用还是有意思那么一点点（/狗头保命）
+## Game Selection
+
+First, the game had to be sufficiently classic (otherwise I wouldn't have the passion). Second, language should ideally be the core gameplay mechanic (since this wave of AI is primarily language models, making it truly AI-native). Finally, it couldn't be too complex (since I'm just a jack-of-all-trades developer). With these criteria in mind, my final choice was actually the first idea that popped up: Capcom's classic courtroom drama series *Ace Attorney* (逆転裁判), one of my favorites.
+
+## Preview
+
+The current demo recreates the first case of the first *Ace Attorney* game ("The First Turnabout"). Story-wise, rookie attorney Phoenix Wright takes the stage with help from his mentor Mia Fey to clear his friend Larry Butz of murder charges. Mechanically, the original's classic multiple-choice courtroom cross-examination segments have been AI-remade—players must use evidence in hand to reason through contradictions in testimony and expose the AI-played perjuring witness.
+
+![Game Cover](/assets/images/2025-04-09-ace-attorney/title.png)  
+*AI-redrawn cover attempting cyberpunk style, complete with AI's signature text rendering flaws*  
+
+![Scene Dialogue](/assets/images/2025-04-09-ace-attorney/scene.png)  
+*Heavily AI-flavored scene artwork and character sprites*  
+
+![Multiple Choice](/assets/images/2025-04-09-ace-attorney/choice.png)  
+*Traditional choice segments*  
+
+![AI Cross-examination](/assets/images/2025-04-09-ace-attorney/query.png)  
+*AI-played witness debate segments*  
+
+The entire game is built on the Ren'Py framework, with most art assets, music, and even code completed by AI—my main contribution was using detailed prompt engineering to keep AI behavior "on-script" and create additional gameplay enjoyment.
+
+This wave of AI has indeed brought ordinary players closer to indie game development than ever before, giving us the technical capability to create what we actually want. Studios like FromSoftware and Game Freak have proven that great game developers don't necessarily need to be high-tech programmers (← subtle shade).
+
+## To Do
+
+- I'm working on releasing a web playable version using appropriate methods, and fine-tuning the script to improve the difficulty and enjoyment of AI debates
+- I believe there are many more games that fit the above criteria worth exploring: numerous mechanically similar ACG games (e.g., *Memories Off*), fragmented narrative-driven games (e.g., *Soul-like*, *Rusty Lake*), or even more complex games that build worldviews around abstract language-related concepts (e.g., *Metal Gear Solid V: The Phantom Pain* or *Alan Wake*) could all potentially gain fresh appeal with LLM integration
+- Feel free to reach out for a coffee chat—after all, this is slightly more interesting than workplace AI applications (/doge for safety)
