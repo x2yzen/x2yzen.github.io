@@ -39,4 +39,3 @@ This wave of AI has indeed brought ordinary players closer to indie game develop
 
 - I'm working on releasing a web playable version using appropriate methods, and fine-tuning the script to improve the difficulty and enjoyment of AI debates
 - I believe there are many more games that fit the above criteria worth exploring: numerous mechanically similar ACG games (e.g., *Memories Off*), fragmented narrative-driven games (e.g., *Soul-like*, *Rusty Lake*), or even more complex games that build worldviews around abstract language-related concepts (e.g., *Metal Gear Solid V: The Phantom Pain* or *Alan Wake*) could all potentially gain fresh appeal with LLM integration
-- Feel free to reach out for a coffee chat—after all, this is slightly more interesting than workplace AI applications (/doge for safety)
