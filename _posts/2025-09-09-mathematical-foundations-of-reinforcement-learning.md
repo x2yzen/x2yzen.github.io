@@ -172,11 +172,11 @@ Convergence Conditions:
 
 As a special form, Robbins-Monro can be used to incrementally estimate mathematical expectation $\mathbb{E}[X]$, by setting
 $$
-g(w) = w - \mathbb{E}[X]
+g(w) = w - \mathbb{E}[X] \tag{17}
 $$
 Because
 $$
-\tilde{g}(w, \eta) = w - x = w - x + \mathbb{E}[X] - \mathbb{E}[X] = (w - \mathbb{E}[X]) + (\mathbb{E}[X] - x) \stackrel{\triangle}{=} g(w) + \eta
+\tilde{g}(w, \eta) = w - x = w - x + \mathbb{E}[X] - \mathbb{E}[X] = (w - \mathbb{E}[X]) + (\mathbb{E}[X] - x) \stackrel{\triangle}{=} g(w) + \eta \tag{18}
 $$
 So the root of $g(w)$, which is $\mathbb{E}[X]$, can be estimated using
 $$
@@ -188,7 +188,7 @@ Additionally, Robbins-Monro is also the mathematical foundation of *stochastic g
 
 Using equation (10) to solve BOE:
 $$
-q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_a q(S_{t+1}, a) \mid S_t = s, A_t = a\right]
+q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_a q(S_{t+1}, a) \mid S_t = s, A_t = a\right] \tag{19}
 $$
 We can obtain the following algorithm. Compared to monte-carlo learning which must complete an entire episode to update, this algorithm can update at each step through the difference between current estimates and (noisy) targets, hence called _temporal difference learning_. Specifically, since it solves for optimal action values, it's also called *Q-learning*.
 
@@ -217,16 +217,18 @@ In previous sections, we assumed that state value function $v(s)$ and action val
 
 If we use $\hat{q}(s,a,w)$ to represent action value function $q(s,a)$ and want it to be as accurate as possible, a common objective is:
 $$
-\min_w \mathbb{E}\left[q_t(s,a) - \hat{q}(s,a;w)\right]^2
+\min_w \mathbb{E}\left[q_t(s,a) - \hat{q}(s,a;w)\right]^2 \tag{20}
 $$
 According to gradient descent rules, we can easily obtain the optimization iteration:
 $$
-w_{t+1} = w_t + \alpha_t \left[q_t(s,a) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t)
+w_{t+1} = w_t + \alpha_t \left[q_t(s,a) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{21}
 $$
 This optimization is still intractable because we don't know the accurate optimization target $q(s,a)$. However, according to TD-Learning ideas, $rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t)$ can serve as an estimate of optimal $q(s,a)$. Substituting into the above equation:
+
 $$
 w_{t+1} = w_t + \alpha_t \left[rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{11}
 $$
+
 By iteratively optimizing $\hat{q}(s,a,w)$ according to the above equation, we can finally learn a parametric estimate of the optimal action value function. Obviously, this method is a parametric version of Q-learning. Since deep neural networks are a common choice for this parametric function, it's also called **deep Q-learning**. Adding some practical tricks (experience replay & target network), the algorithm implementation is as follows:
 
 ```
@@ -264,11 +266,11 @@ $$
 Computing this gradient requires traversing all states s and actions a, which is actually intractable. However, according to stochastic gradient descent ideas, it can be rewritten as the following sampling-based estimate:
 Since
 $$
-\nabla_\theta \pi(a|s, \theta) = \nabla_\theta \ln \pi(a|s, \theta) \cdot \pi(a|s, \theta)
+\nabla_\theta \pi(a|s, \theta) = \nabla_\theta \ln \pi(a|s, \theta) \cdot \pi(a|s, \theta) \tag{22}
 $$
 We have
 $$
-\nabla_\theta J(\theta)  = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta)\nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a)
+\nabla_\theta J(\theta)  = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta)\nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \tag{23}
 $$
 Which can also be written as
 $$
@@ -331,11 +333,11 @@ $$
 $$
 This enables us to use a method similar to controlled variables (CUPED) to reduce the variance of SGD gradient estimation. A common choice for b(s) is the state value function, in which case the overall critic function is called advantage:
 $$
-\theta_{t+1} = \theta_t + \alpha \mathbb{E}\left[ \nabla_\theta \ln \pi(A|S, \theta_t) [q_\pi(S, A) - v_\pi(S)] \right]
+\theta_{t+1} = \theta_t + \alpha \mathbb{E}\left[ \nabla_\theta \ln \pi(A|S, \theta_t) [q_\pi(S, A) - v_\pi(S)] \right] \tag{24}
 $$
 In practice, to avoid maintaining 2 critic networks (q&v) simultaneously, the following approximation is commonly used:
 $$
-q_t(s_t, a_t) - v_t(s_t) \approx r_{t+1} + \gamma v_t(s_{t+1}) - v_t(s_t)
+q_t(s_t, a_t) - v_t(s_t) \approx r_{t+1} + \gamma v_t(s_{t+1}) - v_t(s_t) \tag{25}
 $$
 This way, only one value network is needed to complete the algorithm:
 ```
