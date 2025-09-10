@@ -27,11 +27,14 @@ Ultimately, these two methods can be combined through the **actor-critic** algor
 ### Bellman Equation
 
 The Bellman Optimal Equation is a special form of the *Bellman Equation*. In the MDP model, the value of a state is defined as the reward obtained by following a policy $\pi$ from that state, consisting of *immediate rewards* and *future rewards*, where future rewards are actually the values of the next states. Therefore, we can use an equation to describe the relationship between the value of any state s and the values of other states:
+
 $$
 V_{\pi}(s) = \sum_{a} \pi(a|s) \left[ \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s'} P(s'|s,a) V_{\pi}(s') \right] \\
 = \mathbb{E}[R + \gamma V_{\pi}(s')] \tag{1}
 $$
+
 This equation is called the Bellman Equation. From the action value perspective, the Bellman Equation has a dual form describing the relationship between any action's value and other action values:
+
 $$
 \begin{aligned}
 q_{\pi}(s,a) &= \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s'} P(s'|s,a) V_{\pi}(s') \\
@@ -39,24 +42,31 @@ q_{\pi}(s,a) &= \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s'} P(s'|s,a) V_{\pi}(s
 &= \mathbb{E}[R + \gamma q_{\pi}(s',a')]
 \end{aligned} \tag{2}
 $$
+
 The transformation relationship between them is:
+
 $$
 V_{\pi}(s) = \sum_{a} \pi(a|s) q_{\pi}(s,a) \tag{3}
 $$
+
 
 ### Optimality of Bellman Equation
 
 From the Bellman Equation, we can see that state values are defined under a specific policy, so the same state has different values under different policies. Therefore, there must exist a policy under which each state's value is no less than that state's value under any other policy (otherwise the policy could be adjusted at that state). We define this as the optimal policy.
 
 Substituting into the Bellman equation, the state value functions under the optimal policy should satisfy:
+
 $$
 v(s) = \max_{\pi} \left( r_{\pi} + \gamma P_{\pi} V \right)  \tag{4}
 $$
+
 This equation is called the Bellman optimality equation (state value version).
 Obviously, it still has a dual form based on action values:
+
 $$
 q(s,a) = r_{t+1} + \gamma \max_{a} q(s_{t+1}, a) \tag{5}
 $$
+
 BOE is the core concept and essential problem of reinforcement learning. All following content revolves around these two points:
 
 1. How to solve BOE: From the most basic value function iteration → monte-carlo learning, eliminating the requirement for environment model description; monte-carlo learning → temporal difference, achieving incremental updates and improving algorithmic efficiency; the final product is Q-learning.
@@ -74,9 +84,11 @@ The most basic BOE solution method, applicable when environment models $p(r|s,a)
 
 A series of iteration-based solution methods, with effectiveness guaranteed by the *Contraction Mapping Theorem*.
 Bellman Equation (1) holds for every state s, so theoretically it can be solved simultaneously. However, when there are too many states, to avoid the computational complexity of solving a huge inverse matrix, iterative methods are often used to obtain approximate solutions: simply substitute random initial v values into the right side of the equation continuously, and after convergence, the state value under the given policy $\pi$ can be obtained. This process is also called _policy evaluation_.
+
 $$
 v_{k+1} = r_{\pi} + \gamma P_{\pi} v_{k} \tag{6}
 $$
+
 Bellman Optimal Equation (3) is more tricky: because $\pi$ and v are mutually dependent, but it can be proven that it can still be solved by initializing either side and then iterating.
 
 ##### value iteration
@@ -84,10 +96,13 @@ Bellman Optimal Equation (3) is more tricky: because $\pi$ and v are mutually de
 If we choose to initialize v, this method is called *value iteration*, with specific steps:
 
 1. Starting from any given initial state value function v, for state s, calculate q(s,a)
-   $$
-   q_k(s,a) = \sum_{r}p(r|s,a)r + \gamma\sum_{s'}p(s'|s,a)v_k(s') \tag{7}
-   $$
+  
+  $$
+  q_k(s,a) = \sum_{r}p(r|s,a)r + \gamma\sum_{s'}p(s'|s,a)v_k(s') \tag{7}
+  $$
+
 2. Obviously, by equation (3), the policy that maximizes state s value must greedily select the action a corresponding to the maximum q(s,a)
+
    $$
    \pi_{k+1}(a|s) =
    \begin{cases}
@@ -95,7 +110,9 @@ If we choose to initialize v, this method is called *value iteration*, with spec
    0 & a \neq a_k^*(s)
    \end{cases} \quad \text{where } a_k^*(s) = \arg\max_a q_k(s, a). \tag{8}
    $$
+
 3. Calculate new v(s), noting that v at this time is not a value function, because the equation it satisfies is v1=f(v0) rather than the standard form v1=f(v1) of the Bellman equation
+
    $$
    v_{k+1}(s) = \max_{a} q_k(s, a) \tag{9}
    $$
@@ -171,25 +188,33 @@ Convergence Conditions:
 </div>  
 
 As a special form, Robbins-Monro can be used to incrementally estimate mathematical expectation $\mathbb{E}[X]$, by setting
+
 $$
 g(w) = w - \mathbb{E}[X] \tag{17}
 $$
+
 Because
+
 $$
 \tilde{g}(w, \eta) = w - x = w - x + \mathbb{E}[X] - \mathbb{E}[X] = (w - \mathbb{E}[X]) + (\mathbb{E}[X] - x) \stackrel{\triangle}{=} g(w) + \eta \tag{18}
 $$
+
 So the root of $g(w)$, which is $\mathbb{E}[X]$, can be estimated using
+
 $$
 w_{k+1} = w_k - \alpha_k \tilde{g}(w_k, \eta_k) = w_k - \alpha_k(w_k - x_k) \tag{10}
 $$
+
 Additionally, Robbins-Monro is also the mathematical foundation of *stochastic gradient descent*: As an application, we can formulate an optimization problem in which the objective function is J(w) as a root-finding problem: g(w) = ∇ₓJ(w) = 0. In this case, the condition that g(w) is monotonically increasing indicates that J(w) is **convex**, which is a commonly adopted assumption in optimization problems.
 
 ###### Q-learning
 
 Using equation (10) to solve BOE:
+
 $$
 q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_a q(S_{t+1}, a) \mid S_t = s, A_t = a\right] \tag{19}
 $$
+
 We can obtain the following algorithm. Compared to monte-carlo learning which must complete an entire episode to update, this algorithm can update at each step through the difference between current estimates and (noisy) targets, hence called _temporal difference learning_. Specifically, since it solves for optimal action values, it's also called *Q-learning*.
 
 ```
@@ -216,13 +241,17 @@ Until convergence (or maximum number of episodes reached)
 In previous sections, we assumed that state value function $v(s)$ and action value function $q(s,a)$ are in some **discrete tabular** form. In practical applications, the enumerated values of states and actions can be very large, so to save storage and gain generalization, a natural idea is to use **parametric functions**, instead of tables, to describe value functions.
 
 If we use $\hat{q}(s,a,w)$ to represent action value function $q(s,a)$ and want it to be as accurate as possible, a common objective is:
+
 $$
 \min_w \mathbb{E}\left[q_t(s,a) - \hat{q}(s,a;w)\right]^2 \tag{20}
 $$
+
 According to gradient descent rules, we can easily obtain the optimization iteration:
+
 $$
 w_{t+1} = w_t + \alpha_t \left[q_t(s,a) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{21}
 $$
+
 This optimization is still intractable because we don't know the accurate optimization target $q(s,a)$. However, according to TD-Learning ideas, $rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t)$ can serve as an estimate of optimal $q(s,a)$. Substituting into the above equation:
 
 $$
@@ -256,30 +285,42 @@ For each iteration, do
 ## Policy-based methods
 
 Methods represented by policy gradient embody another approach to solving reinforcement learning problems: parametric functions can be used not only for value representation, but also for policy, from tabular representation $\pi(a_i|s_k)$ → functional representation $\pi(a|s,\theta)$. If we can use some scalar metric to describe optimality, we can conveniently obtain the optimal policy by optimizing the parametric policy function. _Average state value_ describes the average state value weighted by the Markov steady-state distribution corresponding to a policy, and is a frequently used metric:
+
 $$
 \bar{v}_{\pi}(s) = \sum_{s \in S} \eta(s) v_\pi(s) = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta) q_\pi(s, a) \tag{12}
 $$
+
 To perform gradient ascent, we take the derivative of the above equation:
+
 $$
 \nabla_\theta J(\theta) = \sum_{s \in S} \eta(s) \sum_{a \in A} \nabla_\theta \pi(a|s, \theta) q_\pi(s, a) \tag{13}
 $$
+
 Computing this gradient requires traversing all states s and actions a, which is actually intractable. However, according to stochastic gradient descent ideas, it can be rewritten as the following sampling-based estimate:
 Since
+
 $$
 \nabla_\theta \pi(a|s, \theta) = \nabla_\theta \ln \pi(a|s, \theta) \cdot \pi(a|s, \theta) \tag{22}
 $$
+
 We have
+
 $$
 \nabla_\theta J(\theta)  = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta)\nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \tag{23}
 $$
+
 Which can also be written as
+
 $$
 \nabla_\theta J(\theta) = \mathbb{E}_{s \sim \eta, a \sim \pi(s, \theta)} \left[ \nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \right] \tag{14}
 $$
+
 That is, the gradient of the objective function is the mathematical expectation of an expression based on $(s,a)$, so we can use random sampling $(s_t,a_t)$ of $(s,a)$ to estimate and perform stochastic gradient descent:
+
 $$
 \theta_{t+1} = \theta_t + \alpha\cdot {q_t(s_t, a_t)} \nabla_\theta \ln\pi(a_t|s_t, \theta_t)=\theta_t + \alpha \left( \frac{q_t(s_t, a_t)}{\pi(a_t|s_t, \theta_t)} \right) \nabla_\theta \pi(a_t|s_t, \theta_t)  \tag{15}
 $$
+
 Analyzing the above equation, it essentially increases the probability of actions with higher action values, and is inversely amplified by the current policy's probability for that action, implicitly expressing some exploration-exploitation trade-off.
 Combining (15) with SGD + Monte Carlo estimation of action values gives us a practically runnable algorithm (REINFORCE):
 
@@ -328,17 +369,23 @@ At time step t in each episode, do
 ```
 ### Advantage-actor-critic  
 Furthermore, it can be proven that equation (16) holds, which allows adding any function that only depends on state (and is independent of policy parameter $\theta$) to the critic term in the expected return gradient formula without changing the expectation:
+
 $$
 \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) q_\pi(S, A) \right] = \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) (q_\pi(S, A) - b(S)) \right] \tag{16}
 $$
+
 This enables us to use a method similar to controlled variables (CUPED) to reduce the variance of SGD gradient estimation. A common choice for b(s) is the state value function, in which case the overall critic function is called advantage:
+
 $$
 \theta_{t+1} = \theta_t + \alpha \mathbb{E}\left[ \nabla_\theta \ln \pi(A|S, \theta_t) [q_\pi(S, A) - v_\pi(S)] \right] \tag{24}
 $$
+
 In practice, to avoid maintaining 2 critic networks (q&v) simultaneously, the following approximation is commonly used:
+
 $$
 q_t(s_t, a_t) - v_t(s_t) \approx r_{t+1} + \gamma v_t(s_{t+1}) - v_t(s_t) \tag{25}
 $$
+
 This way, only one value network is needed to complete the algorithm:
 ```
 Advantage actor-critic (A2C) or TD actor-critic
