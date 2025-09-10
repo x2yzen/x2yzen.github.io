@@ -18,7 +18,7 @@ This blog attempts to clarify the mathematical foundations of the reinforcement 
 The core problem in reinforcement learning is to find the optimal action policy in an environment that can be abstracted as a *Markov decision process*, in order to maximize rewards. There are two main approaches:
 
 1. **Value-based**: Describes the value $q(s,a)$ of each action in each environment state. Indirectly, the optimal policy is to select the action with maximum value in the current environment. These methods belong to classical reinforcement learning theory, solved through dynamic programming to achieve Bellman Optimal Equation, with deep Q-learning being a typical algorithm.
-2. **Policy-based**: Directly describes the optimal policy function, i.e., given any state s, output the optimal action $\pi(a|s)$. This approach is closer to solving optimization problems, optimizing expected rewards through standard gradient ascent.
+2. **Policy-based**: Directly describes the optimal policy function, i.e., given any state s, output the optimal action pi(a|s). This approach is closer to solving optimization problems, optimizing expected rewards through standard gradient ascent.
 
 Ultimately, these two methods can be combined through the **actor-critic** algorithmic framework, forming the complete theory of modern reinforcement learning.
 
@@ -78,7 +78,7 @@ The following sections will separately introduce methods for solving BOE and for
 
 #### Iteration Methods
 
-The most basic BOE solution method, applicable when environment models $p(r|s,a)$ and $p(s'|s,a)$ are known.
+The most basic BOE solution method, applicable when environment models p(r|s,a) and p(s'|s,a) are known.
 
 ##### policy evaluation
 
@@ -190,19 +190,19 @@ Convergence Conditions:
 As a special form, Robbins-Monro can be used to incrementally estimate mathematical expectation $\mathbb{E}[X]$, by setting
 
 $$
-g(w) = w - \mathbb{E}[X] \tag{17}
+g(w) = w - \mathbb{E}[X] \tag{10}
 $$
 
 Because
 
 $$
-\tilde{g}(w, \eta) = w - x = w - x + \mathbb{E}[X] - \mathbb{E}[X] = (w - \mathbb{E}[X]) + (\mathbb{E}[X] - x) \stackrel{\triangle}{=} g(w) + \eta \tag{18}
+\tilde{g}(w, \eta) = w - x = w - x + \mathbb{E}[X] - \mathbb{E}[X] = (w - \mathbb{E}[X]) + (\mathbb{E}[X] - x) \stackrel{\triangle}{=} g(w) + \eta \tag{11}
 $$
 
 So the root of $g(w)$, which is $\mathbb{E}[X]$, can be estimated using
 
 $$
-w_{k+1} = w_k - \alpha_k \tilde{g}(w_k, \eta_k) = w_k - \alpha_k(w_k - x_k) \tag{10}
+w_{k+1} = w_k - \alpha_k \tilde{g}(w_k, \eta_k) = w_k - \alpha_k(w_k - x_k) \tag{12}
 $$
 
 Additionally, Robbins-Monro is also the mathematical foundation of *stochastic gradient descent*: As an application, we can formulate an optimization problem in which the objective function is J(w) as a root-finding problem: g(w) = ∇ₓJ(w) = 0. In this case, the condition that g(w) is monotonically increasing indicates that J(w) is **convex**, which is a commonly adopted assumption in optimization problems.
@@ -212,7 +212,7 @@ Additionally, Robbins-Monro is also the mathematical foundation of *stochastic g
 Using equation (12) to solve BOE:
 
 $$
-q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_a q(S_{t+1}, a) \mid S_t = s, A_t = a\right] \tag{19}
+q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_a q(S_{t+1}, a) \mid S_t = s, A_t = a\right] \tag{13}
 $$
 
 We can obtain the following algorithm. Compared to monte-carlo learning which must complete an entire episode to update, this algorithm can update at each step through the difference between current estimates and (noisy) targets, hence called _temporal difference learning_. Specifically, since it solves for optimal action values, it's also called *Q-learning*.
@@ -243,19 +243,19 @@ In previous sections, we assumed that state value function $v(s)$ and action val
 If we use $\hat{q}(s,a,w)$ to represent action value function $q(s,a)$ and want it to be as accurate as possible, a common objective is:
 
 $$
-\min_w \mathbb{E}\left[q_t(s,a) - \hat{q}(s,a;w)\right]^2 \tag{20}
+\min_w \mathbb{E}\left[q_t(s,a) - \hat{q}(s,a;w)\right]^2 \tag{14}
 $$
 
 According to gradient descent rules, we can easily obtain the optimization iteration:
 
 $$
-w_{t+1} = w_t + \alpha_t \left[q_t(s,a) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{21}
+w_{t+1} = w_t + \alpha_t \left[q_t(s,a) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{15}
 $$
 
 This optimization is still intractable because we don't know the accurate optimization target $q(s,a)$. However, according to TD-Learning ideas, $rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t)$ can serve as an estimate of optimal $q(s,a)$. Substituting into the above equation:
 
 $$
-w_{t+1} = w_t + \alpha_t \left[rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{11}
+w_{t+1} = w_t + \alpha_t \left[rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{16}
 $$
 
 By iteratively optimizing $\hat{q}(s,a,w)$ according to the above equation, we can finally learn a parametric estimate of the optimal action value function. Obviously, this method is a parametric version of Q-learning. Since deep neural networks are a common choice for this parametric function, it's also called **deep Q-learning**. Adding some practical tricks (experience replay & target network), the algorithm implementation is as follows:
@@ -287,38 +287,38 @@ For each iteration, do
 Methods represented by policy gradient embody another approach to solving reinforcement learning problems: parametric functions can be used not only for value representation, but also for policy, from tabular representation $\pi(a_i|s_k)$ → functional representation $\pi(a|s,\theta)$. If we can use some scalar metric to describe optimality, we can conveniently obtain the optimal policy by optimizing the parametric policy function. _Average state value_ describes the average state value weighted by the Markov steady-state distribution corresponding to a policy, and is a frequently used metric:
 
 $$
-\bar{v}_{\pi}(s) = \sum_{s \in S} \eta(s) v_\pi(s) = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta) q_\pi(s, a) \tag{12}
+\bar{v}_{\pi}(s) = \sum_{s \in S} \eta(s) v_\pi(s) = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta) q_\pi(s, a) \tag{17}
 $$
 
 To perform gradient ascent, we take the derivative of the above equation:
 
 $$
-\nabla_\theta J(\theta) = \sum_{s \in S} \eta(s) \sum_{a \in A} \nabla_\theta \pi(a|s, \theta) q_\pi(s, a) \tag{13}
+\nabla_\theta J(\theta) = \sum_{s \in S} \eta(s) \sum_{a \in A} \nabla_\theta \pi(a|s, \theta) q_\pi(s, a) \tag{18}
 $$
 
 Computing this gradient requires traversing all states s and actions a, which is actually intractable. However, according to stochastic gradient descent ideas, it can be rewritten as the following sampling-based estimate:
 Since
 
 $$
-\nabla_\theta \pi(a|s, \theta) = \nabla_\theta \ln \pi(a|s, \theta) \cdot \pi(a|s, \theta) \tag{22}
+\nabla_\theta \pi(a|s, \theta) = \nabla_\theta \ln \pi(a|s, \theta) \cdot \pi(a|s, \theta) \tag{19}
 $$
 
 We have
 
 $$
-\nabla_\theta J(\theta)  = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta)\nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \tag{23}
+\nabla_\theta J(\theta)  = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta)\nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \tag{20}
 $$
 
 Which can also be written as
 
 $$
-\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \eta, a \sim \pi(s, \theta)} \left[ \nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \right] \tag{14}
+\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \eta, a \sim \pi(s, \theta)} \left[ \nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \right] \tag{21}
 $$
 
 That is, the gradient of the objective function is the mathematical expectation of an expression based on $(s,a)$, so we can use random sampling $(s_t,a_t)$ of $(s,a)$ to estimate and perform stochastic gradient descent:
 
 $$
-\theta_{t+1} = \theta_t + \alpha\cdot {q_t(s_t, a_t)} \nabla_\theta \ln\pi(a_t|s_t, \theta_t)=\theta_t + \alpha \left( \frac{q_t(s_t, a_t)}{\pi(a_t|s_t, \theta_t)} \right) \nabla_\theta \pi(a_t|s_t, \theta_t)  \tag{15}
+\theta_{t+1} = \theta_t + \alpha\cdot {q_t(s_t, a_t)} \nabla_\theta \ln\pi(a_t|s_t, \theta_t)=\theta_t + \alpha \left( \frac{q_t(s_t, a_t)}{\pi(a_t|s_t, \theta_t)} \right) \nabla_\theta \pi(a_t|s_t, \theta_t)  \tag{22}
 $$
 
 Analyzing the above equation, it essentially increases the probability of actions with higher action values, and is inversely amplified by the current policy's probability for that action, implicitly expressing some exploration-exploitation trade-off.
@@ -371,7 +371,7 @@ At time step t in each episode, do
 Furthermore, it can be proven that equation (23) holds, which allows adding any function that only depends on state (and is independent of policy parameter $\theta$) to the critic term in the expected return gradient formula without changing the expectation:
 
 $$
-\mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) q_\pi(S, A) \right] = \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) (q_\pi(S, A) - b(S)) \right] \tag{16}
+\mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) q_\pi(S, A) \right] = \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) (q_\pi(S, A) - b(S)) \right] \tag{23}
 $$
 
 This enables us to use a method similar to controlled variables (CUPED) to reduce the variance of SGD gradient estimation. A common choice for b(s) is the state value function, in which case the overall critic function is called advantage:
