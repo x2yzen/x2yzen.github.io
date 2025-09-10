@@ -209,7 +209,7 @@ Additionally, Robbins-Monro is also the mathematical foundation of *stochastic g
 
 ###### Q-learning
 
-Using equation (10) to solve BOE:
+Using equation (12) to solve BOE:
 
 $$
 q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_a q(S_{t+1}, a) \mid S_t = s, A_t = a\right] \tag{19}
@@ -322,7 +322,7 @@ $$
 $$
 
 Analyzing the above equation, it essentially increases the probability of actions with higher action values, and is inversely amplified by the current policy's probability for that action, implicitly expressing some exploration-exploitation trade-off.
-Combining (15) with SGD + Monte Carlo estimation of action values gives us a practically runnable algorithm (REINFORCE):
+Combining (22) with SGD + Monte Carlo estimation of action values gives us a practically runnable algorithm (REINFORCE):
 
 ```
 Pseudocode: Policy Gradient by Monte Carlo (REINFORCE)
@@ -368,7 +368,7 @@ At time step t in each episode, do
     wₜ₊₁ = wₜ + αw [rₜ₊₁ + γq(sₜ₊₁, aₜ₊₁, wₜ) - q(sₜ, aₜ, wₜ)] ∇w q(sₜ, aₜ, wₜ)
 ```
 ### Advantage-actor-critic  
-Furthermore, it can be proven that equation (16) holds, which allows adding any function that only depends on state (and is independent of policy parameter $\theta$) to the critic term in the expected return gradient formula without changing the expectation:
+Furthermore, it can be proven that equation (23) holds, which allows adding any function that only depends on state (and is independent of policy parameter $\theta$) to the critic term in the expected return gradient formula without changing the expectation:
 
 $$
 \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) q_\pi(S, A) \right] = \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) (q_\pi(S, A) - b(S)) \right] \tag{16}
