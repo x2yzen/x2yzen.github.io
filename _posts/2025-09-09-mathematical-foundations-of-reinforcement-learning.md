@@ -1,13 +1,13 @@
 ---
 title: Mathematical Foundations of Reinforcement Learning 
-date: 2025-09-09 17:00:00 -0700
+date: 2025-09-09 10:00:00 -0700
 categories: [reinforcement_learning ]
 tags: [rl]
 pin: false
 math: true
 ---
 
-# Overview
+## Overview
 
 This blog attempts to clarify the mathematical foundations of the reinforcement learning framework in a concise manner, following these principles:
 
@@ -22,9 +22,9 @@ The core problem in reinforcement learning is to find the optimal action policy 
 
 Ultimately, these two methods can be combined through the **actor-critic** algorithmic framework, forming the complete theory of modern reinforcement learning.
 
-# Value-based methods
+## Value-based methods
 
-## Bellman Equation
+### Bellman Equation
 
 The Bellman Optimal Equation is a special form of the *Bellman Equation*. In the MDP model, the value of a state is defined as the reward obtained by following a policy $\pi$ from that state, consisting of *immediate rewards* and *future rewards*, where future rewards are actually the values of the next states. Therefore, we can use an equation to describe the relationship between the value of any state s and the values of other states:
 $$
@@ -44,7 +44,7 @@ $$
 V_{\pi}(s) = \sum_{a} \pi(a|s) q_{\pi}(s,a) \tag{3}
 $$
 
-## Optimality of Bellman Equation
+### Optimality of Bellman Equation
 
 From the Bellman Equation, we can see that state values are defined under a specific policy, so the same state has different values under different policies. Therefore, there must exist a policy under which each state's value is no less than that state's value under any other policy (otherwise the policy could be adjusted at that state). We define this as the optimal policy.
 
@@ -64,13 +64,13 @@ BOE is the core concept and essential problem of reinforcement learning. All fol
 
 The following sections will separately introduce methods for solving BOE and forms of value functions.
 
-## Solve BOE
+### Solve BOE
 
-### Iteration Methods
+#### Iteration Methods
 
 The most basic BOE solution method, applicable when environment models $p(r|s,a)$ and $p(s'|s,a)$ are known.
 
-#### policy evaluation
+##### policy evaluation
 
 A series of iteration-based solution methods, with effectiveness guaranteed by the *Contraction Mapping Theorem*.
 Bellman Equation (1) holds for every state s, so theoretically it can be solved simultaneously. However, when there are too many states, to avoid the computational complexity of solving a huge inverse matrix, iterative methods are often used to obtain approximate solutions: simply substitute random initial v values into the right side of the equation continuously, and after convergence, the state value under the given policy $\pi$ can be obtained. This process is also called _policy evaluation_.
@@ -79,7 +79,7 @@ v_{k+1} = r_{\pi} + \gamma P_{\pi} v_{k} \tag{6}
 $$
 Bellman Optimal Equation (3) is more tricky: because $\pi$ and v are mutually dependent, but it can be proven that it can still be solved by initializing either side and then iterating.
 
-#### value iteration
+##### value iteration
 
 If we choose to initialize v, this method is called *value iteration*, with specific steps:
 
@@ -102,7 +102,7 @@ If we choose to initialize v, this method is called *value iteration*, with spec
 
 Repeat until the difference between vk+1 and vk is negligible, then we obtain the optimal value for each state and the corresponding computable optimal policy (deterministic greedy).
 
-#### policy iteration
+##### policy iteration
 
 Since v and $\pi$ have a one-to-one correspondence, by symmetry, we can also iterate starting from any initial policy. This method is called _policy iteration_:
 
@@ -111,11 +111,11 @@ Since v and $\pi$ have a one-to-one correspondence, by symmetry, we can also ite
 
 Repeat steps 1-2 iteratively until v and $\pi$ converge and correspond to each other. Compared to value iteration, policy iteration embeds an inner loop in each outer loop step, requiring the value function to reach convergence.
 
-### Monte-Carlo Learning
+#### Monte-Carlo Learning
 
 In real-world application scenarios, environment models (states, actions, reward mechanisms, etc.) are often difficult to express completely, making value/policy iteration ineffective (they all require environment models to calculate action values). However, calculating action values can also be estimated using empirical sampling, thus introducing a class of model-free methods collectively called monte-carlo learning.
 
-#### Naive Monte-Carlo
+##### Naive Monte-Carlo
 
 The core of the policy iteration algorithm is actually calculating the action value function (because optimal policy is simply deterministic greedy on action value). Returning to the most essential definition, action value $q_{\pi}(s,a)$ is actually "the total discounted return obtained by executing action a in state s and then following policy $\pi$", so it can be estimated by sampling enough episodes and taking the average.
 
@@ -137,11 +137,11 @@ While the value estimate has not converged, for the kᵗʰ iteration, do
         π_{k+1}(a|s) = 1 if a = a₋k* and π_{k+1}(a|s) = 0 otherwise
 ```
 
-#### Temporal-Difference
+##### Temporal-Difference
 
 Monte-carlo learning requires collecting several complete episodes before each iteration, which is inefficient in practical implementation. Actually, an incremental method can be used for continuous iteration. First, introduce the required lemma:
 
-##### Lemma: Robbins-Monro
+###### Lemma: Robbins-Monro
 
 ```
 Problem: Find root of g(w) = 0
@@ -184,7 +184,7 @@ w_{k+1} = w_k - \alpha_k \tilde{g}(w_k, \eta_k) = w_k - \alpha_k(w_k - x_k) \tag
 $$
 Additionally, Robbins-Monro is also the mathematical foundation of *stochastic gradient descent*: As an application, we can formulate an optimization problem in which the objective function is J(w) as a root-finding problem: g(w) = ∇ₓJ(w) = 0. In this case, the condition that g(w) is monotonically increasing indicates that J(w) is **convex**, which is a commonly adopted assumption in optimization problems.
 
-##### Q-learning
+###### Q-learning
 
 Using equation (10) to solve BOE:
 $$
@@ -211,7 +211,7 @@ Repeat (for each episode):
 Until convergence (or maximum number of episodes reached)
 ```  
 
-## Parametric value functions
+### Parametric value functions
 
 In previous sections, we assumed that state value function $v(s)$ and action value function $q(s,a)$ are in some **discrete tabular** form. In practical applications, the enumerated values of states and actions can be very large, so to save storage and gain generalization, a natural idea is to use **parametric functions**, instead of tables, to describe value functions.
 
@@ -251,7 +251,7 @@ For each iteration, do
     Set wT = w every C iterations
 ```
 
-# Policy-based methods
+## Policy-based methods
 
 Methods represented by policy gradient embody another approach to solving reinforcement learning problems: parametric functions can be used not only for value representation, but also for policy, from tabular representation $\pi(a_i|s_k)$ → functional representation $\pi(a|s,\theta)$. If we can use some scalar metric to describe optimality, we can conveniently obtain the optimal policy by optimizing the parametric policy function. _Average state value_ describes the average state value weighted by the Markov steady-state distribution corresponding to a policy, and is a frequently used metric:
 $$
@@ -300,11 +300,11 @@ For the kth iteration, do
     θₖ = θₜ
 ```
 
-# Actor-critic framework
+## Actor-critic framework
 
 REINFORCE is a policy-based method, but it also involves value estimation, where the latter determines the magnitude of the former's updates. REINFORCE uses the most simple and direct monte-carlo learning to estimate action values, but obviously value estimation methods are not limited to one. We can "plug in" various schemes for estimating action values from value-based methods into REINFORCE to obtain various variants, collectively called _actor-critic_.
 
-## Q-actor-critic
+### Q-actor-critic
 Replacing monte-carlo learning with TD-learning, while fitting both a policy-DNN and a Q-DNN, we get *Q-actor-critic*:
 ```
 Pseudocode: The simplest actor-critic algorithm (QAC)
@@ -324,7 +324,7 @@ At time step t in each episode, do
     Critic (value update):
     wₜ₊₁ = wₜ + αw [rₜ₊₁ + γq(sₜ₊₁, aₜ₊₁, wₜ) - q(sₜ, aₜ, wₜ)] ∇w q(sₜ, aₜ, wₜ)
 ```
-## Advantage-actor-critic  
+### Advantage-actor-critic  
 Furthermore, it can be proven that equation (16) holds, which allows adding any function that only depends on state (and is independent of policy parameter $\theta$) to the critic term in the expected return gradient formula without changing the expectation:
 $$
 \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) q_\pi(S, A) \right] = \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) (q_\pi(S, A) - b(S)) \right] \tag{16}

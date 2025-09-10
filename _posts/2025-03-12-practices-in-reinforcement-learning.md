@@ -8,14 +8,14 @@ math: true
 ---
 Review and practice RL among different scenarios, incl. classical models, Zen game and language models
 
-# Cart-pole Balancing
+## Cart-pole Balancing
 Deriving common forms of policy gradient and applying them to a cart-pole balancing demo.
-
-## Simplest Policy Gradient
+  
+### Simplest Policy Gradient
 
 Mainly refer to https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#id7
 
-### Theory
+#### Theory
 
 The simplest form of policy gradient—derivation on the left, required lemmas on the right:
 
@@ -49,7 +49,7 @@ Two particularly important points to understand:
 >
 > We raise this point because it is common for ML practitioners to interpret a loss function as a useful signal during training—"if the loss goes down, all is well." In policy gradients, this intuition is wrong, and you should only care about average return. The loss function means nothing.
 
-### Implementation
+#### Implementation
 
 See this code prototype: https://github.com/openai/spinningup/blob/master/spinup/examples/pytorch/pg_math/1_simple_pg.py
 
@@ -182,9 +182,9 @@ epoch:  49          loss: 452.700          return: 635.750          ep_len: 635.
 
 Comparing policies before and after training shows the trained policy significantly better masters balance, maintaining the pole within the specified tilt range (±24°) for much longer (1s vs. 10s).
 
-## Other Forms of the Policy Gradient
+### Other Forms of the Policy Gradient
 
-### Reward-to-go Policy Gradient and Baselines
+#### Reward-to-go Policy Gradient and Baselines
 
 This section introduces two common variants of policy gradient that both reduce estimation variance and required trajectory sample size—required lemmas on the right:
 
@@ -204,7 +204,7 @@ Intuition: The most common choice of baseline is the [on-policy value function](
 
 In practice, the on-policy value function **cannot be computed exactly**, so it has to be **approximated**. This is usually done with a **neural network** which is updated concurrently with the policy.
 
-### Advantage
+#### Advantage
 
 So far, all gradient formulas in the above sections can be written in the following form:
 
@@ -236,11 +236,11 @@ OpenAI Spinning Up's [*vanilla policy gradient*](https://spinningup.openai.com/e
 
 ![](/assets/images/2024-09-17-reinforcement-learning-101/image-1.png)
 
-# AI Zen of Go Game
+## AI Zen of Go Game
 
-## Paper
+### Paper
 
-### Mastering the game of Go with deep neural networks and tree search
+#### Mastering the game of Go with deep neural networks and tree search
 
 [https://www.nature.com/articles/nature16961](https://www.nature.com/articles/nature16961)
 
@@ -295,17 +295,17 @@ The actual gameplay doesn't rely on any single network but uses them together to
 - MCTS, this explicit forward search, is undoubtedly effective ← Deep RL networks alone can only beat amateur players, but with MCTS, they can even defeat Lee Sedol.
 - Current language models' inference-time scaling is essentially the modern version of MCTS—both are forms of conditional computation during inference, using structured or unstructured additional computational processes to enhance model robustness and capability boundaries when facing complex tasks.
 
-### Mastering the game of Go without human knowledge
+#### Mastering the game of Go without human knowledge
 
 [https://www.nature.com/articles/nature24270](https://www.nature.com/articles/nature24270)
 
-## Code
+### Code
 
 demo implementation of alphago-zero in gomoku
 
 [https://github.com/junxiaosong/AlphaZero_Gomoku](https://github.com/junxiaosong/AlphaZero_Gomoku)
 
-## Fun fact
+### Fun fact
 
 [🎯 After Witnessing AlphaGo's Singularity, I Became a "Human Traitor" - Fan Hui/Dongdong Gun/Beiming Chenghaisheng](https://www.xiaoyuzhoufm.com/episode/675ec9c27d8426f692408889)
 
@@ -313,10 +313,10 @@ demo implementation of alphago-zero in gomoku
 
 [Ke Jie's Peak Masterpiece: Wuzhen Battle Against AlphaGo, Ten Great Dragons Dance Together, Thousands of Go Fans Boil with Excitement!](https://www.bilibili.com/video/BV1Za411P7bV/?share_source=copy_web&vd_source=988c48161c58791d278abb7b1437b14e)
 
-# Reinforcement Learning in Language Models
+## Reinforcement Learning in Language Models
 A comprehensive overview of reinforcement learning techniques used in language models
 
-## Overview
+### Overview
 
 ![](/assets/images/2025-03-04-mathematical-foundations-of-reinforcement-learning/wb1.png)
 
@@ -326,11 +326,11 @@ A comprehensive overview of reinforcement learning techniques used in language m
    - LM RL → deep RL: Language models are typically viewed as policies in deep RL, so both PPO and GRPO belong to the policy-gradient family of methods in deep RL
    - deep RL → classic RL: Deep RL uses parameterized policy functions with optimality expressed as scalar functions, driven by gradient optimization algorithms to search for optimal policies; while the easily understood classic RL uses tabular policies with optimality expressed as Bellman optimal conditions, driven by iterative methods to explore optimal policies. They connect through value function estimation methods needed for policy gradient calculations (TD-learning → Monte Carlo learning → iterative methods → BOE)
 
-## Proximal Policy Optimization (PPO)
+### Proximal Policy Optimization (PPO)
 
 Starting from _advantage actor-critic (A2C)_, adding KL divergence as a penalty term or CLIP to control that the objective function after iteration doesn't differ too much from the original function, we get Proximal Policy Optimization (PPO).
 
-### Theory
+#### Theory
 
 Previous actor-critic algorithms focused solely on maximizing reward model outputs, which causes problems in the language model context. Reward models are trained on far fewer samples than pretraining, so their knowledge can be sparse and irregular, making them easy to hack. For example, meaningless sequences (thethethethe... or lots of emojis) often mysteriously gain favor from reward models. Optimizing language models toward reward models without constraints eventually leads to nonsensical outputs. This gave birth to PPO and TRPO (trust-region policy optimization), algorithms that essentially require the post-iteration policy to not differ too much from the pre-iteration policy. The most obvious penalty would be using KL divergence as a penalty term, which can indeed be done. Let's first introduce a more commonly used and simpler implementation: PPO-clip (reportedly favored by OpenAI).
 
@@ -363,7 +363,7 @@ $$
 
 Comparing to equation (10.7), it's almost identical (after taking gradients, the denominator can be absorbed to become log). The main difference is the additional min($\epsilon$) term → this is the "clip" meaning, using this hyperparameter to cap the gains and avoid taking steps that are too large.
 
-### Implementation
+#### Implementation
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/SO1HbDlfmosLJJx46ZMjVJSkprf.png)
 
@@ -466,7 +466,7 @@ values, advantages, returns = self.compute_advantages(values, rewards, masks)
 	return (values * mask).sum() / mask.sum()
 	```
 
-### Demo
+#### Demo
 
 Using the [yelp_review_full](https://huggingface.co/datasets/Yelp/yelp_review_full) corpus, truncating the beginning and having the model continue writing, with the goal of using RLHF to force positive reviews (even if the original was 0 stars, it has to be spun positively =.=). For proof of concept convenience, I chose the relatively new small model [Qwen2.5-1.5B-base](https://huggingface.co/Qwen/Qwen2.5-1.5B), running on Tesla L4 24G *1.
 
@@ -494,15 +494,15 @@ The metrics overall meet expectations. Let's examine some typical cases to see h
 
 ![](/assets/images/2025-03-12-reinforcement-learning-in-language-models/SUHpblFUcoCuaUx4WhVjbmfBpsc.png)
 
-### Discussion
+#### Discussion
 
 Unlike SFT's question→answer training paradigm, RLHF is a comparison-based training stage. From one perspective, this training mode's benefit is mainly reducing sample acquisition costs, even making training standards that are difficult to explicitly describe possible. In many scenarios, having human annotators "generate" preference-compliant training samples is expensive, or even nearly impossible due to annotator limitations and subtle standards that can't be completely expressed in language. But if provided with several samples and having trained annotators judge which they prefer more, the cost is much lower (imagine training a generative model to draw handsome men and beautiful women - having annotators draw handsome sketches one by one as training samples versus just judging which of several model-generated faces is more handsome - the cost difference is obvious).
 
 In current LLM pipelines, the general sequence is pretrain→SFT→RL. The mainstream view is that most model knowledge and capabilities are acquired during pretraining, SFT only teaches the model specific formats to answer specific questions, while RL doesn't create new capabilities or formats but ensures effect stability. In other words, whether a model can answer a question is largely determined at the base model stage - if the intelligence isn't sufficient, subsequent training won't help much; if intelligence is adequate, after SFT the model gains response patterns more suitable for specific scenarios, but the probabilistic model nature means these capabilities and patterns won't be 100% stable in every response. Furthermore, the RL stage uses preference alignment to suppress non-preferred sample probabilities and amplify effect stability, ultimately becoming a checkpoint ready for real-world deployment.
 
-## Group Relative Policy Optimization (GRPO)
+### Group Relative Policy Optimization (GRPO)
 
-### Theory
+#### Theory
 
 This new concept became famous through deepseek-R1 (https://arxiv.org/abs/2501.12948), but the actual changes are minimal. Observe the following formula:
 
@@ -514,7 +514,7 @@ Compared to CLIP-PPO, there are only two differences:
 
 2. It removes the value network needed for advantage estimation (complex, expensive, and easily hacked), replacing it with normalized reward means from multiple response samples to calculate advantage. This returns to the more primitive Monte Carlo approach, where advantage is estimated by the difference between this sample's reward and the average reward across multiple samples, yielding _GRPO_.
 
-### Implementation 
+#### Implementation 
 
 TRL already includes [GRPOTrainer](https://huggingface.co/docs/trl/v0.16.0/grpo_trainer#quick-start) implementation, divided into four clear stages:
 
@@ -558,9 +558,9 @@ train_dataset=dataset,
 trainer.train()
 ```  
 
-### Demo
+#### Demo
 
-#### Dataset
+##### Dataset
 
 Using a [countdown game dataset](https://huggingface.co/datasets/Jiayi-Pan/Countdown-Tasks-3to4), with rules similar to the 24-point game - use 3 numbers with basic arithmetic operations to create a target number.
 
@@ -585,7 +585,7 @@ Using the numbers [79, 17, 60], create an equation that equals 36.
    output example: '<think>your thinking process</think> thus the answer is <answer> (1 + 2) / 3 </answer>'
 ```
 
-#### Reward 
+##### Reward 
 
 Based on regex completion of model output strings, simply put:
 
@@ -594,7 +594,7 @@ Based on regex completion of model output strings, simply put:
 
 Combined effect: completely correct gets 1 point, correct format but wrong equation gets 0.1 points, everything else gets 0 points.
 
-#### Training
+##### Training
 
 Training overview:
 
