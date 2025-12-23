@@ -2,7 +2,7 @@
 title: Mathematical Foundations of Reinforcement Learning
 date: 2025-09-09 10:00:00 -0700
 categories: [ reinforcement_learning ]
-tags: [ rl ]
+tags: [rl]
 pin: false
 math: true
 ---
