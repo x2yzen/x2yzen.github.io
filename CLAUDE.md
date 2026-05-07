@@ -26,7 +26,7 @@ Required front matter (copy from any existing post):
 ```yaml
 ---
 title: <Title>
-date: YYYY-MM-DD HH:MM:SS ±ZZZZ      # tz offset matters for ordering — site tz is Asia/Hong_Kong
+date: YYYY-MM-DD HH:MM:SS -0700      # site tz is America/Los_Angeles; write dates in Pacific (-0700 PDT / -0800 PST). Future-dated posts (relative to site tz at build time) are silently dropped by Jekyll.
 categories: [<one_category>]          # singular; existing values: language_model, statistics, game, reinforcement_learning
 tags: [<tag1>, <tag2>]
 pin: false
