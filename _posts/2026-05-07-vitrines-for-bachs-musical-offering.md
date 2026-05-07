@@ -1,6 +1,6 @@
 ---
 title: Vitrines for Bach's Musical Offering
-date: 2026-05-07 14:00:00 -0700
+date: 2026-05-07 09:00:00 +0800
 categories: [art]
 tags: [music, visualization, three-js, bach]
 pin: false
