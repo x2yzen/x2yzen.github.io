@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bach · Canon a 2 per Tonos · BWV 1079</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5a5a5a;
+    --color-text-tertiary: #8a8a8a;
+    --color-border-tertiary: rgba(0,0,0,0.15);
+    --color-border-secondary: rgba(0,0,0,0.3);
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f6f5f0;
+    --color-canvas-bg: #f1eee6;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e8e8;
+      --color-text-secondary: #aaa;
+      --color-text-tertiary: #777;
+      --color-border-tertiary: rgba(255,255,255,0.18);
+      --color-border-secondary: rgba(255,255,255,0.32);
+      --color-background-primary: #1f1f1f;
+      --color-background-secondary: #2a2a2a;
+      --color-canvas-bg: #1a1a1a;
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); margin: 0; padding: 24px 16px 60px; display: flex; justify-content: center; }
+  main { width: 100%; max-width: 760px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; padding: 20px 24px 16px; }
+  h1 { font-size: 16px; font-weight: 500; margin: 0 0 4px; }
+  .sub { font-family: 'IM Fell English', Georgia, serif; font-style: normal; font-feature-settings: "liga", "dlig"; font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .sub em { font-style: italic; }
+  button { border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+  button:hover { background: var(--color-background-secondary); }
+  button:active { transform: scale(0.96); }
+  input[type="range"] { accent-color: var(--color-text-primary); }
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  /* The vitrine is taller than wide, so 3/4 ratio frames it better than 4/3. */
+  #stage{position:relative;width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--color-canvas-bg);border:0.5px solid var(--color-border-tertiary)}
+  #stage canvas{display:block;width:100%!important;height:100%!important;outline:none}
+  .legend{position:absolute;left:10px;top:10px;font-size:11px;color:var(--color-text-secondary);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+  .legend .row{display:flex;align-items:center;gap:6px}
+  .legend .swatch{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .views{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+  .vbtn-sm{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(4px);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);cursor:pointer}
+  @media (prefers-color-scheme: dark){.vbtn-sm{background:rgba(0,0,0,0.45)}}
+  .hint{font-size:11px;color:var(--color-text-tertiary);margin:6px 4px 14px;text-align:right}
+  .bc{display:flex;align-items:center;gap:12px;padding:8px 4px 12px}
+  .bp{width:36px;height:36px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .bp svg{width:10px;height:10px}
+  .bt{font-size:12px;color:var(--color-text-secondary);font-variant-numeric:tabular-nums;min-width:78px;text-align:right;flex-shrink:0}
+  .bs{flex:1;min-width:0}
+  .vt{display:flex;align-items:center;gap:8px;padding:0 4px 10px;flex-wrap:wrap}
+  .vbtn{font-size:11px;padding:5px 10px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;transition:opacity 0.15s,background 0.15s}
+  .vbtn:hover{background:var(--color-background-secondary)}
+  .vbtn .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .vbtn[aria-pressed="false"]{opacity:0.42}
+  .vbtn[aria-pressed="false"] .dot{opacity:0.4}
+  .vlbl{font-size:11px;color:var(--color-text-tertiary);margin-right:2px}
+  .psr{font-size:11px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;margin-left:auto}
+</style>
+</head>
+<body>
+<main>
+<h1>Bach · Canon a 2 per Tonos · BWV 1079</h1>
+<p class="sub">each repetition modulates up a whole tone — six turns of the helix close the spiral, returning home an octave higher.</p>
+<h2 class="sr-only">3D helix visualization of Bach's Canon per Tonos as a precision instrument inside a glass vitrine, lit by an HDRI environment</h2>
+
+<div id="stage">
+  <div class="legend">
+    <div class="row"><span class="swatch" style="background:#C9994A;border:0.5px solid #4A2D08"></span>King's theme</div>
+    <div class="row"><span class="swatch" style="background:#3F8788"></span>Dux</div>
+    <div class="row"><span class="swatch" style="background:#B86348"></span>Comes (5th up, +4 beats)</div>
+  </div>
+  <div class="views">
+    <button class="vbtn-sm" data-view="3q">3/4</button>
+    <button class="vbtn-sm" data-view="side">side</button>
+    <button class="vbtn-sm" data-view="top">top</button>
+  </div>
+</div>
+
+<div class="bc">
+<button class="bp" id="bp" aria-label="Play"><svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg></button>
+<input type="range" class="bs" id="bs" min="0" max="98" step="0.05" value="0">
+<span class="bt" id="bt">0:00 / 1:38</span>
+</div>
+
+<div class="vt">
+<span class="vlbl">solo</span>
+<button class="vbtn" id="v0" aria-pressed="true"><span class="dot" style="background:#C9994A;border:0.5px solid #4A2D08"></span>Royal</button>
+<button class="vbtn" id="v2" aria-pressed="true"><span class="dot" style="background:#3F8788"></span>Dux</button>
+<button class="vbtn" id="v1" aria-pressed="true"><span class="dot" style="background:#B86348"></span>Comes</button>
+<button class="vbtn" id="lp" aria-pressed="true"><span style="font-size:13px;line-height:1;letter-spacing:-1px">∞</span> loop</button>
+<span class="psr" id="psr">cycle 1/6 · +0 st</span>
+</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.43/Tone.js"></script>
+<!-- es-module-shims polyfills <script type="importmap"> on Safari ≤16.3
+     (macOS Monterey caps at Safari 15). No-op on browsers with native support. -->
+<script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+// === note data — voice / start_16th / end_16th / midi_pitch ===
+// Voice 0 = Royal Theme (the King's gift, the cantus firmus around which the canon turns).
+// Voice 1 = Comes (the canonic follower, enters 4 beats after Dux, a 5th up).
+// Voice 2 = Dux (the canonic leader).
+const N=[[0,0,6,59],[2,1,2,47],[2,2,3,50],[2,3,4,54],[2,4,12,59],[0,6,8,61],[0,8,10,62],[0,10,12,63],[0,12,14,64],[2,12,14,57],[0,14,16,65],[2,14,16,56],[0,16,24,66],[2,16,21,57],[1,17,18,54],[1,18,19,57],[1,19,20,61],[1,20,28,66],[2,21,22,51],[2,22,23,49],[2,23,24,51],[0,24,29,67],[2,24,25,52],[2,25,26,47],[2,26,27,52],[2,27,28,54],[1,28,30,64],[2,28,34,55],[0,29,30,64],[0,30,31,60],[1,30,32,63],[0,31,32,59],[0,32,36,58],[1,32,37,64],[2,34,36,55],[2,36,38,54],[1,37,38,58],[1,38,39,56],[2,38,40,52],[1,39,40,58],[1,40,41,59],[2,40,45,50],[1,41,42,54],[1,42,43,59],[1,43,44,61],[0,44,52,66],[1,44,50,62],[2,45,46,52],[2,46,47,50],[2,47,48,49],[2,48,50,47],[1,50,52,62],[2,50,52,48],[0,52,60,65],[1,52,54,61],[2,52,56,49],[1,54,56,59],[1,56,61,57],[2,58,60,50],[0,60,68,64],[2,60,62,49],[1,61,62,59],[1,62,63,57],[2,62,64,47],[1,63,64,56],[1,64,66,54],[2,64,66,46],[1,66,68,55],[2,66,67,47],[2,67,68,46],[0,68,76,63],[1,68,72,56],[2,68,69,47],[2,69,70,49],[2,70,71,47],[2,71,72,45],[2,72,73,44],[2,73,74,42],[1,74,76,57],[2,74,75,44],[2,75,76,45],[0,76,84,62],[1,76,78,56],[2,76,77,47],[2,77,78,44],[1,78,80,54],[2,78,79,45],[2,79,80,47],[1,80,82,53],[2,80,82,49],[1,82,83,54],[2,82,86,59],[1,83,84,53],[0,84,90,61],[1,84,85,54],[1,85,86,56],[1,86,87,54],[2,86,87,57],[1,87,88,52],[2,87,88,56],[1,88,89,51],[2,88,90,57],[1,89,90,49],[0,90,92,60],[1,90,91,51],[2,90,92,54],[1,91,92,52],[0,92,94,57],[1,92,93,54],[2,92,94,51],[1,93,94,51],[0,94,96,56],[1,94,95,52],[2,94,95,56],[1,95,96,54],[2,95,96,54],[0,96,100,61],[1,96,98,56],[2,96,98,53],[1,98,102,66],[2,98,99,54],[2,99,100,56],[2,100,102,57],[1,102,103,64],[2,102,104,48],[1,103,104,63],[1,104,106,64],[2,104,108,49],[1,106,108,61],[0,108,116,66],[1,108,110,58],[1,110,111,63],[1,111,112,61],[1,112,114,60],[1,114,115,61],[2,114,117,49],[1,115,116,63],[0,116,120,64],[1,116,118,64],[2,117,118,52],[1,118,120,55],[2,118,119,51],[2,119,120,49],[0,120,128,63],[1,120,124,56],[2,120,121,48],[2,121,122,49],[2,122,123,51],[2,123,124,52],[2,124,125,54],[2,125,126,57],[2,126,127,56],[2,127,128,54],[0,128,134,61],[2,128,129,52],[2,129,130,49],[1,130,133,56],[2,130,131,52],[2,131,132,56],[2,132,140,61],[1,133,134,59],[0,134,136,63],[1,134,135,58],[1,135,136,56],[0,136,138,64],[1,136,137,55],[1,137,138,56],[0,138,140,65],[1,138,139,58],[1,139,140,59],[0,140,142,66],[1,140,141,61],[2,140,142,59],[1,141,142,64],[0,142,144,67],[1,142,143,63],[2,142,144,58],[1,143,144,61],[0,144,152,68],[1,144,145,59],[2,144,149,59],[1,145,146,56],[1,146,147,59],[1,147,148,63],[1,148,156,68],[2,149,150,53],[2,150,151,51],[2,151,152,53],[0,152,157,69],[2,152,153,54],[2,153,154,49],[2,154,155,54],[2,155,156,56],[1,156,158,66],[2,156,162,57],[0,157,158,66],[0,158,159,62],[1,158,160,65],[0,159,160,61],[0,160,164,60],[1,160,165,66],[2,162,164,57],[2,164,166,56],[1,165,166,60],[1,166,167,58],[2,166,168,54],[1,167,168,60],[1,168,169,61],[2,168,173,52],[1,169,170,56],[1,170,171,61],[1,171,172,63],[0,172,180,68],[1,172,178,64],[2,173,174,54],[2,174,175,52],[2,175,176,51],[2,176,178,49],[1,178,180,64],[2,178,180,50],[0,180,188,67],[1,180,182,63],[2,180,184,51],[1,182,184,61],[1,184,189,59],[2,186,188,52],[0,188,196,66],[2,188,190,51],[1,189,190,61],[1,190,191,59],[2,190,192,49],[1,191,192,58],[1,192,194,56],[2,192,194,48],[1,194,196,57],[2,194,195,49],[2,195,196,48],[0,196,204,65],[1,196,200,58],[2,196,197,49],[2,197,198,51],[2,198,199,49],[2,199,200,47],[2,200,201,46],[2,201,202,44],[1,202,204,59],[2,202,203,46],[2,203,204,47],[0,204,212,64],[1,204,206,58],[2,204,205,49],[2,205,206,46],[1,206,208,56],[2,206,207,47],[2,207,208,49],[1,208,210,55],[2,208,210,51],[1,210,211,56],[2,210,214,61],[1,211,212,55],[0,212,218,63],[1,212,213,56],[1,213,214,58],[1,214,215,56],[2,214,215,59],[1,215,216,54],[2,215,216,58],[1,216,217,53],[2,216,218,59],[1,217,218,51],[0,218,220,62],[1,218,219,53],[2,218,220,56],[1,219,220,54],[0,220,222,59],[1,220,221,56],[2,220,222,53],[1,221,222,53],[0,222,224,58],[1,222,223,54],[2,222,223,58],[1,223,224,56],[2,223,224,56],[0,224,228,63],[1,224,226,58],[2,224,226,55],[1,226,230,68],[2,226,227,56],[2,227,228,58],[2,228,230,59],[1,230,231,66],[2,230,232,50],[1,231,232,65],[1,232,234,66],[2,232,236,51],[1,234,236,63],[0,236,244,68],[1,236,238,60],[1,238,239,65],[1,239,240,63],[1,240,242,62],[1,242,243,63],[2,242,245,51],[1,243,244,65],[0,244,248,66],[1,244,246,66],[2,245,246,54],[1,246,248,57],[2,246,247,53],[2,247,248,51],[0,248,256,65],[1,248,252,58],[2,248,249,50],[2,249,250,51],[2,250,251,53],[2,251,252,54],[2,252,253,56],[2,253,254,59],[2,254,255,58],[2,255,256,56],[0,256,262,63],[2,256,257,54],[2,257,258,51],[1,258,261,58],[2,258,259,54],[2,259,260,58],[2,260,268,63],[1,261,262,61],[0,262,264,65],[1,262,263,60],[1,263,264,58],[0,264,266,66],[1,264,265,57],[1,265,266,58],[0,266,268,67],[1,266,267,60],[1,267,268,61],[0,268,270,68],[1,268,269,63],[2,268,270,61],[1,269,270,66],[0,270,272,69],[1,270,271,65],[2,270,272,60],[1,271,272,63],[0,272,280,70],[1,272,273,61],[2,272,277,61],[1,273,274,58],[1,274,275,61],[1,275,276,65],[1,276,284,70],[2,277,278,55],[2,278,279,53],[2,279,280,55],[0,280,285,71],[2,280,281,56],[2,281,282,51],[2,282,283,56],[2,283,284,58],[1,284,286,68],[2,284,290,59],[0,285,286,68],[0,286,287,64],[1,286,288,67],[0,287,288,63],[0,288,292,62],[1,288,293,68],[2,290,292,59],[2,292,294,58],[1,293,294,62],[1,294,295,60],[2,294,296,56],[1,295,296,62],[1,296,297,63],[2,296,301,54],[1,297,298,58],[1,298,299,63],[1,299,300,65],[0,300,308,70],[1,300,306,66],[2,301,302,56],[2,302,303,54],[2,303,304,53],[2,304,306,51],[1,306,308,66],[2,306,308,52],[0,308,316,69],[1,308,310,65],[2,308,312,53],[1,310,312,63],[1,312,317,61],[2,314,316,54],[0,316,324,68],[2,316,318,53],[1,317,318,63],[1,318,319,61],[2,318,320,51],[1,319,320,60],[1,320,322,58],[2,320,322,50],[1,322,324,59],[2,322,323,51],[2,323,324,50],[0,324,332,67],[1,324,328,60],[2,324,325,51],[2,325,326,53],[2,326,327,51],[2,327,328,49],[2,328,329,48],[2,329,330,46],[1,330,332,61],[2,330,331,48],[2,331,332,49],[0,332,340,66],[1,332,334,60],[2,332,333,51],[2,333,334,48],[1,334,336,58],[2,334,335,49],[2,335,336,51],[1,336,338,57],[2,336,338,53],[1,338,339,58],[2,338,342,63],[1,339,340,57],[0,340,346,65],[1,340,341,58],[1,341,342,60],[1,342,343,58],[2,342,343,61],[1,343,344,56],[2,343,344,60],[1,344,345,55],[2,344,346,61],[1,345,346,53],[0,346,348,64],[1,346,347,55],[2,346,348,58],[1,347,348,56],[0,348,350,61],[1,348,349,58],[2,348,350,55],[1,349,350,55],[0,350,352,60],[1,350,351,56],[2,350,351,60],[1,351,352,58],[2,351,352,58],[0,352,356,65],[1,352,354,60],[2,352,354,57],[1,354,358,70],[2,354,355,58],[2,355,356,60],[2,356,358,61],[1,358,359,68],[2,358,360,52],[1,359,360,67],[1,360,362,68],[2,360,364,53],[1,362,364,65],[0,364,372,70],[1,364,366,62],[1,366,367,67],[1,367,368,65],[1,368,370,64],[1,370,371,65],[2,370,373,53],[1,371,372,67],[0,372,376,68],[1,372,374,68],[2,373,374,56],[1,374,376,59],[2,374,375,55],[2,375,376,53],[0,376,384,67],[1,376,380,60],[2,376,377,52],[2,377,378,53],[2,378,379,55],[2,379,380,56],[2,380,381,58],[2,381,382,61],[2,382,383,60],[2,383,384,58],[0,384,390,65],[2,384,385,56],[2,385,386,53],[1,386,389,60],[2,386,387,56],[2,387,388,60],[2,388,396,65],[1,389,390,63],[0,390,392,67],[1,390,391,62],[1,391,392,60],[0,392,394,68],[1,392,393,59],[1,393,394,60],[0,394,396,69],[1,394,395,62],[1,395,396,63],[0,396,398,70],[1,396,397,65],[2,396,398,63],[1,397,398,68],[0,398,400,71],[1,398,399,67],[2,398,400,62],[1,399,400,65],[0,400,408,72],[1,400,401,63],[2,400,405,63],[1,401,402,60],[1,402,403,63],[1,403,404,67],[1,404,412,72],[2,405,406,57],[2,406,407,55],[2,407,408,57],[0,408,413,73],[2,408,409,58],[2,409,410,53],[2,410,411,58],[2,411,412,60],[1,412,414,70],[2,412,418,61],[0,413,414,70],[0,414,415,66],[1,414,416,69],[0,415,416,65],[0,416,420,64],[1,416,421,70],[2,418,420,61],[2,420,422,60],[1,421,422,64],[1,422,423,62],[2,422,424,58],[1,423,424,64],[1,424,425,65],[2,424,429,56],[1,425,426,60],[1,426,427,65],[1,427,428,67],[0,428,436,72],[1,428,434,68],[2,429,430,58],[2,430,431,56],[2,431,432,55],[2,432,434,53],[1,434,436,68],[2,434,436,54],[0,436,444,71],[1,436,438,67],[2,436,440,55],[1,438,440,65],[1,440,445,63],[2,442,444,56],[0,444,452,70],[2,444,446,55],[1,445,446,65],[1,446,447,63],[2,446,448,53],[1,447,448,62],[1,448,450,60],[2,448,450,52],[1,450,452,61],[2,450,451,53],[2,451,452,52],[0,452,460,69],[1,452,456,62],[2,452,453,53],[2,453,454,55],[2,454,455,53],[2,455,456,51],[2,456,457,50],[2,457,458,48],[1,458,460,63],[2,458,459,50],[2,459,460,51],[0,460,468,68],[1,460,462,62],[2,460,461,53],[2,461,462,50],[1,462,464,60],[2,462,463,51],[2,463,464,53],[1,464,466,59],[2,464,466,55],[1,466,467,60],[2,466,470,65],[1,467,468,59],[0,468,474,67],[1,468,469,60],[1,469,470,62],[1,470,471,60],[2,470,471,63],[1,471,472,58],[2,471,472,62],[1,472,473,57],[2,472,474,63],[1,473,474,55],[0,474,476,66],[1,474,475,57],[2,474,476,60],[1,475,476,58],[0,476,478,63],[1,476,477,60],[2,476,478,57],[1,477,478,57],[0,478,480,62],[1,478,479,58],[2,478,479,62],[1,479,480,60],[2,479,480,60],[0,480,484,67],[1,480,482,62],[2,480,482,59],[1,482,486,72],[2,482,483,60],[2,483,484,62],[2,484,486,63],[1,486,487,70],[2,486,488,54],[1,487,488,69],[1,488,490,70],[2,488,492,55],[1,490,492,67],[0,492,500,72],[1,492,494,64],[1,494,495,69],[1,495,496,67],[1,496,498,66],[1,498,499,67],[2,498,501,55],[1,499,500,69],[0,500,504,70],[1,500,502,70],[2,501,502,58],[1,502,504,61],[2,502,503,57],[2,503,504,55],[0,504,512,69],[1,504,508,62],[2,504,505,54],[2,505,506,55],[2,506,507,57],[2,507,508,58],[2,508,509,60],[2,509,510,63],[2,510,511,62],[2,511,512,60],[0,512,518,67],[2,512,513,58],[2,513,514,55],[1,514,517,62],[2,514,515,58],[2,515,516,62],[2,516,524,67],[1,517,518,65],[0,518,520,69],[1,518,519,64],[1,519,520,62],[0,520,522,70],[1,520,521,61],[1,521,522,62],[0,522,524,71],[1,522,523,64],[1,523,524,65],[0,524,526,72],[1,524,525,67],[2,524,526,65],[1,525,526,70],[0,526,528,73],[1,526,527,69],[2,526,528,64],[1,527,528,67],[0,528,536,74],[1,528,529,65],[2,528,533,65],[1,529,530,62],[1,530,531,65],[1,531,532,69],[1,532,540,74],[2,533,534,59],[2,534,535,57],[2,535,536,59],[0,536,541,75],[2,536,537,60],[2,537,538,55],[2,538,539,60],[2,539,540,62],[1,540,542,72],[2,540,546,63],[0,541,542,72],[0,542,543,68],[1,542,544,71],[0,543,544,67],[0,544,548,66],[1,544,549,72],[2,546,548,63],[2,548,550,62],[1,549,550,66],[1,550,551,64],[2,550,552,60],[1,551,552,66],[1,552,553,67],[2,552,557,58],[1,553,554,62],[1,554,555,67],[1,555,556,69],[0,556,564,74],[1,556,562,70],[2,557,558,60],[2,558,559,58],[2,559,560,57],[2,560,562,55],[1,562,564,70],[2,562,564,56],[0,564,572,73],[1,564,566,69],[2,564,568,57],[1,566,568,67],[1,568,573,65],[2,570,572,58],[0,572,580,72],[2,572,574,57],[1,573,574,67],[1,574,575,65],[2,574,576,55],[1,575,576,64],[1,576,578,62],[2,576,578,54],[1,578,580,63],[2,578,579,55],[2,579,580,54],[0,580,588,71],[1,580,584,64],[2,580,581,55],[2,581,582,57],[2,582,583,55],[2,583,584,53],[2,584,585,52],[2,585,586,50],[1,586,588,65],[2,586,587,52],[2,587,588,53],[0,588,596,70],[1,588,590,64],[2,588,589,55],[2,589,590,52],[1,590,592,62],[2,590,591,53],[2,591,592,55],[1,592,594,61],[2,592,594,57],[1,594,595,62],[2,594,598,67],[1,595,596,61],[0,596,602,69],[1,596,597,62],[1,597,598,64],[1,598,599,62],[2,598,599,65],[1,599,600,60],[2,599,600,64],[1,600,601,59],[2,600,602,65],[1,601,602,57],[0,602,604,68],[1,602,603,59],[2,602,604,62],[1,603,604,60],[0,604,606,65],[1,604,605,62],[2,604,606,59],[1,605,606,59],[0,606,608,64],[1,606,607,60],[2,606,607,64],[1,607,608,62],[2,607,608,62],[0,608,612,69],[1,608,610,64],[2,608,610,61],[1,610,614,74],[2,610,611,62],[2,611,612,64],[2,612,614,65],[1,614,615,72],[2,614,616,56],[1,615,616,71],[1,616,618,72],[2,616,620,57],[1,618,620,69],[0,620,628,74],[1,620,622,66],[1,622,623,71],[1,623,624,69],[1,624,626,68],[1,626,627,69],[2,626,629,57],[1,627,628,71],[0,628,632,72],[1,628,630,72],[2,629,630,60],[1,630,632,63],[2,630,631,59],[2,631,632,57],[0,632,640,71],[1,632,636,64],[2,632,633,56],[2,633,634,57],[2,634,635,59],[2,635,636,60],[2,636,637,62],[2,637,638,65],[2,638,639,64],[2,639,640,62],[0,640,646,69],[2,640,641,60],[2,641,642,57],[1,642,645,64],[2,642,643,60],[2,643,644,64],[2,644,652,69],[1,645,646,67],[0,646,648,71],[1,646,647,66],[1,647,648,64],[0,648,650,72],[1,648,649,63],[1,649,650,64],[0,650,652,73],[1,650,651,66],[1,651,652,67],[0,652,654,74],[1,652,653,69],[2,652,654,67],[1,653,654,72],[0,654,656,75],[1,654,655,71],[2,654,656,66],[1,655,656,69],[0,656,664,76],[1,656,657,67],[2,656,661,67],[1,657,658,64],[1,658,659,67],[1,659,660,71],[1,660,668,76],[2,661,662,61],[2,662,663,59],[2,663,664,61],[0,664,669,77],[2,664,665,62],[2,665,666,57],[2,666,667,62],[2,667,668,64],[1,668,670,74],[2,668,674,65],[0,669,670,74],[0,670,671,70],[1,670,672,73],[0,671,672,69],[0,672,676,68],[1,672,677,74],[2,674,676,65],[2,676,678,64],[1,677,678,68],[1,678,679,66],[2,678,680,62],[1,679,680,68],[1,680,681,69],[2,680,685,60],[1,681,682,64],[1,682,683,69],[1,683,684,71],[0,684,692,76],[1,684,690,72],[2,685,686,62],[2,686,687,60],[2,687,688,59],[2,688,690,57],[1,690,692,72],[2,690,692,58],[0,692,700,75],[1,692,694,71],[2,692,696,59],[1,694,696,69],[1,696,701,67],[2,698,700,60],[0,700,708,74],[2,700,702,59],[1,701,702,69],[1,702,703,67],[2,702,704,57],[1,703,704,66],[1,704,706,64],[2,704,706,56],[1,706,708,65],[2,706,707,57],[2,707,708,56],[0,708,716,73],[1,708,712,66],[2,708,709,57],[2,709,710,59],[2,710,711,57],[2,711,712,55],[2,712,713,54],[2,713,714,52],[1,714,716,67],[2,714,715,54],[2,715,716,55],[0,716,724,72],[1,716,718,66],[2,716,717,57],[2,717,718,54],[1,718,720,64],[2,718,719,55],[2,719,720,57],[1,720,722,63],[2,720,722,59],[1,722,723,64],[2,722,726,69],[1,723,724,63],[0,724,730,71],[1,724,725,64],[1,725,726,66],[1,726,727,64],[2,726,727,67],[1,727,728,62],[2,727,728,66],[1,728,729,61],[2,728,730,67],[1,729,730,59],[0,730,732,70],[1,730,731,61],[2,730,732,64],[1,731,732,62],[0,732,734,67],[1,732,733,64],[2,732,734,61],[1,733,734,61],[0,734,736,66],[1,734,735,62],[2,734,735,66],[1,735,736,64],[2,735,736,64],[0,736,740,71],[1,736,738,66],[2,736,738,63],[1,738,742,76],[2,738,739,64],[2,739,740,66],[2,740,742,67],[1,742,743,74],[2,742,744,58],[1,743,744,73],[1,744,746,74],[2,744,748,59],[1,746,748,71],[0,748,756,76],[1,748,750,68],[1,750,751,73],[1,751,752,71],[1,752,754,70],[1,754,755,71],[2,754,757,59],[1,755,756,73],[0,756,760,74],[1,756,758,74],[2,757,758,62],[1,758,760,65],[2,758,759,61],[2,759,760,59],[0,760,768,73],[1,760,764,66],[2,760,761,58],[2,761,762,59],[2,762,763,61],[2,763,764,62],[2,764,765,64],[2,765,766,67],[2,766,767,66],[2,767,768,64],[0,768,784,71],[1,768,784,59],[2,768,784,63]];
+
+// === musical / temporal constants ===
+// IB beats per modulation; 6 modulations rise by a whole tone each, returning to
+// the start an octave up (Shepard-tone illusion when looped with PitchShift).
+const TOT16=784, IB=196/6, NN=6, BPM=120, BS=60/BPM, TPS=BS/4, DUR=196*BS;
+
+// === HDRI selection ===
+// Alternates (swap by changing this single line):
+//   '../textures/museum_of_ethnography_2k.hdr' — warm museum interior, primary
+//   '../textures/vintage_measuring_lab_2k.hdr' — old scientific instrument vibe
+const HDRI_FILE='../textures/museum_of_ethnography_2k.hdr';
+
+// === geometry constants ===
+// The vitrine is taller than wide because the helix is 7.2m of vertical climb.
+// Base footprint 7×7 (square — no privileged horizontal axis), case height 9m.
+const HELIX_R=2.4, H_PER_TURN=1.0, PITCH_SCALE=0.025;
+const TOTAL_H=NN*H_PER_TURN;          // 6.0m total helix climb (compacted from 7.2)
+// Y_OFFSET centers the helix vertically inside the vitrine. Without it the
+// lowest Dux pitches at i≈0 (p=42) would sink below the wood top at y=-3.7.
+const Y_OFFSET=0.5;
+
+// pos3D — all three voices share the same helix at radius HELIX_R; voice
+// identity is communicated by sphere size, color, and material (matching the
+// original canon_per_tonos_3d.html composition where the helix is the single
+// architectural figure and voices share its path).
+function pos3D(s16, p, voice){
+  const sB=s16/4;                     // 16th-step → beat
+  const i=sB/IB;                      // beat → helix turns (0..NN)
+  const phi=i*2*Math.PI;
+  const y=i*H_PER_TURN + (p-60)*PITCH_SCALE - TOTAL_H/2 + Y_OFFSET;
+  return new THREE.Vector3(HELIX_R*Math.cos(phi), y, HELIX_R*Math.sin(phi));
+}
+
+// === Three.js scene setup ===
+const stage=document.getElementById('stage');
+const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+const bgColor=isDark?0x1a1a1a:0xd6cbb1;
+
+// Cross-demo unified lighting — values match canon_per_motum_contrarium so
+// the trio of vitrines reads as one museum collection. 'o' (already-played)
+// dots stay warm rather than fading to grey; envMap and exposure lifted so
+// the warm-HDRI cast carries through; bloom threshold raised in lockstep so
+// wood specular stays out of the bloom path under the brighter exposure.
+const D_O   = isDark ? 0.18 : 0.70;
+const D_E   = isDark ? 0.22 : 0.32;
+const D_S_F = isDark ? 0.85 : 0.90;
+const O_O   = isDark ? 0.68 : 1.00;
+const O_E   = isDark ? 0.45 : 0.70;
+const ENV_MUL        = isDark ? 1.30 : 0.50;
+const LIGHT_MUL      = isDark ? 1.20 : 0.75;
+const EXPOSURE       = isDark ? 1.15 : 1.05;
+const BLOOM_STRENGTH = isDark ? 0.42 : 0.42;
+const BLOOM_THRESHOLD= isDark ? 1.00 : 0.92;
+const P_E_MUL        = isDark ? 1.0  : 3.2;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(bgColor);
+scene.fog=new THREE.Fog(bgColor, 18, 38);
+
+const camera=new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+// DPR cap at 1.5 — on Retina (DPR=2) cuts shaded pixels by ~44% with no
+// perceptible quality loss at typical viewing distance. On non-Retina (DPR=1)
+// this is a no-op.
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=EXPOSURE;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement);
+
+// === environment map ===
+// Bootstrap with RoomEnvironment so brass/glass aren't pitch-black during the
+// async HDRI load, then replace as soon as the .hdr is parsed.
+const pmrem=new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+{
+  scene.environment=pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+}
+const rgbeLoader=new RGBELoader();
+rgbeLoader.load(HDRI_FILE, (hdrTex)=>{
+  hdrTex.mapping=THREE.EquirectangularReflectionMapping;
+  const envRT=pmrem.fromEquirectangular(hdrTex);
+  if(scene.environment) scene.environment.dispose();
+  scene.environment=envRT.texture;
+  hdrTex.dispose();
+  // scene.background intentionally left as the flat color.
+});
+
+// === wood textures (PBR) ===
+const texLoader=new THREE.TextureLoader();
+const woodDiff =texLoader.load('../textures/wood_table_001_diff_2k.jpg');
+const woodNorm =texLoader.load('../textures/wood_table_001_nor_gl_2k.jpg');
+const woodRough=texLoader.load('../textures/wood_table_001_rough_2k.jpg');
+woodDiff.colorSpace=THREE.SRGBColorSpace;
+for(const t of [woodDiff, woodNorm, woodRough]){
+  t.wrapS=THREE.RepeatWrapping;
+  t.wrapT=THREE.RepeatWrapping;
+}
+
+// postprocessing — soft bloom on emissive notes during play
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass=new UnrealBloomPass(new THREE.Vector2(2,2), BLOOM_STRENGTH, 0.75, BLOOM_THRESHOLD);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
+function resize(){
+  const w=stage.clientWidth, h=stage.clientHeight;
+  renderer.setSize(w, h, false);
+  composer.setSize(w, h);
+  bloomPass.setSize(w, h);
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+}
+resize();
+new ResizeObserver(resize).observe(stage);
+
+// === three-point lighting + hemisphere fill ===
+// HDRI provides soft museum ambience; analytic lights shape silhouette + cast shadow.
+scene.add(new THREE.HemisphereLight(
+  isDark?0x99aabb:0xc8d4e6,
+  isDark?0x332211:0x6b5840,
+  0.15 * LIGHT_MUL
+));
+// keyL — only shadow caster. Same intensity as crab canon (0.70) — needs to keep
+// the wood floor's IBL specular from washing out the shadow at grazing angles.
+const keyL=new THREE.DirectionalLight(0xfff2dd, 0.70 * LIGHT_MUL);
+// Helix is centered around y≈0; key light from upper-left-back, shadow falls
+// toward right-front-down so it lands in the camera's view in 3/4 and side.
+keyL.position.set(-7, 12, -5);
+keyL.target.position.set(0, 0, 0);
+scene.add(keyL.target);
+keyL.castShadow=true;
+keyL.shadow.mapSize.width=2048;
+keyL.shadow.mapSize.height=2048;
+// Frustum tuned for the tall shape: ±7 horizontally (covers 7×7 base + helix),
+// y from -5 to +9 so the entire 9m vitrine + extra headroom is captured.
+keyL.shadow.camera.left=-9;
+keyL.shadow.camera.right=9;
+keyL.shadow.camera.top=10;
+keyL.shadow.camera.bottom=-7;
+keyL.shadow.camera.near=0.5;
+keyL.shadow.camera.far=44;
+keyL.shadow.camera.updateProjectionMatrix();
+keyL.shadow.bias=-0.0005;
+keyL.shadow.normalBias=0.02;
+scene.add(keyL);
+
+const fillL=new THREE.DirectionalLight(0x88aaff, 0.10 * LIGHT_MUL);
+fillL.position.set(-5, -1, -3);
+scene.add(fillL);
+const rimL=new THREE.DirectionalLight(0xffaa55, 0.15 * LIGHT_MUL);
+rimL.position.set(0, 4, -8);
+scene.add(rimL);
+
+const caseSpot=new THREE.PointLight(0xfff2dd, 0.20 * LIGHT_MUL, 30, 1.4);
+caseSpot.position.set(0, 6, 4);
+scene.add(caseSpot);
+
+// === orbit controls + view presets ===
+// View target sits at the helix midpoint (Y_OFFSET above origin) so the
+// camera's pivot is the visual center of the artwork, not the floor.
+const VIEW_Y=Y_OFFSET;
+const controls=new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, VIEW_Y, 0);
+controls.enableDamping=true;
+controls.dampingFactor=0.08;
+controls.minDistance=12;
+controls.maxDistance=34;
+// Polar-angle clamp removed (was [0.2, π·0.62]) so the camera can be rotated
+// to any orientation — including strict overhead and below-floor — at the
+// user's discretion. Tiny ε on the upper bound avoids gimbal-lock at the
+// south pole; minPolarAngle=0 allows exact top-down view.
+controls.minPolarAngle=0;
+controls.maxPolarAngle=Math.PI;
+
+function setView(name){
+  // Distances chosen so the full 7×7×7.6 vitrine fits inside a 38° vertical FOV
+  // on a 3:4-aspect canvas with comfortable margin. Pulled back from earlier
+  // values so the default 3/4 view shows the whole device, not just its top.
+  if(name==='3q'){        camera.position.set(15, 7, 17); }
+  else if(name==='side'){ camera.position.set(0.01, VIEW_Y+0.6, 19); }
+  else if(name==='top'){  camera.position.set(0.01, VIEW_Y+15, 0.01); }
+  controls.target.set(0, VIEW_Y, 0);
+  controls.update();
+}
+// URL hash (#top / #side / #3q) selects the initial view; defaults to 3q.
+// Useful for direct linking to a particular angle and for headless screenshots.
+const initView = (location.hash || '#3q').replace(/^#/, '');
+setView(['3q','side','top'].includes(initView) ? initView : '3q');
+document.querySelectorAll('[data-view]').forEach(b=>{
+  b.addEventListener('click',()=>setView(b.dataset.view));
+});
+
+// === voice styling — unified with canon_per_motum_contrarium ===
+// Antique gold for the Royal cantus firmus; aged terracotta + cooler teal
+// for the canonic pair (Comes / Dux). Sphere radii halved so the dot grain
+// matches the other two demos; material props (metalness/roughness/env/pE)
+// carried verbatim from the motum file's Flute / Violin / Viola entries.
+const VS=[
+  {color:0xC9994A, emissive:0x4A2D08, baseR:0.058, metalness:0.62, roughness:0.30, env:0.65, pE:1.15}, // Royal — antique gold
+  {color:0xB86348, emissive:0x4A1C0A, baseR:0.045, metalness:0.18, roughness:0.40, env:0.55, pE:1.45}, // Comes (v=1) — aged terracotta
+  {color:0x3F8788, emissive:0x0E3537, baseR:0.045, metalness:0.20, roughness:0.42, env:0.55, pE:1.55}  // Dux  (v=2) — cooled teal
+];
+const sphereGeoms=VS.map(v=>new THREE.SphereGeometry(v.baseR, 14, 12));
+
+// === single helix guide ribbon (shared by all three voices) ===
+// One thin, neutral-colored tube traces the helix geometry; voice identity
+// is read from the note dots along it, not from the guide. This matches the
+// original's "helix as architectural figure" reading.
+{
+  const SAMPLES=600;
+  const pts=[];
+  for(let s=0; s<=SAMPLES; s++){
+    const i=NN*s/SAMPLES;
+    const phi=i*2*Math.PI;
+    const y=i*H_PER_TURN - TOTAL_H/2 + Y_OFFSET;
+    pts.push(new THREE.Vector3(HELIX_R*Math.cos(phi), y, HELIX_R*Math.sin(phi)));
+  }
+  const curve=new THREE.CatmullRomCurve3(pts);
+  const guideGeom=new THREE.TubeGeometry(curve, 600, isDark?0.018:0.026, 6, false);
+  const guideMat=new THREE.MeshBasicMaterial({
+    color:isDark?0x666688:0x2e2620,
+    transparent:true, opacity:isDark?0.45:0.78
+  });
+  const guideMesh=new THREE.Mesh(guideGeom, guideMat);
+  guideMesh.castShadow=true;
+  scene.add(guideMesh);
+}
+
+// =====================================================================
+// === VITRINE SHELL ===================================================
+// =====================================================================
+
+// shared antique-brass material — used by pillars, rails, nameplate sides, inlay
+const brassMat=new THREE.MeshStandardMaterial({
+  color:0xc9a060,
+  metalness:0.92,
+  roughness:0.32,
+  envMapIntensity:1.2 * (isDark?1.0:0.7)
+});
+
+// 1. wood base (PBR walnut) — square footprint 7×7, slightly chunkier base.
+const baseMat=new THREE.MeshStandardMaterial({
+  map:woodDiff,
+  normalMap:woodNorm,
+  roughnessMap:woodRough,
+  metalness:0.0,
+  roughness:1.0,
+  normalScale:new THREE.Vector2(1.0, 1.0),
+  envMapIntensity:0.5 * (isDark?1.0:0.4)
+});
+const baseGeom=new RoundedBoxGeometry(7, 0.7, 7, 4, 0.07);
+const base=new THREE.Mesh(baseGeom, baseMat);
+base.position.set(0, -4.05, 0);  // top at y=-3.7 (below helix bottom at -3.6 with margin)
+base.receiveShadow=true;
+scene.add(base);
+// brass inlay — top sits 0.01 below the wood top so it reads as a thin metallic skirt
+const inlayGeom=new RoundedBoxGeometry(7.05, 0.05, 7.05, 4, 0.07);
+const inlay=new THREE.Mesh(inlayGeom, brassMat);
+inlay.position.set(0, -3.735, 0);
+inlay.castShadow=true;
+scene.add(inlay);
+
+// 2. four brass pillars + 8 horizontal frame rails — the case's 12 edges.
+{
+  const PILLAR_H=7.6;            // accommodates 6.0m helix + headroom (compacted from 9.2)
+  // Bottom of pillar at wood top y=-3.7 → PY = -3.7 + 3.8 = 0.1
+  const PY = 0.1;
+  const TOP_Y    = PY + PILLAR_H/2;   // +3.9 (glass top)
+  const BOTTOM_Y = PY - PILLAR_H/2;   // -3.7 (wood top)
+
+  const pillarGeom=new THREE.CylinderGeometry(0.06, 0.06, PILLAR_H, 16);
+  const corners=[[ 3.4, PY,  3.4],[-3.4, PY,  3.4],[ 3.4, PY, -3.4],[-3.4, PY, -3.4]];
+  for(const [x,y,z] of corners){
+    const p=new THREE.Mesh(pillarGeom, brassMat);
+    p.position.set(x, y, z);
+    p.castShadow=true;
+    scene.add(p);
+  }
+
+  // 8 horizontal rails (4 top, 4 bottom). Square 0.04×0.04 cross-section — same
+  // machined-edge moulding as the crab canon. Bottom rails sit at the wood top.
+  const railX=new THREE.BoxGeometry(6.8, 0.04, 0.04);
+  const railZ=new THREE.BoxGeometry(0.04, 0.04, 6.8);
+  const rails=[
+    [railX, 0, TOP_Y,     3.4],
+    [railX, 0, TOP_Y,    -3.4],
+    [railZ,  3.4, TOP_Y,    0],
+    [railZ, -3.4, TOP_Y,    0],
+    [railX, 0, BOTTOM_Y,  3.4],
+    [railX, 0, BOTTOM_Y, -3.4],
+    [railZ,  3.4, BOTTOM_Y, 0],
+    [railZ, -3.4, BOTTOM_Y, 0],
+  ];
+  for(const [geom, x, y, z] of rails){
+    const r=new THREE.Mesh(geom, brassMat);
+    r.position.set(x, y, z);
+    r.castShadow=true;
+    scene.add(r);
+  }
+
+  // 3. glass case (top + 4 sides). Same opacity/clearcoat recipe as crab canon.
+  const glassMat=new THREE.MeshPhysicalMaterial({
+    color:0xffffff,
+    metalness:0,
+    roughness:0.08,
+    ior:1.5,
+    clearcoat:0.6,
+    clearcoatRoughness:0.08,
+    transparent:true,
+    opacity:0.06,
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.0
+  });
+
+  const top=new THREE.Mesh(new THREE.BoxGeometry(6.8, 0.08, 6.8), glassMat);
+  top.position.set(0, TOP_Y, 0);
+  scene.add(top);
+
+  const fbGeom=new THREE.PlaneGeometry(6.8, PILLAR_H);
+  const front=new THREE.Mesh(fbGeom, glassMat);
+  front.position.set(0, PY,  3.4);
+  scene.add(front);
+  const back=new THREE.Mesh(fbGeom, glassMat);
+  back.position.set(0, PY, -3.4);
+  back.rotation.y=Math.PI;
+  scene.add(back);
+
+  const lrGeom=new THREE.PlaneGeometry(6.8, PILLAR_H);
+  const left=new THREE.Mesh(lrGeom, glassMat);
+  left.position.set(-3.4, PY, 0);
+  left.rotation.y=Math.PI/2;
+  scene.add(left);
+  const right=new THREE.Mesh(lrGeom, glassMat);
+  right.position.set(3.4, PY, 0);
+  right.rotation.y=-Math.PI/2;
+  scene.add(right);
+}
+
+// 4. brass nameplate, engraved via CanvasTexture
+{
+  function makeNameplateTexture(){
+    const W=1200, H=200;
+    const cv=document.createElement('canvas');
+    cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const grad=ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,    '#d8a64a');
+    grad.addColorStop(0.45, '#b8862f');
+    grad.addColorStop(1,    '#8a5f1d');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,H);
+    ctx.globalAlpha=0.05;
+    for(let y=0;y<H;y+=2){
+      ctx.fillStyle = (y%4===0)?'#000':'#fff';
+      ctx.fillRect(0,y,W,1);
+    }
+    ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(60,38,16,0.45)';
+    ctx.lineWidth=2;
+    ctx.strokeRect(14,14,W-28,H-28);
+    ctx.strokeStyle='rgba(255,232,175,0.35)';
+    ctx.lineWidth=1;
+    ctx.strokeRect(15,15,W-30,H-30);
+
+    const SERIF='"Baskerville","Bodoni 72","Didot","Hoefler Text","Garamond","Times New Roman",serif';
+    const SERIF_IT='italic '+SERIF;
+    const PAD=80;
+    const MAX=W - PAD*2;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+
+    const line1='JOHANN SEBASTIAN BACH';
+    let f1=72;
+    ctx.font=`500 ${f1}px ${SERIF}`;
+    while(ctx.measureText(line1).width>MAX && f1>20){ f1-=2; ctx.font=`500 ${f1}px ${SERIF}`; }
+
+    const line2='Canon a 2 per Tonos   ·   BWV 1079';
+    let f2=42;
+    ctx.font=`${f2}px ${SERIF_IT}`;
+    while(ctx.measureText(line2).width>MAX && f2>14){ f2-=2; ctx.font=`${f2}px ${SERIF_IT}`; }
+
+    function engraved(text, font, x, y, mainColor){
+      ctx.font=font;
+      ctx.fillStyle='rgba(28, 16, 6, 0.85)';
+      ctx.fillText(text, x + 1.2, y + 1.2);
+      ctx.fillStyle='rgba(255, 232, 175, 0.55)';
+      ctx.fillText(text, x - 1.0, y - 1.0);
+      ctx.fillStyle=mainColor;
+      ctx.fillText(text, x, y);
+    }
+    engraved(line1, `500 ${f1}px ${SERIF}`,    W/2, H*0.40, '#3a230d');
+    engraved(line2, `${f2}px ${SERIF_IT}`,     W/2, H*0.72, '#3a230d');
+
+    const tex=new THREE.CanvasTexture(cv);
+    tex.anisotropy=8;
+    tex.colorSpace=THREE.SRGBColorSpace;
+    return tex;
+  }
+  const engravedTex=makeNameplateTexture();
+  const engravedFace=new THREE.MeshStandardMaterial({
+    map:engravedTex,
+    color:0xffffff,
+    metalness:0.7,
+    roughness:0.38,
+    envMapIntensity:1.0 * (isDark?1.0:0.6)
+  });
+  const plateMats=[brassMat, brassMat, engravedFace, brassMat, brassMat, brassMat];
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.04, 0.4), plateMats);
+  plate.position.set(0, -3.68, 3.45);  // wood top y=-3.7; plate sits just outside front face z=+3.4
+  plate.castShadow=true;
+  scene.add(plate);
+}
+
+// === Engraved emblem — DNA double helix ===
+// The Shepard-tone helix that climbs an octave per cycle is the genetic
+// code of this canon — the same structural motif (one strand a 5th up,
+// the other ascending into pitch space) repeated turn after turn. A
+// minimalist double-helix silhouette (3 turns, 6 base-pair rungs) etched
+// into the wood top is the narrative anchor for the helical climb above.
+// Same SVG-stamp engraving recipe as the crown / crab siblings:
+// shadow halo + walnut recess + warm-bevel rim, V-cut appearance.
+{
+  function makeOverlayTexture(){
+    const W=1024, H=1024;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const tex=new THREE.CanvasTexture(cv);
+    tex.colorSpace=THREE.SRGBColorSpace;
+    tex.anisotropy=16;
+
+    const img=new Image();
+    img.onload=()=>{
+      // Pre-render the SVG to a "stamp" canvas, vertically flipped so the
+      // helix top (top of SVG y) ends up at canvas-bottom. With our plane
+      // rotation (rotation.x = -π/2), canvas-bottom maps to world +z (front),
+      // so the helix axis runs front-to-back in the case.
+      const stamp=document.createElement('canvas');
+      stamp.width=W; stamp.height=H;
+      const sctx=stamp.getContext('2d');
+      const SC=1.0;
+      const sz=W*SC, ox=(W-sz)/2, oy=(H-sz)/2;
+      sctx.save();
+      sctx.translate(0, H);
+      sctx.scale(1, -1);
+      sctx.drawImage(img, ox, oy, sz, sz);
+      sctx.restore();
+
+      const tintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        ctx.drawImage(tmp, 0, 0);
+      };
+      const innerTintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        tctx.globalCompositeOperation='destination-in';
+        tctx.drawImage(stamp, 0, 0);
+        ctx.drawImage(tmp, 0, 0);
+      };
+
+      tintPass('rgba(0, 0, 0, 0.60)', 4.5, 4.5);
+      tintPass('rgba(0, 0, 0, 0.45)', 2.0, 2.0);
+      tintPass('rgba(0, 0, 0, 1.0)', 0, 0);
+      innerTintPass('rgba(248, 218, 165, 0.85)', -2.5, -2.5);
+      innerTintPass('rgba(255, 240, 205, 0.55)', -1.0, -1.0);
+
+      tex.needsUpdate=true;
+    };
+    img.onerror=()=>{
+      console.warn('dna_helix.svg failed to load; engraving overlay will be empty');
+    };
+    img.src='assets/pic/dna_helix.svg';
+
+    return tex;
+  }
+
+  const tex=makeOverlayTexture();
+  const overlayMat=new THREE.MeshStandardMaterial({
+    map:tex,
+    transparent:true,
+    alphaTest:0.04,
+    roughness:0.85,
+    metalness:0.0,
+    envMapIntensity:0.5 * (isDark?1.0:0.6),
+    polygonOffset:true,
+    polygonOffsetFactor:-1,
+    polygonOffsetUnits:-1,
+  });
+  overlayMat.side=THREE.DoubleSide;
+  // 1.3×1.3 plane (square — matches the SVG viewBox) laid flat 0.01 above
+  // the wood top (y=-3.69), centred at z=2.50. Spans z ∈ [1.85, 3.15],
+  // leaving a 0.10 gap to the nameplate at z=3.25.
+  const G=new THREE.PlaneGeometry(1.3, 1.3);
+  const overlay=new THREE.Mesh(G, overlayMat);
+  overlay.rotation.x=-Math.PI/2;
+  overlay.position.set(0, -3.69, 2.50);
+  overlay.receiveShadow=true;
+  scene.add(overlay);
+}
+// =====================================================================
+
+// === helix supports — minimal brass rods on the φ=0 seam axis ===
+// The helix begins (i=0, φ=0) and ends (i=NN, φ=12π ≡ 0) at the same angular
+// position, so both endpoints fall on a single vertical line at x=+HELIX_R,
+// z=0. We exploit that: a short post anchors the start to the wood floor,
+// and a thin tether suspends the end from the glass ceiling. Together the
+// two rods read as one quiet "seam" line — the helix neither floats nor
+// needs a dashed marker to tell you where each turn closes.
+{
+  const helixBottomY = -TOTAL_H/2 + Y_OFFSET;    // i=0  → -2.5
+  const helixTopY    =  TOTAL_H/2 + Y_OFFSET;    // i=NN → +3.5
+  const WOOD_TOP_Y   = -3.7;
+  const GLASS_TOP_Y  =  3.9;                     // matches PILLAR TOP_Y
+
+  // Bottom anchor — slightly thicker (0.030) since it carries gravity.
+  const bottomH = helixBottomY - WOOD_TOP_Y;
+  const bottomMesh = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.030, 0.030, bottomH, 14),
+    brassMat
+  );
+  bottomMesh.position.set(HELIX_R, (helixBottomY + WOOD_TOP_Y)/2, 0);
+  bottomMesh.castShadow = true;
+  scene.add(bottomMesh);
+
+  // Top tether — thinner (0.020) since it's in tension, not compression.
+  const topH = GLASS_TOP_Y - helixTopY;
+  const topMesh = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.020, 0.020, topH, 14),
+    brassMat
+  );
+  topMesh.position.set(HELIX_R, (GLASS_TOP_Y + helixTopY)/2, 0);
+  topMesh.castShadow = true;
+  scene.add(topMesh);
+}
+
+// === build note dot meshes ===
+const notes=[];
+function makeDot(s, e, p, voice){
+  const sB=s/4;
+  const i=sB/IB;
+  if(i>=NN) return;                       // safety: skip notes past helix end
+  const dur=(e-s)/4;
+  const sizeFactor=1+Math.min(dur/4, 0.6);
+  const mat=new THREE.MeshStandardMaterial({
+    color:VS[voice].color,
+    emissive:VS[voice].emissive,
+    emissiveIntensity:D_E,
+    roughness:VS[voice].roughness,
+    metalness:VS[voice].metalness,
+    envMapIntensity:VS[voice].env * ENV_MUL,
+    transparent:true,
+    opacity:D_O
+  });
+  const mesh=new THREE.Mesh(sphereGeoms[voice], mat);
+  mesh.position.copy(pos3D(s, p, voice));
+  const initialScale=sizeFactor*D_S_F;
+  mesh.scale.setScalar(initialScale);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  notes.push({
+    mesh, mat, voice,
+    st:sB*BS, en:(e/4)*BS,
+    baseSize:sizeFactor,
+    pE:VS[voice].pE,
+    s:'d',
+    tO:D_O, tE:D_E, tS:initialScale, spd:3.5
+  });
+}
+for(const [v,s,e,p] of N) makeDot(s, e, p, v);
+
+const sO=notes.slice().sort((a,b)=>a.st-b.st);
+const eO=notes.slice().sort((a,b)=>a.en-b.en);
+let sP=0, eP=0;
+
+const voiceEnabled=[true, true, true];
+
+function setNote(n, s){
+  if(n.s===s) return;
+  n.s=s;
+  if(!voiceEnabled[n.voice]){
+    n.tO=0.04; n.tE=0; n.tS=n.baseSize*0.7; n.spd=8; return;
+  }
+  if(s==='d'){
+    n.tO=D_O; n.tE=D_E; n.tS=n.baseSize*D_S_F; n.spd=3.5;
+  }else if(s==='p'){
+    n.tO=1.0; n.tE=n.pE*P_E_MUL; n.tS=n.baseSize*1.95; n.spd=20;
+  }else{
+    n.tO=O_O; n.tE=O_E; n.tS=n.baseSize*1.08; n.spd=2.4;
+  }
+}
+
+// === single playhead — small spark riding the helix at the current time ===
+// Tiny + dim + flickering. The spark is animated in animate() with a
+// candle-flame-style noise modulation so it feels like a living ember,
+// not a UI cursor.
+const playheadMat=new THREE.MeshStandardMaterial({
+  color:0xffffff,
+  emissive:0xffffff,
+  emissiveIntensity:0.5,
+  envMapIntensity:0,
+  transparent:true,
+  opacity:0
+});
+const playhead=new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 10), playheadMat);
+playhead.castShadow=false;     // too small + too transparent to give a meaningful shadow
+scene.add(playhead);
+
+const haloTex=(()=>{
+  const cv=document.createElement('canvas'); cv.width=cv.height=128;
+  const ctx=cv.getContext('2d');
+  const g=ctx.createRadialGradient(64,64,2,64,64,64);
+  g.addColorStop(0,'rgba(255,235,180,1)');
+  g.addColorStop(0.25,'rgba(255,220,150,0.35)');
+  g.addColorStop(1,'rgba(255,210,140,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(cv);
+})();
+const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:haloTex, transparent:true, opacity:0, depthWrite:false}));
+halo.scale.set(0.32,0.32,0.32);
+scene.add(halo);
+
+// Spark flicker state — toned down candle-flame noise. Two layered sines plus
+// random noise gives a "warm-but-restless" modulation; sounding gates apply.
+let _sparkPhase=0;
+
+// === audio chain ===
+// Sampled instruments through a concert-hall bus (see chain below).
+//
+// PitchShift node is not used: Tone.js's granular pitch-shifting introduces
+// audible artifacts at the cycle-wrap modulation. We transpose PER NOTE by
+// multiplying the played frequency by the per-cycle factor — mathematically
+// lossless, and Tone.Sampler resamples cleanly off the closest stored note.
+// Per Tonos = "by a whole tone": each cycle climbs +2 semitones, six cycles
+// close into a full octave and the helix returns home. Cycle 1 = +0, cycle 2
+// = +2, …, cycle 6 = +10, then we reset to +0 (the next cycle is heard as
+// "an octave higher" against the start, the Shepard idea Bach engraved).
+// Sampled instruments + concert-hall space:
+//   Comp → EQ → early reflections → long reverb → stereo widener → limiter.
+// Royal voice = harp (plucked, gilded — reads as a cantus firmus engraving).
+// Dux/Comes = the SAME violin sampler; the canonic pair must share timbre,
+// since contour (not colour) carries the canon.
+const SBASE='https://nbrosowsky.github.io/tonejs-instruments/samples/';
+const limiter    = new Tone.Limiter(-1).toDestination();
+const widener    = new Tone.StereoWidener(0.55).connect(limiter);
+const reverb     = new Tone.Reverb({decay:5.4, preDelay:0.06, wet:0.28}).connect(widener);
+const er         = new Tone.FeedbackDelay({delayTime:0.045, feedback:0.18, wet:0.16}).connect(reverb);
+const eq         = new Tone.EQ3({low:1, mid:0, high:-0.5}).connect(er);
+const comp       = new Tone.Compressor({threshold:-20, ratio:2.4, attack:0.01, release:0.18}).connect(eq);
+
+// Royal centred (the cantus firmus); Dux left, Comes right, flanking ±0.28.
+const royalPan = new Tone.Panner( 0.0 ).connect(comp);
+const duxPan   = new Tone.Panner(-0.28).connect(comp);
+const comesPan = new Tone.Panner( 0.28).connect(comp);
+
+const harpUrls={
+  A2:'A2.mp3', A4:'A4.mp3', A6:'A6.mp3',
+  B1:'B1.mp3', B3:'B3.mp3', B5:'B5.mp3',
+  C3:'C3.mp3', C5:'C5.mp3',
+  D2:'D2.mp3', D4:'D4.mp3', D6:'D6.mp3', D7:'D7.mp3',
+  E1:'E1.mp3', E3:'E3.mp3', E5:'E5.mp3',
+  F2:'F2.mp3', F4:'F4.mp3', F6:'F6.mp3', F7:'F7.mp3',
+  G1:'G1.mp3', G3:'G3.mp3', G5:'G5.mp3'
+};
+const violinUrls={
+  A3:'A3.mp3', A4:'A4.mp3', A5:'A5.mp3', A6:'A6.mp3',
+  C4:'C4.mp3', C5:'C5.mp3', C6:'C6.mp3', C7:'C7.mp3',
+  E4:'E4.mp3', E5:'E5.mp3', E6:'E6.mp3',
+  G3:'G3.mp3', G4:'G4.mp3', G5:'G5.mp3', G6:'G6.mp3'
+};
+
+const royalSynth = new Tone.Sampler({urls:harpUrls,   baseUrl:SBASE+'harp/',   release:2.0}).connect(royalPan);
+const duxSynth   = new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.4}).connect(duxPan);
+const comesSynth = new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.4}).connect(comesPan);
+royalSynth.volume.value = -6;
+duxSynth.volume.value   = -8;
+comesSynth.volume.value = -8;
+
+// synths indexed by voice id (matches the data array's voice field)
+const synths=[royalSynth, comesSynth, duxSynth];
+
+Tone.Transport.bpm.value=BPM;
+Tone.Transport.loop=true;
+Tone.Transport.loopStart=0;
+Tone.Transport.loopEnd=DUR;
+
+const evs=N.map(([v,s,e,p])=>({
+  voice:v,
+  time:(s/4)*BS,
+  freq:440*Math.pow(2,(p-69)/12),
+  dur:Math.max(((e-s)/4)*BS, 0.05)
+}));
+const part=new Tone.Part((t,e)=>{
+  if(!voiceEnabled[e.voice]) return;
+  // Per-loop whole-tone climb: +2 semitones each loop wrap, six loops to a
+  // full octave (then reset). Applied as a frequency multiplier on the played
+  // pitch — clean, no granular artifacts.
+  const cycleMul = Math.pow(2, ((cycleCount % 6) * 2) / 12);
+  // Royal louder and steadier (it's the King's stately theme); the canon pair
+  // gets a small velocity jitter so the lines breathe instead of metronoming.
+  const vel = e.voice===0
+    ? 0.55
+    : 0.40 + Math.random()*0.10;
+  synths[e.voice].triggerAttackRelease(e.freq * cycleMul, e.dur, t, vel);
+}, evs);
+part.loop=true;
+part.loopEnd=DUR;
+part.start(0);
+
+// === UI plumbing ===
+const bp=document.getElementById('bp');
+const bs=document.getElementById('bs');
+const bt=document.getElementById('bt');
+const psr=document.getElementById('psr');
+const PLAY='<svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg>';
+const PAUSE='<svg viewBox="0 0 10 10"><rect x="2" y="1" width="2" height="8" fill="currentColor"/><rect x="6" y="1" width="2" height="8" fill="currentColor"/></svg>';
+
+let playing=false, scrubMode=false, loopEnabled=true, lastT=0;
+let cycleCount=0;
+
+function fmt(t){const m=Math.floor(t/60), s=Math.floor(t-m*60); return m+':'+(s<10?'0':'')+s;}
+const TOT=fmt(DUR);
+
+function updatePsr(){
+  const semis=(cycleCount%6)*2;
+  psr.textContent='cycle '+((cycleCount%6)+1)+'/6 · +'+semis+' st';
+}
+
+// Drive the single playhead along the helix's nominal time-position. No pitch
+// term, no per-voice branch — the helix itself is the time axis here.
+// Visibility/intensity is set here as a base; animate() layers a flicker on top.
+let _sparkVisible=false;
+function updatePlayheads(t){
+  if(t<0 || (t>=DUR && !loopEnabled)){
+    _sparkVisible=false;
+    playhead.material.opacity=0;
+    halo.material.opacity=0;
+    return;
+  }
+  const tt=Math.min(t, DUR-0.001);
+  const i=(tt/BS)/IB;
+  const phi=i*2*Math.PI;
+  const x=HELIX_R*Math.cos(phi);
+  const z=HELIX_R*Math.sin(phi);
+  const y=i*H_PER_TURN - TOTAL_H/2 + Y_OFFSET;
+  playhead.position.set(x,y,z);
+  halo.position.set(x,y,z);
+  _sparkVisible=true;
+}
+
+function uui(t){
+  bt.textContent=fmt(t)+' / '+TOT;
+  if(!scrubMode) bs.value=t.toFixed(2);
+  updatePlayheads(t);
+}
+
+function resetVisualProgress(){
+  sP=0; eP=0;
+  for(const n of notes){ n.s=null; setNote(n,'d'); }
+}
+
+function onCycleWrap(){
+  cycleCount++;
+  // each loop adds +2 semitones (a whole tone — "per Tonos"); six loops close
+  // into an octave and the cycle resets so we don't drift indefinitely.
+  // (No PitchShift node anymore — the per-note frequency multiplier in the
+  // part callback applies the climb cleanly.)
+  updatePsr();
+  resetVisualProgress();
+}
+
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(), 0.1);
+  controls.update();
+
+  // refresh shadow camera target each frame to avoid stale matrixWorld across
+  // view switches (same crab-canon lesson — shadow drift on view change).
+  keyL.target.updateMatrixWorld();
+
+  if(playing){
+    const t=Tone.Transport.seconds;
+    if(loopEnabled && t+0.5<lastT) onCycleWrap();
+    lastT=t;
+    while(sP<sO.length && sO[sP].st<=t){ setNote(sO[sP],'p'); sP++; }
+    while(eP<eO.length && eO[eP].en<=t){ setNote(eO[eP],'o'); eP++; }
+    uui(t);
+    if(!loopEnabled && t>=DUR-0.02){ pause(); }
+  }
+
+  for(let k=0;k<notes.length;k++){
+    const n=notes[k];
+    const a=1-Math.exp(-n.spd*dt);
+    n.mat.opacity += (n.tO-n.mat.opacity)*a;
+    n.mat.emissiveIntensity += (n.tE-n.mat.emissiveIntensity)*a;
+    const cs=n.mesh.scale.x;
+    n.mesh.scale.setScalar(cs+(n.tS-cs)*a);
+  }
+
+  // Spark flicker — two-rate sine + low-amplitude noise, candle-style. When
+  // not sounding, decay quickly to zero so the spark doesn't ghost on rests.
+  _sparkPhase += dt;
+  if(_sparkVisible){
+    const f1 = Math.sin(_sparkPhase*11.0);
+    const f2 = Math.sin(_sparkPhase*4.3 + 1.7);
+    const noise = (Math.random()-0.5);
+    const m = 0.55 + 0.18*f1 + 0.10*f2 + 0.08*noise;     // ≈ [0.30, 0.85]
+    const op = Math.max(0, Math.min(1, m));
+    playhead.material.opacity         = op;
+    playhead.material.emissiveIntensity = 0.35 + 0.55*op;
+    halo.material.opacity             = 0.10 + 0.10*op;
+    const sc = 0.28 + 0.06*op;
+    halo.scale.set(sc, sc, sc);
+  } else {
+    const decay = 1 - Math.exp(-8*dt);
+    playhead.material.opacity *= (1 - decay);
+    halo.material.opacity     *= (1 - decay);
+  }
+
+  composer.render();
+}
+animate();
+
+async function play(){
+  if(Tone.context.state!=='running') await Tone.start();
+  await Tone.loaded();
+  if(!loopEnabled && Tone.Transport.seconds>=DUR-0.05) seek(0);
+  playing=true;
+  Tone.Transport.start();
+  bp.innerHTML=PAUSE;
+  bp.setAttribute('aria-label','Pause');
+  lastT=Tone.Transport.seconds;
+}
+
+function pause(){
+  playing=false;
+  Tone.Transport.pause();
+  bp.innerHTML=PLAY;
+  bp.setAttribute('aria-label','Play');
+}
+
+function seek(t){
+  const wp=playing;
+  if(Tone.Transport.state==='started'){
+    Tone.Transport.pause();
+    for(const s of synths) s.releaseAll();
+  }
+  Tone.Transport.seconds=t;
+  lastT=t;
+  for(const n of notes) n.s=null;
+  sP=0; eP=0;
+  while(sP<sO.length && sO[sP].st<=t){
+    const n=sO[sP];
+    setNote(n, n.en<=t?'o':'p');
+    sP++;
+  }
+  while(eP<eO.length && eO[eP].en<=t) eP++;
+  for(let i=sP; i<sO.length; i++) setNote(sO[i],'d');
+  uui(t);
+  if(wp){ playing=true; Tone.Transport.start(); }
+}
+
+bp.addEventListener('click',()=>playing?pause():play());
+
+let scrubT;
+bs.addEventListener('input',()=>{
+  scrubMode=true;
+  bt.textContent=fmt(parseFloat(bs.value))+' / '+TOT;
+  clearTimeout(scrubT);
+  scrubT=setTimeout(()=>{ scrubMode=false; seek(parseFloat(bs.value)); }, 80);
+});
+
+function toggleVoice(v){
+  voiceEnabled[v]=!voiceEnabled[v];
+  document.getElementById('v'+v).setAttribute('aria-pressed', String(voiceEnabled[v]));
+  if(!voiceEnabled[v]) synths[v].releaseAll();
+  for(const n of notes) if(n.voice===v){ const cs=n.s; n.s=null; setNote(n, cs||'d'); }
+}
+document.getElementById('v0').addEventListener('click',()=>toggleVoice(0));
+document.getElementById('v1').addEventListener('click',()=>toggleVoice(1));
+document.getElementById('v2').addEventListener('click',()=>toggleVoice(2));
+
+const lpBtn=document.getElementById('lp');
+lpBtn.addEventListener('click',()=>{
+  loopEnabled=!loopEnabled;
+  Tone.Transport.loop=loopEnabled;
+  lpBtn.setAttribute('aria-pressed', String(loopEnabled));
+  if(loopEnabled){
+    cycleCount=0;
+    // (cycleCount reset above is sufficient — frequency multiplier follows it.)
+    updatePsr();
+  }
+});
+
+for(const n of notes){ n.s=null; setNote(n,'d'); }
+bs.max=DUR.toFixed(2);
+updatePsr();
+uui(0);
+</script>
+</body>
+</html>

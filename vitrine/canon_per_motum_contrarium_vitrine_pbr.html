@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bach · Canon a 2 per Motum contrarium · BWV 1079</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5a5a5a;
+    --color-text-tertiary: #8a8a8a;
+    --color-border-tertiary: rgba(0,0,0,0.15);
+    --color-border-secondary: rgba(0,0,0,0.3);
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f6f5f0;
+    --color-canvas-bg: #f1eee6;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e8e8;
+      --color-text-secondary: #aaa;
+      --color-text-tertiary: #777;
+      --color-border-tertiary: rgba(255,255,255,0.18);
+      --color-border-secondary: rgba(255,255,255,0.32);
+      --color-background-primary: #1f1f1f;
+      --color-background-secondary: #2a2a2a;
+      --color-canvas-bg: #1a1a1a;
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); margin: 0; padding: 24px 16px 60px; display: flex; justify-content: center; }
+  main { width: 100%; max-width: 760px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; padding: 20px 24px 16px; }
+  h1 { font-size: 16px; font-weight: 500; margin: 0 0 4px; }
+  .sub { font-family: 'IM Fell English', Georgia, serif; font-style: normal; font-feature-settings: "liga", "dlig"; font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .sub em { font-style: italic; }
+  button { border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+  button:hover { background: var(--color-background-secondary); }
+  button:active { transform: scale(0.96); }
+  input[type="range"] { accent-color: var(--color-text-primary); }
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  #stage{position:relative;width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--color-canvas-bg);border:0.5px solid var(--color-border-tertiary)}
+  #stage canvas{display:block;width:100%!important;height:100%!important;outline:none}
+  .legend{position:absolute;left:10px;top:10px;font-size:11px;color:var(--color-text-secondary);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+  .legend .row{display:flex;align-items:center;gap:6px}
+  .legend .swatch{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .views{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+  .vbtn-sm{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(4px);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);cursor:pointer}
+  @media (prefers-color-scheme: dark){.vbtn-sm{background:rgba(0,0,0,0.45)}}
+  .hint{font-size:11px;color:var(--color-text-tertiary);margin:6px 4px 14px;text-align:right}
+  .bc{display:flex;align-items:center;gap:12px;padding:8px 4px 12px}
+  .bp{width:36px;height:36px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .bp svg{width:10px;height:10px}
+  .bt{font-size:12px;color:var(--color-text-secondary);font-variant-numeric:tabular-nums;min-width:78px;text-align:right;flex-shrink:0}
+  .bs{flex:1;min-width:0}
+  .vt{display:flex;align-items:center;gap:8px;padding:0 4px 10px;flex-wrap:wrap}
+  .vbtn{font-size:11px;padding:5px 10px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;transition:opacity 0.15s,background 0.15s}
+  .vbtn:hover{background:var(--color-background-secondary)}
+  .vbtn .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .vbtn[aria-pressed="false"]{opacity:0.42}
+  .vbtn[aria-pressed="false"] .dot{opacity:0.4}
+  .vlbl{font-size:11px;color:var(--color-text-tertiary);margin-right:2px}
+  .psr{font-size:11px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;margin-left:auto}
+</style>
+</head>
+<body>
+<main>
+<h1>Bach · Canon a 2 per Motum contrarium · BWV 1079</h1>
+<p class="sub">violin and viola move in contrary motion as exact y-mirrors across the Eb/E axis — every paired note sums to MIDI 127, while flute carries the King's theme.</p>
+<h2 class="sr-only">3D mirror-canon visualization of Bach's Canon a 2 per Motum contrarium as a precision instrument inside a glass vitrine, lit by an HDRI environment</h2>
+
+<div id="stage">
+  <div class="legend">
+    <div class="row"><span class="swatch" style="background:#C9994A;border:0.5px solid #4A2D08"></span>Flute — King's theme</div>
+    <div class="row"><span class="swatch" style="background:#B86348"></span>Violin — above the mirror</div>
+    <div class="row"><span class="swatch" style="background:#3F8788"></span>Viola — below the mirror (+2 beats)</div>
+  </div>
+  <div class="views">
+    <button class="vbtn-sm" data-view="3q">3/4</button>
+    <button class="vbtn-sm" data-view="top">top</button>
+    <button class="vbtn-sm" data-view="front">front</button>
+  </div>
+</div>
+
+<div class="bc">
+<button class="bp" id="bp" aria-label="Play"><svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg></button>
+<label class="sr-only" for="bs">Scrub timeline</label>
+<input type="range" class="bs" id="bs" min="0" max="52.5" step="0.05" value="0" aria-label="Scrub timeline">
+<span class="bt" id="bt">0:00 / 0:52</span>
+</div>
+
+<div class="vt">
+<span class="vlbl">solo</span>
+<button class="vbtn" id="v0" aria-pressed="true"><span class="dot" style="background:#C9994A;border:0.5px solid #4A2D08"></span>Flute</button>
+<button class="vbtn" id="v1" aria-pressed="true"><span class="dot" style="background:#B86348"></span>Violin</button>
+<button class="vbtn" id="v2" aria-pressed="true"><span class="dot" style="background:#3F8788"></span>Viola</button>
+<button class="vbtn" id="lp" aria-pressed="true"><span style="font-size:13px;line-height:1;letter-spacing:-1px">∞</span> loop</button>
+<span class="psr" id="psr">t = 0.0 / 52.5</span>
+</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.43/Tone.js"></script>
+<!-- es-module-shims polyfills <script type="importmap"> on Safari ≤16.3
+     (macOS Monterey caps at Safari 15). No-op on browsers with native support. -->
+<script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+// === note data — voice / start_16th / end_16th / midi_pitch ===
+// Voice 0 = Flute (cantus firmus, Frederick II's Royal theme).
+// Voice 1 = Violin (dux of the canon pair — leads).
+// Voice 2 = Viola  (comes — enters 8 sixteenths late, exact y-mirror around MIDI 63.5).
+// Mirror invariant: vn(t) + va(t+8) ∈ {126, 127} for steps 1..237; breaks at 238.
+const N=[[0,0,4,72],[0,4,8,75],[0,8,12,79],[0,12,16,80],[0,16,20,71],[0,22,24,79],[0,24,28,78],[0,28,32,77],[0,32,36,76],[0,36,42,75],[0,42,44,74],[0,44,46,73],[0,46,48,72],[0,48,50,71],[0,50,51,69],[0,51,52,67],[0,52,54,72],[0,54,56,77],[0,56,58,76],[0,58,60,75],[0,60,64,74],[0,64,68,72],[0,68,72,75],[0,72,76,79],[0,76,80,80],[0,80,84,71],[0,86,88,79],[0,88,92,78],[0,92,96,77],[0,96,100,76],[0,100,106,75],[0,106,108,74],[0,108,110,73],[0,110,112,72],[0,112,114,71],[0,114,115,69],[0,115,116,67],[0,116,118,72],[0,118,120,77],[0,120,122,76],[0,122,124,75],[0,124,128,74],[0,128,132,72],[0,132,136,75],[0,136,140,79],[0,140,144,80],[0,144,148,71],[0,150,152,79],[0,152,156,78],[0,156,160,77],[0,160,164,76],[0,164,170,75],[0,170,172,74],[0,172,174,73],[0,174,176,72],[0,176,178,71],[0,178,179,69],[0,179,180,67],[0,180,182,72],[0,182,184,77],[0,184,186,76],[0,186,188,75],[0,188,192,74],[0,192,196,72],[0,196,200,75],[0,200,204,79],[0,204,208,80],[0,208,212,71],[0,214,216,79],[0,216,220,78],[0,220,224,77],[0,224,228,76],[0,228,234,75],[0,234,236,74],[0,236,238,73],[0,238,240,72],[0,240,242,71],[0,242,243,69],[0,243,244,67],[0,244,246,72],[0,246,248,77],[0,248,252,76],[1,1,2,72],[1,2,3,70],[1,3,4,68],[1,4,5,67],[1,5,6,65],[1,6,7,63],[1,7,8,62],[1,8,9,60],[1,9,10,59],[1,10,11,60],[1,11,12,62],[1,12,14,63],[1,14,16,60],[1,18,20,67],[1,20,21,72],[1,21,22,74],[1,22,23,72],[1,23,24,70],[1,24,25,69],[1,25,26,57],[1,26,27,55],[1,27,28,57],[1,28,30,59],[1,30,33,67],[1,33,34,55],[1,34,35,57],[1,35,36,59],[1,36,37,60],[1,37,38,62],[1,38,39,63],[1,39,40,62],[1,40,42,60],[1,42,44,62],[1,44,46,63],[1,46,48,56],[1,48,49,55],[1,49,50,62],[1,50,51,60],[1,51,52,59],[1,53,54,65],[1,54,55,64],[1,55,56,62],[1,56,62,60],[1,62,64,59],[1,64,65,63],[1,65,66,72],[1,66,67,70],[1,67,68,68],[1,68,69,67],[1,69,70,65],[1,70,71,63],[1,71,72,62],[1,72,73,60],[1,73,74,59],[1,74,75,60],[1,75,76,62],[1,76,78,63],[1,78,80,60],[1,82,84,67],[1,84,85,72],[1,85,86,74],[1,86,87,72],[1,87,88,70],[1,88,89,69],[1,89,90,57],[1,90,91,55],[1,91,92,57],[1,92,94,59],[1,94,97,67],[1,97,98,55],[1,98,99,57],[1,99,100,59],[1,100,101,60],[1,101,102,62],[1,102,103,63],[1,103,104,62],[1,104,106,60],[1,106,108,62],[1,108,110,63],[1,110,112,56],[1,112,113,55],[1,113,114,62],[1,114,115,60],[1,115,116,59],[1,117,118,65],[1,118,119,64],[1,119,120,62],[1,120,126,60],[1,126,128,59],[1,128,129,63],[1,129,130,72],[1,130,131,70],[1,131,132,68],[1,132,133,67],[1,133,134,65],[1,134,135,63],[1,135,136,62],[1,136,137,60],[1,137,138,59],[1,138,139,60],[1,139,140,62],[1,140,142,63],[1,142,144,60],[1,146,148,67],[1,148,149,72],[1,149,150,74],[1,150,151,72],[1,151,152,70],[1,152,153,69],[1,153,154,57],[1,154,155,55],[1,155,156,57],[1,156,158,59],[1,158,161,67],[1,161,162,55],[1,162,163,57],[1,163,164,59],[1,164,165,60],[1,165,166,62],[1,166,167,63],[1,167,168,62],[1,168,170,60],[1,170,172,62],[1,172,174,63],[1,174,176,56],[1,176,177,55],[1,177,178,62],[1,178,179,60],[1,179,180,59],[1,181,182,65],[1,182,183,64],[1,183,184,62],[1,184,190,60],[1,190,192,59],[1,192,193,63],[1,193,194,72],[1,194,195,70],[1,195,196,68],[1,196,197,67],[1,197,198,65],[1,198,199,63],[1,199,200,62],[1,200,201,60],[1,201,202,59],[1,202,203,60],[1,203,204,62],[1,204,206,63],[1,206,208,60],[1,210,212,67],[1,212,213,72],[1,213,214,74],[1,214,215,72],[1,215,216,70],[1,216,217,69],[1,217,218,57],[1,218,219,55],[1,219,220,57],[1,220,222,59],[1,222,225,67],[1,225,226,55],[1,226,227,57],[1,227,228,59],[1,228,229,60],[1,229,230,62],[1,230,231,63],[1,231,232,62],[1,232,234,60],[1,234,236,62],[1,236,238,63],[1,238,240,56],[1,240,241,55],[1,241,242,62],[1,242,243,60],[1,243,244,59],[1,245,246,65],[1,246,247,64],[1,247,248,62],[1,248,252,60],[2,9,10,55],[2,10,11,57],[2,11,12,59],[2,12,13,60],[2,13,14,62],[2,14,15,63],[2,15,16,65],[2,16,17,67],[2,17,18,68],[2,18,19,67],[2,19,20,65],[2,20,22,63],[2,22,24,67],[2,26,28,60],[2,28,29,55],[2,29,30,53],[2,30,31,55],[2,31,32,56],[2,32,33,58],[2,33,34,70],[2,34,35,72],[2,35,36,70],[2,36,38,68],[2,38,41,60],[2,41,42,72],[2,42,43,70],[2,43,44,68],[2,44,45,67],[2,45,46,65],[2,46,47,63],[2,47,48,65],[2,48,50,67],[2,50,52,65],[2,52,54,63],[2,54,56,70],[2,56,57,72],[2,57,58,65],[2,58,59,67],[2,59,60,68],[2,61,62,62],[2,62,63,63],[2,63,64,65],[2,64,70,67],[2,70,72,68],[2,72,73,63],[2,73,74,55],[2,74,75,57],[2,75,76,59],[2,76,77,60],[2,77,78,62],[2,78,79,63],[2,79,80,65],[2,80,81,67],[2,81,82,68],[2,82,83,67],[2,83,84,65],[2,84,86,63],[2,86,88,67],[2,90,92,60],[2,92,93,55],[2,93,94,53],[2,94,95,55],[2,95,96,56],[2,96,97,58],[2,97,98,70],[2,98,99,72],[2,99,100,70],[2,100,102,68],[2,102,105,60],[2,105,106,72],[2,106,107,70],[2,107,108,68],[2,108,109,67],[2,109,110,65],[2,110,111,63],[2,111,112,65],[2,112,114,67],[2,114,116,65],[2,116,118,63],[2,118,120,70],[2,120,121,72],[2,121,122,65],[2,122,123,67],[2,123,124,68],[2,125,126,62],[2,126,127,63],[2,127,128,65],[2,128,134,67],[2,134,136,68],[2,136,137,63],[2,137,138,55],[2,138,139,57],[2,139,140,59],[2,140,141,60],[2,141,142,62],[2,142,143,63],[2,143,144,65],[2,144,145,67],[2,145,146,68],[2,146,147,67],[2,147,148,65],[2,148,150,63],[2,150,152,67],[2,154,156,60],[2,156,157,55],[2,157,158,53],[2,158,159,55],[2,159,160,56],[2,160,161,58],[2,161,162,70],[2,162,163,72],[2,163,164,70],[2,164,166,68],[2,166,169,60],[2,169,170,72],[2,170,171,70],[2,171,172,68],[2,172,173,67],[2,173,174,65],[2,174,175,63],[2,175,176,65],[2,176,178,67],[2,178,180,65],[2,180,182,63],[2,182,184,70],[2,184,185,72],[2,185,186,65],[2,186,187,67],[2,187,188,68],[2,189,190,62],[2,190,191,63],[2,191,192,65],[2,192,198,67],[2,198,200,68],[2,200,201,63],[2,201,202,55],[2,202,203,57],[2,203,204,59],[2,204,205,60],[2,205,206,62],[2,206,207,63],[2,207,208,65],[2,208,209,67],[2,209,210,68],[2,210,211,67],[2,211,212,65],[2,212,214,63],[2,214,216,67],[2,218,220,60],[2,220,221,55],[2,221,222,53],[2,222,223,55],[2,223,224,56],[2,224,225,58],[2,225,226,70],[2,226,227,72],[2,227,228,70],[2,228,230,68],[2,230,233,60],[2,233,234,72],[2,234,235,70],[2,235,236,68],[2,236,237,67],[2,237,238,65],[2,238,239,63],[2,239,240,65],[2,240,242,67],[2,242,244,65],[2,244,246,63],[2,246,248,59],[2,248,252,60]];
+
+// === musical / temporal constants ===
+// 252 sixteenths ≈ 15.75 bars of 4/4. BPM=72 yields DUR=52.5s — within the
+// 30–60s loop window the dev guide recommends, slow enough to feel deliberate.
+// MIRROR_AXIS=63.5 is geometrically between Eb4 (63) and E4 (64); violin and
+// viola pitches summing to 127 reflect exactly across this y=0 plane.
+const TOT16=252, BPM=72, TPS=60/BPM/4, DUR=TOT16*TPS;
+const MIRROR_AXIS=63.5;
+
+// Step where mirror law fails — last 14 sixteenths of violin time. After this
+// point the canon pair drops out of strict reflection so all three voices can
+// land on the c-minor cadence together. Used to render a barely-rougher region
+// at the right end of the mirror plate so the rule break is statically legible.
+const RULE_BREAK_STEP=238;
+
+// === HDRI selection ===
+// Alternates (swap by changing this single line):
+//   '../textures/museum_of_ethnography_2k.hdr' — warm museum interior, primary
+//   '../textures/vintage_measuring_lab_2k.hdr' — old scientific instrument vibe
+const HDRI_FILE='../textures/museum_of_ethnography_2k.hdr';
+
+// === geometry constants ===
+// Same 12×6 footprint as the crab canon — the mirror canon is essentially a
+// horizontal time-band piece. Visual y is pitch-deviation from the axis at 63.5.
+const X_RANGE=10;
+const PITCH_SCALE=0.13;        // 16.5 semitones (max distance) → ±2.15 world units; fits inside the 5.4-tall vitrine with margin
+// All three voices brought closer in z now that every dot is half-size —
+// keeps the trio reading as a single composed object rather than three
+// distant layers. Flute is still well in front of the canon pair (so it
+// reads as the "lead" cantus firmus on top of the structure); violin and
+// viola sit symmetrically tight around the mirror plane.
+const Z_FLUTE=0.55;            // cantus firmus, in front of the canon pair
+const Z_VIOLIN=0.06;           // just in front of the mirror plane (real)
+const Z_VIOLA=-0.06;           // just behind the mirror plane (reflection)
+
+// pitch → world y, mirror at y=0 by definition.
+function pitchY(p){ return (p-MIRROR_AXIS)*PITCH_SCALE; }
+// 16th-step → world x, time runs left→right.
+function stepX(s){ return (s/TOT16 - 0.5)*X_RANGE; }
+
+// Visual-only canon offset: viola sounds 2 beats (8 sixteenths) after violin,
+// but to make the y-mirror legible at a glance we draw the viola at the x
+// position where its mirror partner is sounding NOW — i.e. 8 steps earlier
+// in space. The audio is unaffected; only the geometry shifts left.
+// This trades canon-delay legibility for mirror-axis legibility, which the
+// user prioritised. Net effect: violin (t) and viola (t) appear at the same
+// x with exactly opposite y, producing a reflection that reads instantly.
+const VOLA_VISUAL_SHIFT = -8;          // sixteenths
+
+function pos3D(s, p, voice){
+  const sVisual = voice===2 ? (s + VOLA_VISUAL_SHIFT) : s;
+  const x=stepX(sVisual);
+  const y=pitchY(p);
+  const z=voice===0 ? Z_FLUTE : (voice===1 ? Z_VIOLIN : Z_VIOLA);
+  return new THREE.Vector3(x,y,z);
+}
+
+// === Three.js scene setup ===
+const stage=document.getElementById('stage');
+const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+const bgColor=isDark?0x1a1a1a:0xd6cbb1;
+
+// Mode-aware multipliers — recipe carried from crab canon / per_tonos and
+// then lifted across the board so the overall ambience is warmer and the
+// 'o' (already-played) dots no longer fade to near-grey. Particular bumps:
+//   O_O  — played-over opacity, so the played dots stay solid not ghostly
+//   O_E  — played-over emissive, so the dot keeps a warm internal glow
+//   D_E  — dormant emissive, so unplayed notes have presence too
+//   LIGHT_MUL / ENV_MUL / EXPOSURE — overall scene brightness
+// BLOOM_THRESHOLD raised in lockstep so the brighter exposure does not let
+// wood specular leak into bloom (only the playing notes should bloom).
+const D_O   = isDark ? 0.18 : 0.70;
+const D_E   = isDark ? 0.22 : 0.32;
+const D_S_F = isDark ? 0.85 : 0.90;
+const O_O   = isDark ? 0.68 : 1.00;
+const O_E   = isDark ? 0.45 : 0.70;
+const ENV_MUL        = isDark ? 1.30 : 0.50;
+const LIGHT_MUL      = isDark ? 1.20 : 0.75;
+const EXPOSURE       = isDark ? 1.15 : 1.05;
+const BLOOM_STRENGTH = isDark ? 0.42 : 0.42;
+const BLOOM_THRESHOLD= isDark ? 1.00 : 0.92;
+const P_E_MUL        = isDark ? 1.0 : 3.2;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(bgColor);
+scene.fog=new THREE.Fog(bgColor, 16, 32);
+
+const camera=new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=EXPOSURE;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement);
+
+// === environment map ===
+const pmrem=new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+{
+  scene.environment=pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+}
+const rgbeLoader=new RGBELoader();
+rgbeLoader.load(HDRI_FILE, (hdrTex)=>{
+  hdrTex.mapping=THREE.EquirectangularReflectionMapping;
+  const envRT=pmrem.fromEquirectangular(hdrTex);
+  if(scene.environment) scene.environment.dispose();
+  scene.environment=envRT.texture;
+  hdrTex.dispose();
+});
+
+// === wood textures (PBR) ===
+const texLoader=new THREE.TextureLoader();
+const woodDiff =texLoader.load('../textures/wood_table_001_diff_2k.jpg');
+const woodNorm =texLoader.load('../textures/wood_table_001_nor_gl_2k.jpg');
+const woodRough=texLoader.load('../textures/wood_table_001_rough_2k.jpg');
+woodDiff.colorSpace=THREE.SRGBColorSpace;
+for(const t of [woodDiff, woodNorm, woodRough]){
+  t.wrapS=THREE.RepeatWrapping;
+  t.wrapT=THREE.RepeatWrapping;
+}
+
+// postprocessing — soft bloom on emissive notes during play
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass=new UnrealBloomPass(new THREE.Vector2(2,2), BLOOM_STRENGTH, 0.75, BLOOM_THRESHOLD);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
+function resize(){
+  const w=stage.clientWidth, h=stage.clientHeight;
+  renderer.setSize(w, h, false);
+  composer.setSize(w, h);
+  bloomPass.setSize(w, h);
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+}
+resize();
+new ResizeObserver(resize).observe(stage);
+
+// === three-point lighting + hemisphere fill ===
+scene.add(new THREE.HemisphereLight(
+  isDark?0x99aabb:0xc8d4e6,
+  isDark?0x332211:0x6b5840,
+  0.15 * LIGHT_MUL
+));
+const keyL=new THREE.DirectionalLight(0xfff2dd, 0.70 * LIGHT_MUL);
+keyL.position.set(-7, 9, -5);
+keyL.target.position.set(0, 0, 0);
+scene.add(keyL.target);
+keyL.castShadow=true;
+keyL.shadow.mapSize.width=2048;
+keyL.shadow.mapSize.height=2048;
+keyL.shadow.camera.left=-14;
+keyL.shadow.camera.right=14;
+keyL.shadow.camera.top=12;
+keyL.shadow.camera.bottom=-12;
+keyL.shadow.camera.near=0.5;
+keyL.shadow.camera.far=40;
+keyL.shadow.camera.updateProjectionMatrix();
+keyL.shadow.bias=-0.0005;
+keyL.shadow.normalBias=0.02;
+scene.add(keyL);
+
+const fillL=new THREE.DirectionalLight(0x88aaff, 0.10 * LIGHT_MUL);
+fillL.position.set(-5, -1, -3);
+scene.add(fillL);
+const rimL=new THREE.DirectionalLight(0xffaa55, 0.15 * LIGHT_MUL);
+rimL.position.set(0, 4, -8);
+scene.add(rimL);
+
+const caseSpot=new THREE.PointLight(0xfff2dd, 0.20 * LIGHT_MUL, 30, 1.4);
+caseSpot.position.set(0, 4, 4);
+scene.add(caseSpot);
+
+// === orbit controls + view presets ===
+const controls=new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 0);
+controls.enableDamping=true;
+controls.dampingFactor=0.08;
+controls.minDistance=8;
+controls.maxDistance=24;
+controls.minPolarAngle=0.2;
+controls.maxPolarAngle=Math.PI*0.55;
+
+function setView(name){
+  if(name==='3q'){ camera.position.set(11, 5, 13); }
+  else if(name==='top'){ camera.position.set(0.01, 16, 0.01); }
+  else if(name==='front'){ camera.position.set(0, 2.5, 14); }
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
+setView('3q');
+document.querySelectorAll('[data-view]').forEach(b=>{
+  b.addEventListener('click',()=>setView(b.dataset.view));
+});
+
+// === voice styling — flute=antique-gold cantus firmus, violin=warm terracotta
+// (real, above mirror), viola=cool teal (reflection, below mirror).
+// Slightly desaturated relative to crab/per_tonos for a more 典雅 reading;
+// emissive is kept generous for legibility under the warm HDRI in light mode.
+const VS=[
+  {color:0xC9994A, emissive:0x4A2D08, baseR:0.058, metalness:0.62, roughness:0.30, env:0.65, pE:1.15}, // Flute — antique gold; halved so the trio reads at a uniform fine grain
+  {color:0xB86348, emissive:0x4a1c0a, baseR:0.045, metalness:0.18, roughness:0.40, env:0.55, pE:1.45}, // Violin — aged terracotta (real); halved baseR per request so the canon pair reads finer than the cantus firmus
+  {color:0x3F8788, emissive:0x0E3537, baseR:0.045, metalness:0.20, roughness:0.42, env:0.55, pE:1.55}  // Viola  — cooled teal (reflection); halved baseR per request
+];
+const sphereGeoms=VS.map(v=>new THREE.SphereGeometry(v.baseR, 14, 12));
+
+// === split notes by voice ===
+const voiceNotes=[N.filter(n=>n[0]===0), N.filter(n=>n[0]===1), N.filter(n=>n[0]===2)];
+
+// === build path tubes for each voice ===
+function buildPath(notes, voice){
+  if(notes.length<2) return null;
+  const points=notes.map(([_,s,e,p])=>pos3D(s, p, voice));
+  const curve=new THREE.CatmullRomCurve3(points);
+  // Flute ribbon thicker (cantus firmus reads as the leading line); canon pair
+  // thinner so they don't visually outweigh the King's theme.
+  const r = voice===0 ? (isDark?0.018:0.026) : (isDark?0.012:0.018);
+  const tubeGeom=new THREE.TubeGeometry(curve, 500, r, 6, false);
+  const mat=new THREE.MeshBasicMaterial({
+    color:VS[voice].color,
+    transparent:true,
+    opacity:isDark?0.30:0.72
+  });
+  const mesh=new THREE.Mesh(tubeGeom, mat);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  return mesh;
+}
+// Keep ribbon meshes per voice so the solo buttons can hide them along with
+// the note dots — without this the ribbon stays visible after mute, which
+// looks like a bug.
+const voiceRibbons=[
+  buildPath(voiceNotes[0], 0),
+  buildPath(voiceNotes[1], 1),
+  buildPath(voiceNotes[2], 2)
+];
+
+// =====================================================================
+// === VITRINE SHELL ===================================================
+// =====================================================================
+
+const brassMat=new THREE.MeshStandardMaterial({
+  color:0xc9a060,
+  metalness:0.92,
+  roughness:0.32,
+  envMapIntensity:1.2 * (isDark?1.0:0.7)
+});
+
+// 1. wood base (PBR walnut)
+const baseMat=new THREE.MeshStandardMaterial({
+  map:woodDiff,
+  normalMap:woodNorm,
+  roughnessMap:woodRough,
+  metalness:0.0,
+  roughness:1.0,
+  normalScale:new THREE.Vector2(1.0, 1.0),
+  envMapIntensity:0.5 * (isDark?1.0:0.4)
+});
+const baseGeom=new RoundedBoxGeometry(12, 0.6, 6, 4, 0.06);
+const base=new THREE.Mesh(baseGeom, baseMat);
+base.position.set(0, -3.0, 0);
+base.receiveShadow=true;
+scene.add(base);
+const inlayGeom=new RoundedBoxGeometry(12.05, 0.05, 6.05, 4, 0.06);
+const inlay=new THREE.Mesh(inlayGeom, brassMat);
+inlay.position.set(0, -2.735, 0);
+inlay.castShadow=true;
+scene.add(inlay);
+
+// 2. four brass pillars + 8 horizontal frame rails
+{
+  const pillarGeom=new THREE.CylinderGeometry(0.05, 0.05, 5.4, 16);
+  const corners=[[ 5.8, 0,  2.8],[-5.8, 0,  2.8],[ 5.8, 0, -2.8],[-5.8, 0, -2.8]];
+  for(const [x,y,z] of corners){
+    const p=new THREE.Mesh(pillarGeom, brassMat);
+    p.position.set(x, y, z);
+    p.castShadow=true;
+    scene.add(p);
+  }
+  const railX=new THREE.BoxGeometry(11.6, 0.04, 0.04);
+  const railZ=new THREE.BoxGeometry(0.04, 0.04, 5.6);
+  const rails=[
+    [railX, 0,  2.7,  2.8],
+    [railX, 0,  2.7, -2.8],
+    [railZ,  5.8,  2.7, 0],
+    [railZ, -5.8,  2.7, 0],
+    [railX, 0, -2.7,  2.8],
+    [railX, 0, -2.7, -2.8],
+    [railZ,  5.8, -2.7, 0],
+    [railZ, -5.8, -2.7, 0],
+  ];
+  for(const [geom, x, y, z] of rails){
+    const r=new THREE.Mesh(geom, brassMat);
+    r.position.set(x, y, z);
+    r.castShadow=true;
+    scene.add(r);
+  }
+}
+
+// 3. glass case (top + 4 sides)
+{
+  const glassMat=new THREE.MeshPhysicalMaterial({
+    color:0xffffff,
+    metalness:0,
+    roughness:0.08,
+    ior:1.5,
+    clearcoat:0.6,
+    clearcoatRoughness:0.08,
+    transparent:true,
+    opacity:0.06,
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.0
+  });
+
+  const top=new THREE.Mesh(new THREE.BoxGeometry(11.6, 0.08, 5.6), glassMat);
+  top.position.set(0, 2.7, 0);
+  scene.add(top);
+
+  const fbGeom=new THREE.PlaneGeometry(11.6, 5.4);
+  const front=new THREE.Mesh(fbGeom, glassMat);
+  front.position.set(0, 0, 2.8);
+  scene.add(front);
+  const back=new THREE.Mesh(fbGeom, glassMat);
+  back.position.set(0, 0, -2.8);
+  back.rotation.y=Math.PI;
+  scene.add(back);
+
+  const lrGeom=new THREE.PlaneGeometry(5.6, 5.4);
+  const left=new THREE.Mesh(lrGeom, glassMat);
+  left.position.set(-5.8, 0, 0);
+  left.rotation.y=Math.PI/2;
+  scene.add(left);
+  const right=new THREE.Mesh(lrGeom, glassMat);
+  right.position.set(5.8, 0, 0);
+  right.rotation.y=-Math.PI/2;
+  scene.add(right);
+}
+
+// =====================================================================
+// === MIRROR PLANE — the piece-specific structural element ===========
+// =====================================================================
+// A near-invisible glass plane at y=0 spanning the case interior. This is
+// the literal "Eb/E axis": violin's ribbon weaves above it, viola's below.
+// Made transparent (not solid brass) so the viewer can see BOTH sides at
+// the same time — without that, the reflection symmetry can't be read.
+// Same recipe as the vitrine glass (clearcoat, depthWrite:false, low
+// opacity, NO transmission) so the panel only reveals itself at grazing
+// angles or when the HDRI catches its clearcoat — a quiet implication of
+// a plane, not a wall.
+//
+// Implemented as TWO panels along x: a long mirror-pristine region for the
+// first ~94% of musical time, then a marginally-cloudier right-end region
+// covering the rule-break (steps 238..252). The hairline brass seam at
+// the boundary keeps the rule break statically legible without obscuring
+// the contents on either side.
+{
+  const PLATE_W = 11.6;
+  const PLATE_D = 5.4;
+  const breakX = stepX(RULE_BREAK_STEP);                  // ≈ +4.44
+  const innerLeftX = -PLATE_W/2;                          // -5.8
+  const innerRightX =  PLATE_W/2;                         // +5.8
+  const cleanW = breakX - innerLeftX;                     // ≈ 10.24
+  const breakW = innerRightX - breakX;                    // ≈ 1.36
+  const cleanCx = (innerLeftX + breakX)/2;
+  const breakCx = (breakX + innerRightX)/2;
+
+  // Mirror-pristine plane: clearcoat catches the HDRI like polished water.
+  // opacity is just enough that a faint warm cast registers when the camera
+  // grazes the plane; from straight on it's nearly invisible.
+  const pristineMat=new THREE.MeshPhysicalMaterial({
+    color:0xfff2cc,            // warm tint so any catch reads as "polished brass surface"
+    metalness:0.0,
+    roughness:0.06,
+    ior:1.5,
+    clearcoat:0.9,
+    clearcoatRoughness:0.06,
+    transparent:true,
+    opacity:0.04,              // very low — visible only via clearcoat highlight + faint tint
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.4 * (isDark?1.0:0.85)
+  });
+  // PlaneGeometry instead of a thin Box: a plane has no edge thickness, so
+  // there's no "ledge" silhouette obstructing the contents. The implied
+  // surface is communicated entirely through the clearcoat / HDRI catch.
+  const pristine=new THREE.Mesh(
+    new THREE.PlaneGeometry(cleanW, PLATE_D),
+    pristineMat
+  );
+  pristine.rotation.x = -Math.PI/2;
+  pristine.position.set(cleanCx, 0, 0);
+  // Transparent surfaces with depthWrite:false don't participate in the
+  // shadow pass; leave both shadow flags off.
+  pristine.castShadow=false;
+  pristine.receiveShadow=false;
+  scene.add(pristine);
+
+  // Rule-break band: same plane, slightly higher clearcoatRoughness so the
+  // HDRI catch hazes — reads as the faintest patina on a polished tool.
+  const tarnishedMat=new THREE.MeshPhysicalMaterial({
+    color:0xf5e3b8,
+    metalness:0.0,
+    roughness:0.18,
+    ior:1.5,
+    clearcoat:0.7,
+    clearcoatRoughness:0.22,
+    transparent:true,
+    opacity:0.07,              // a hair more presence than the pristine half
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.0 * (isDark?1.0:0.85)
+  });
+  const tarnished=new THREE.Mesh(
+    new THREE.PlaneGeometry(breakW, PLATE_D),
+    tarnishedMat
+  );
+  tarnished.rotation.x = -Math.PI/2;
+  tarnished.position.set(breakCx, 0, 0);
+  tarnished.castShadow=false;
+  tarnished.receiveShadow=false;
+  scene.add(tarnished);
+
+  // Mirror-plane perimeter rim — a thin brass thread tracing the boundary
+  // where the (now-transparent) mirror plane meets the case walls. With the
+  // plate itself almost invisible, this hairline frame is what tells the
+  // viewer there IS a structural plane at y=0. Same 0.04×0.04 cross-section
+  // as the top/bottom vitrine rails, in the same brass material — reads as
+  // "this case has a third moulding, halfway up". The previous front-to-back
+  // seam at the rule-break x is removed; the rule break is now communicated
+  // by the slight haze on the right portion of the glass plane alone.
+  const rimRailX=new THREE.BoxGeometry(PLATE_W, 0.04, 0.04);
+  const rimRailZ=new THREE.BoxGeometry(0.04, 0.04, PLATE_D);
+  const rims=[
+    [rimRailX, 0, 0,  PLATE_D/2],   // front
+    [rimRailX, 0, 0, -PLATE_D/2],   // back
+    [rimRailZ,  PLATE_W/2, 0, 0],   // right
+    [rimRailZ, -PLATE_W/2, 0, 0],   // left
+  ];
+  for(const [geom, x, y, z] of rims){
+    const r=new THREE.Mesh(geom, brassMat);
+    r.position.set(x, y, z);
+    r.castShadow=true;
+    scene.add(r);
+  }
+}
+
+// 4. brass nameplate, engraved via CanvasTexture
+{
+  function makeNameplateTexture(){
+    const W=1200, H=200;
+    const cv=document.createElement('canvas');
+    cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const grad=ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,    '#d8a64a');
+    grad.addColorStop(0.45, '#b8862f');
+    grad.addColorStop(1,    '#8a5f1d');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,H);
+    ctx.globalAlpha=0.05;
+    for(let y=0;y<H;y+=2){
+      ctx.fillStyle = (y%4===0)?'#000':'#fff';
+      ctx.fillRect(0,y,W,1);
+    }
+    ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(60,38,16,0.45)';
+    ctx.lineWidth=2;
+    ctx.strokeRect(14,14,W-28,H-28);
+    ctx.strokeStyle='rgba(255,232,175,0.35)';
+    ctx.lineWidth=1;
+    ctx.strokeRect(15,15,W-30,H-30);
+
+    const SERIF='"Baskerville","Bodoni 72","Didot","Hoefler Text","Garamond","Times New Roman",serif';
+    const SERIF_IT='italic '+SERIF;
+    const PAD=80;
+    const MAX=W - PAD*2;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+
+    const line1='JOHANN SEBASTIAN BACH';
+    let f1=72;
+    ctx.font=`500 ${f1}px ${SERIF}`;
+    while(ctx.measureText(line1).width>MAX && f1>20){ f1-=2; ctx.font=`500 ${f1}px ${SERIF}`; }
+
+    const line2='Canon a 2 per Motum contrarium   ·   BWV 1079';
+    let f2=40;
+    ctx.font=`${f2}px ${SERIF_IT}`;
+    while(ctx.measureText(line2).width>MAX && f2>14){ f2-=2; ctx.font=`${f2}px ${SERIF_IT}`; }
+
+    function engraved(text, font, x, y, mainColor){
+      ctx.font=font;
+      ctx.fillStyle='rgba(28, 16, 6, 0.85)';
+      ctx.fillText(text, x + 1.2, y + 1.2);
+      ctx.fillStyle='rgba(255, 232, 175, 0.55)';
+      ctx.fillText(text, x - 1.0, y - 1.0);
+      ctx.fillStyle=mainColor;
+      ctx.fillText(text, x, y);
+    }
+    engraved(line1, `500 ${f1}px ${SERIF}`,    W/2, H*0.40, '#3a230d');
+    engraved(line2, `${f2}px ${SERIF_IT}`,     W/2, H*0.72, '#3a230d');
+
+    const tex=new THREE.CanvasTexture(cv);
+    tex.anisotropy=8;
+    tex.colorSpace=THREE.SRGBColorSpace;
+    return tex;
+  }
+  const engravedTex=makeNameplateTexture();
+  const engravedFace=new THREE.MeshStandardMaterial({
+    map:engravedTex,
+    color:0xffffff,
+    metalness:0.7,
+    roughness:0.38,
+    envMapIntensity:1.0 * (isDark?1.0:0.6)
+  });
+  const plateMats=[brassMat, brassMat, engravedFace, brassMat, brassMat, brassMat];
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.04, 0.4), plateMats);
+  plate.position.set(0, -2.68, 2.85);
+  plate.castShadow=true;
+  scene.add(plate);
+}
+
+// === Engraved emblem — Escher "Day and Night" tessellated birds ===
+// Two opposing flocks of stylized birds tessellate into a single rhombus —
+// the per-Motum contrarium gesture in graphic form. We sample the reference
+// PNG (assets/pic/day-and-night.png, 577×432) per-pixel:
+//
+//   * dark band  (L < 95)         → engraved as dark recessed silhouettes
+//                                    (the black birds + outlines around the white birds)
+//
+// Black bird BODIES become deep V-cuts; white bird OUTLINES become hairline
+// engraved separators. Together they reproduce the tessellation in a single
+// engraving pass (no second tone needed).
+//
+// If getImageData throws (canvas tainted under file:// origin), we fall
+// back to drawing the whole PNG as a single stamp; serve via a local HTTP
+// server (`python3 -m http.server` from the project root) for the proper
+// thresholded result.
+{
+  function makeOverlayTexture(){
+    // 4:3 canvas — close to the PNG's 577×432 aspect (1.34) so the
+    // tessellation diamond fills the engraving plane without padding.
+    const W=1024, H=768;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const tex=new THREE.CanvasTexture(cv);
+    tex.colorSpace=THREE.SRGBColorSpace;
+    tex.anisotropy=16;
+
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>{
+      // Letterbox-fit the PNG into the canvas (preserve aspect, vertically
+      // flipped so image-bottom maps to world +z after rotation.x = -π/2).
+      const work=document.createElement('canvas');
+      work.width=W; work.height=H;
+      const wctx=work.getContext('2d');
+      wctx.imageSmoothingEnabled=true;
+      wctx.imageSmoothingQuality='high';
+      wctx.save();
+      wctx.translate(0, H);
+      wctx.scale(1, -1);
+      const imgAR=img.width/img.height, cvAR=W/H;
+      let dw, dh;
+      if(imgAR > cvAR){ dw=W*0.94; dh=dw/imgAR; }
+      else            { dh=H*0.94; dw=dh*imgAR; }
+      const dx=(W-dw)/2, dy=(H-dh)/2;
+      wctx.drawImage(img, dx, dy, dw, dh);
+      wctx.restore();
+
+      const stamp=document.createElement('canvas');
+      stamp.width=W; stamp.height=H;
+      const stampCtx=stamp.getContext('2d');
+
+      try {
+        // Per-pixel threshold: L < 95 → engraved. Picks up the black bird
+        // bodies AND the dark outlines around the white birds, so the
+        // tessellation reads correctly even though we only emit one band.
+        const src=wctx.getImageData(0,0,W,H).data;
+        const stampImg=stampCtx.createImageData(W,H);
+        for(let i=0; i<src.length; i+=4){
+          if(src[i+3] < 8) continue;
+          const L = 0.299*src[i] + 0.587*src[i+1] + 0.114*src[i+2];
+          if(L < 95){
+            stampImg.data[i+3]=255;
+          }
+        }
+        stampCtx.putImageData(stampImg, 0, 0);
+      } catch(e) {
+        console.warn(
+          'day-and-night.png: getImageData blocked (', e.message, '). Using whole-image stamp fallback. ' +
+          'Serve the page via a local HTTP server (e.g. `python3 -m http.server`) for the proper thresholded engraving.'
+        );
+        stampCtx.drawImage(work, 0, 0);
+      }
+
+      const tintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        ctx.drawImage(tmp, 0, 0);
+      };
+      const innerTintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        tctx.globalCompositeOperation='destination-in';
+        tctx.drawImage(stamp, 0, 0);
+        ctx.drawImage(tmp, 0, 0);
+      };
+
+      // Shared 5-pass engraving recipe — wider drop-shadow halo, pitch-black
+      // recess, and a two-pass bevel rim (warm primary + sharper catch-light)
+      // for clear visibility against the dark walnut.
+      tintPass('rgba(0, 0, 0, 0.60)', 4.5, 4.5);
+      tintPass('rgba(0, 0, 0, 0.45)', 2.0, 2.0);
+      tintPass('rgba(0, 0, 0, 1.0)', 0, 0);
+      innerTintPass('rgba(248, 218, 165, 0.85)', -2.5, -2.5);
+      innerTintPass('rgba(255, 240, 205, 0.55)', -1.0, -1.0);
+
+      tex.needsUpdate=true;
+    };
+    img.onerror=(e)=>{
+      console.warn('day-and-night.png failed to load; engraving overlay will be empty', e);
+    };
+    img.src='assets/pic/day-and-night.png';
+
+    return tex;
+  }
+
+  const tex=makeOverlayTexture();
+  const overlayMat=new THREE.MeshStandardMaterial({
+    map:tex,
+    transparent:true,
+    alphaTest:0.04,
+    roughness:0.85,
+    metalness:0.0,
+    envMapIntensity:0.5 * (isDark?1.0:0.6),
+    polygonOffset:true,
+    polygonOffsetFactor:-1,
+    polygonOffsetUnits:-1,
+  });
+  overlayMat.side=THREE.DoubleSide;
+  // Plane sized 2.0 × 1.5 (4:3, matches PNG aspect), laid flat 0.01 above
+  // the wood top, between the case interior and the nameplate.
+  const G=new THREE.PlaneGeometry(2.0, 1.5);
+  const overlay=new THREE.Mesh(G, overlayMat);
+  overlay.rotation.x=-Math.PI/2;
+  overlay.position.set(0, -2.69, 1.80);
+  overlay.receiveShadow=true;
+  scene.add(overlay);
+}
+
+// (No central spire here — the mirror plate is the structural spine.)
+
+// === Suspension threads — two thin brass wires hanging the flute ribbon
+// from the glass ceiling, so the cantus firmus reads as physically held in
+// place above the canon pair instead of floating. Anchors are real flute
+// notes (so the ribbon actually passes through the attachment points); the
+// wires drop straight down at constant x, z. Unequal lengths are honest:
+// the ribbon is wavy, real suspended objects hang at uneven heights.
+{
+  const CEILING_Y = 2.7;             // glass top y; wires terminate just below it
+  const wireMat = new THREE.MeshStandardMaterial({
+    color:0xc9a060,
+    metalness:0.85,
+    roughness:0.45,
+    envMapIntensity:0.9 * (isDark?1.0:0.7)
+  });
+  // Anchors are the two ribbon endpoints — the first flute note (step 0,
+  // pitch 72) and the last (step 248, pitch 76). buildPath uses the start
+  // step `s` of each note as the curve's control point, so the ribbon
+  // physically begins and ends at exactly these two positions; the wires
+  // grip the ribbon at its tips, not at interior notes.
+  const anchors = [
+    { s:0,   p:72 },   // first flute note  → ≈ (x=-5,    y=1.105)
+    { s:248, p:76 }    // last  flute note  → ≈ (x=+4.84, y=1.625)
+  ];
+  for (const {s, p} of anchors){
+    const pos = pos3D(s, p, 0);
+    const len = CEILING_Y - pos.y;
+    const wire = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.010, 0.010, len, 8),
+      wireMat
+    );
+    wire.position.set(pos.x, (CEILING_Y + pos.y)/2, pos.z);
+    wire.castShadow = true;
+    scene.add(wire);
+  }
+}
+
+// =====================================================================
+
+// === build note dot meshes ===
+const notes=[];
+function makeDot(s, e, p, voice){
+  const sizeFactor=1+Math.min((e-s)/8, 0.5);
+  const mat=new THREE.MeshStandardMaterial({
+    color:VS[voice].color,
+    emissive:VS[voice].emissive,
+    emissiveIntensity:D_E,
+    roughness:VS[voice].roughness,
+    metalness:VS[voice].metalness,
+    envMapIntensity:VS[voice].env * ENV_MUL,
+    transparent:true,
+    opacity:D_O
+  });
+  const mesh=new THREE.Mesh(sphereGeoms[voice], mat);
+  mesh.position.copy(pos3D(s, p, voice));
+  const initialScale=sizeFactor*D_S_F;
+  mesh.scale.setScalar(initialScale);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  notes.push({
+    mesh, mat, voice,
+    st:s*TPS, en:e*TPS,
+    s_step:s, e_step:e, pitch:p,
+    baseSize:sizeFactor,
+    pE:VS[voice].pE,
+    s:'d',
+    tO:D_O, tE:D_E, tS:initialScale, spd:3.5
+  });
+}
+for(const [v,s,e,p] of N) makeDot(s, e, p, v);
+
+const sO=notes.slice().sort((a,b)=>a.st-b.st);
+const eO=notes.slice().sort((a,b)=>a.en-b.en);
+let sP=0, eP=0;
+
+const voiceEnabled=[true, true, true];
+
+function setNote(n, s){
+  if(n.s===s) return;
+  n.s=s;
+  if(!voiceEnabled[n.voice]){
+    n.tO=0.04; n.tE=0; n.tS=n.baseSize*0.7; n.spd=8; return;
+  }
+  if(s==='d'){
+    n.tO=D_O; n.tE=D_E; n.tS=n.baseSize*D_S_F; n.spd=3.5;
+  }else if(s==='p'){
+    n.tO=1.0; n.tE=n.pE*P_E_MUL; n.tS=n.baseSize*1.95; n.spd=20;
+  }else{
+    n.tO=O_O; n.tE=O_E; n.tS=n.baseSize*1.08; n.spd=2.4;
+  }
+}
+
+// === playheads (one per voice) ===
+function makePlayhead(voice){
+  const mat=new THREE.MeshStandardMaterial({
+    color:0xffffff,
+    emissive:VS[voice].color,
+    emissiveIntensity:1.4,
+    envMapIntensity:0,
+    transparent:true,
+    opacity:0
+  });
+  const mesh=new THREE.Mesh(new THREE.SphereGeometry(0.10, 16, 12), mat);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  return mesh;
+}
+const ph=[makePlayhead(0), makePlayhead(1), makePlayhead(2)];
+
+const haloTex=(()=>{
+  const cv=document.createElement('canvas'); cv.width=cv.height=128;
+  const ctx=cv.getContext('2d');
+  const g=ctx.createRadialGradient(64,64,4,64,64,64);
+  g.addColorStop(0,'rgba(255,255,255,1)');
+  g.addColorStop(0.3,'rgba(255,255,255,0.4)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(cv);
+})();
+function makeHalo(){
+  const m=new THREE.Sprite(new THREE.SpriteMaterial({map:haloTex, transparent:true, opacity:0, depthWrite:false}));
+  m.scale.set(0.55,0.55,0.55);
+  scene.add(m);
+  return m;
+}
+const halo=[makeHalo(), makeHalo(), makeHalo()];
+
+// === per-voice playhead tracking — pitch at any sub-step time ===
+// pitchAtTime[v][i] is the MIDI pitch of voice v at integer 16th-step i, or
+// -1 if the voice has no note sustained at that step.
+const pitchAtTime=[
+  new Array(TOT16).fill(-1),
+  new Array(TOT16).fill(-1),
+  new Array(TOT16).fill(-1)
+];
+for(const [v,s,e,p] of N){
+  for(let i=s; i<e && i<TOT16; i++) pitchAtTime[v][i]=p;
+}
+// Last-known-pitch fallback: when a voice rests, hold its previous pitch so
+// the playhead doesn't snap back to a default. Walking forward fills gaps.
+for(let v=0; v<3; v++){
+  let last=-1;
+  for(let i=0; i<TOT16; i++){
+    if(pitchAtTime[v][i] >= 0) last = pitchAtTime[v][i];
+    else if(last >= 0) pitchAtTime[v][i] = last;
+  }
+}
+
+// === audio chain ===
+// Sampled instruments + concert-hall space:
+//   Comp → EQ → early reflections → long reverb → stereo widener → limiter.
+// Flute carries the King's theme (cantus firmus). Violin and viola are exact
+// y-mirrors of one another — same melodic material reflected — so they share
+// a SINGLE violin sampler; only stereo position separates them.
+const SBASE='https://nbrosowsky.github.io/tonejs-instruments/samples/';
+const limiter=new Tone.Limiter(-1).toDestination();
+const widener=new Tone.StereoWidener(0.55).connect(limiter);
+const reverb =new Tone.Reverb({decay:5.2, preDelay:0.06, wet:0.28}).connect(widener);
+const er     =new Tone.FeedbackDelay({delayTime:0.045, feedback:0.18, wet:0.16}).connect(reverb);
+const eq     =new Tone.EQ3({low:1, mid:0, high:-0.5}).connect(er);
+const comp   =new Tone.Compressor({threshold:-20, ratio:2.4, attack:0.01, release:0.18}).connect(eq);
+
+// Flute centred (it's the structural "plinth"); violin slightly left, viola
+// slightly right — the canonic pair flanks symmetrically, mirroring the
+// visual mirror axis in stereo.
+const flutePan = new Tone.Panner( 0.0 ).connect(comp);
+const violPan  = new Tone.Panner(-0.28).connect(comp);
+const violaPan = new Tone.Panner( 0.28).connect(comp);
+
+const fluteUrls={
+  A4:'A4.mp3', A5:'A5.mp3', A6:'A6.mp3',
+  C4:'C4.mp3', C5:'C5.mp3', C6:'C6.mp3', C7:'C7.mp3',
+  E4:'E4.mp3', E5:'E5.mp3', E6:'E6.mp3'
+};
+const violinUrls={
+  A3:'A3.mp3', A4:'A4.mp3', A5:'A5.mp3', A6:'A6.mp3',
+  C4:'C4.mp3', C5:'C5.mp3', C6:'C6.mp3', C7:'C7.mp3',
+  E4:'E4.mp3', E5:'E5.mp3', E6:'E6.mp3',
+  G3:'G3.mp3', G4:'G4.mp3', G5:'G5.mp3', G6:'G6.mp3'
+};
+
+const fluteSynth=new Tone.Sampler({urls:fluteUrls,  baseUrl:SBASE+'flute/',  release:1.6}).connect(flutePan);
+const violSynth =new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.4}).connect(violPan);
+const violaSynth=new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.4}).connect(violaPan);
+fluteSynth.volume.value=-7;
+violSynth.volume.value =-8;
+violaSynth.volume.value=-8;
+
+const synths=[fluteSynth, violSynth, violaSynth];
+
+Tone.Transport.bpm.value=BPM;
+Tone.Transport.loop=true;
+Tone.Transport.loopStart=0;
+Tone.Transport.loopEnd=DUR;
+
+const evs=N.map(([v,s,e,p])=>({
+  voice:v,
+  time:s*TPS,
+  freq:440*Math.pow(2,(p-69)/12),
+  dur:Math.max((e-s)*TPS, 0.05)
+}));
+const part=new Tone.Part((t,e)=>{
+  if(!voiceEnabled[e.voice]) return;
+  // Flute louder and steadier (it's the regal cantus firmus); the canon pair
+  // gets a small velocity jitter so the lines breathe instead of metronoming.
+  const vel = e.voice===0
+    ? 0.55
+    : 0.40 + Math.random()*0.10;
+  synths[e.voice].triggerAttackRelease(e.freq, e.dur, t, vel);
+}, evs);
+part.loop=true;
+part.loopEnd=DUR;
+part.start(0);
+
+// === UI plumbing ===
+const bp=document.getElementById('bp');
+const bs=document.getElementById('bs');
+const bt=document.getElementById('bt');
+const psr=document.getElementById('psr');
+const PLAY='<svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg>';
+const PAUSE='<svg viewBox="0 0 10 10"><rect x="2" y="1" width="2" height="8" fill="currentColor"/><rect x="6" y="1" width="2" height="8" fill="currentColor"/></svg>';
+
+let playing=false, scrubMode=false, loopEnabled=true, lastT=0;
+
+function fmt(t){const m=Math.floor(t/60), s=Math.floor(t-m*60); return m+':'+(s<10?'0':'')+s;}
+const TOT=fmt(DUR);
+
+function updatePlayheads(t){
+  if(t<0 || (t>=DUR && !loopEnabled)){
+    for(let v=0; v<3; v++){
+      ph[v].material.opacity=0;
+      halo[v].material.opacity=0;
+    }
+    return;
+  }
+  const tt=Math.min(t, DUR-0.001);
+  const sFloat=tt/TPS;
+  const i=Math.max(0, Math.min(TOT16-1, Math.floor(sFloat)));
+  for(let v=0; v<3; v++){
+    const p=pitchAtTime[v][i];
+    if(p<0 || !voiceEnabled[v]){
+      ph[v].material.opacity=0;
+      halo[v].material.opacity=0;
+      continue;
+    }
+    // pos3D applies the viola visual shift internally, so the viola
+    // playhead automatically tracks its mirrored x position.
+    const pos=pos3D(sFloat, p, v);
+    ph[v].position.copy(pos);
+    halo[v].position.copy(pos);
+    ph[v].material.opacity=0.85;
+    halo[v].material.opacity=0.32;
+  }
+}
+
+function uui(t){
+  bt.textContent=fmt(t)+' / '+TOT;
+  if(!scrubMode) bs.value=t.toFixed(2);
+  psr.textContent='t = '+t.toFixed(1)+' / '+DUR.toFixed(1);
+  updatePlayheads(t);
+}
+
+function resetVisualProgress(){
+  sP=0; eP=0;
+  for(const n of notes){ n.s=null; setNote(n,'d'); }
+}
+
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(), 0.1);
+  controls.update();
+
+  keyL.target.updateMatrixWorld();
+
+  if(playing){
+    const t=Tone.Transport.seconds;
+    if(loopEnabled && t+0.5<lastT) resetVisualProgress();
+    lastT=t;
+    while(sP<sO.length && sO[sP].st<=t){ setNote(sO[sP],'p'); sP++; }
+    while(eP<eO.length && eO[eP].en<=t){ setNote(eO[eP],'o'); eP++; }
+    uui(t);
+    if(!loopEnabled && t>=DUR-0.02){ pause(); }
+  }
+
+  for(let k=0;k<notes.length;k++){
+    const n=notes[k];
+    const a=1-Math.exp(-n.spd*dt);
+    n.mat.opacity += (n.tO-n.mat.opacity)*a;
+    n.mat.emissiveIntensity += (n.tE-n.mat.emissiveIntensity)*a;
+    const cs=n.mesh.scale.x;
+    n.mesh.scale.setScalar(cs+(n.tS-cs)*a);
+  }
+
+  composer.render();
+}
+animate();
+
+async function play(){
+  if(Tone.context.state!=='running') await Tone.start();
+  await Tone.loaded();
+  if(!loopEnabled && Tone.Transport.seconds>=DUR-0.05) seek(0);
+  playing=true;
+  Tone.Transport.start();
+  bp.innerHTML=PAUSE;
+  bp.setAttribute('aria-label','Pause');
+  lastT=Tone.Transport.seconds;
+}
+
+function pause(){
+  playing=false;
+  Tone.Transport.pause();
+  bp.innerHTML=PLAY;
+  bp.setAttribute('aria-label','Play');
+}
+
+function seek(t){
+  const wp=playing;
+  if(Tone.Transport.state==='started'){
+    Tone.Transport.pause();
+    for(const s of synths) s.releaseAll();
+  }
+  Tone.Transport.seconds=t;
+  lastT=t;
+  for(const n of notes) n.s=null;
+  sP=0; eP=0;
+  while(sP<sO.length && sO[sP].st<=t){
+    const n=sO[sP];
+    setNote(n, n.en<=t?'o':'p');
+    sP++;
+  }
+  while(eP<eO.length && eO[eP].en<=t) eP++;
+  for(let i=sP; i<sO.length; i++) setNote(sO[i],'d');
+  uui(t);
+  if(wp){ playing=true; Tone.Transport.start(); }
+}
+
+bp.addEventListener('click',()=>playing?pause():play());
+
+let scrubT;
+bs.addEventListener('input',()=>{
+  scrubMode=true;
+  bt.textContent=fmt(parseFloat(bs.value))+' / '+TOT;
+  clearTimeout(scrubT);
+  scrubT=setTimeout(()=>{ scrubMode=false; seek(parseFloat(bs.value)); }, 80);
+});
+
+function toggleVoice(v){
+  voiceEnabled[v]=!voiceEnabled[v];
+  document.getElementById('v'+v).setAttribute('aria-pressed', String(voiceEnabled[v]));
+  if(!voiceEnabled[v]) synths[v].releaseAll();
+  for(const n of notes) if(n.voice===v){ const cs=n.s; n.s=null; setNote(n, cs||'d'); }
+  // Hide the ribbon (and its shadow) when the voice is muted; otherwise the
+  // path tube stays visible and contradicts the dimmed dots.
+  if(voiceRibbons[v]){
+    voiceRibbons[v].visible=voiceEnabled[v];
+  }
+}
+document.getElementById('v0').addEventListener('click',()=>toggleVoice(0));
+document.getElementById('v1').addEventListener('click',()=>toggleVoice(1));
+document.getElementById('v2').addEventListener('click',()=>toggleVoice(2));
+
+const lpBtn=document.getElementById('lp');
+lpBtn.addEventListener('click',()=>{
+  loopEnabled=!loopEnabled;
+  Tone.Transport.loop=loopEnabled;
+  lpBtn.setAttribute('aria-pressed', String(loopEnabled));
+});
+
+for(const n of notes){ n.s=null; setNote(n,'d'); }
+bs.max=DUR.toFixed(2);
+uui(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1024" height="1024" viewBox="0 0 1024 1024"
+     preserveAspectRatio="xMidYMid meet">
+<!-- Minimalist double helix: two strands viewed from the side over two
+     full turns; each S-curve between extremes is one cubic Bezier with
+     control y at the crossing midpoint, so the curve passes through the
+     axis exactly at t=0.5 (matches a half-cosine). Stroke linecap=round
+     gives the rounded terminations at top/bottom. The strands are now
+     vertically centred on the canvas at y=512, spanning y∈[292,732]. -->
+<g fill="none" stroke="#0a0a0a" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Strand 1: right-first phase. -->
+  <path stroke-width="34" d="
+    M 692 292
+    C 692 402 332 402 332 512
+    C 332 622 692 622 692 732"/>
+  <!-- Strand 2: 180° out of phase. -->
+  <path stroke-width="34" d="
+    M 332 292
+    C 332 402 692 402 692 512
+    C 692 622 332 622 332 732"/>
+</g>
+</svg>

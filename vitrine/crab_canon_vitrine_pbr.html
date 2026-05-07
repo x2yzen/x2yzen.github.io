@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bach · Crab Canon · BWV 1079</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5a5a5a;
+    --color-text-tertiary: #8a8a8a;
+    --color-border-tertiary: rgba(0,0,0,0.15);
+    --color-border-secondary: rgba(0,0,0,0.3);
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f6f5f0;
+    --color-canvas-bg: #f1eee6;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e8e8;
+      --color-text-secondary: #aaa;
+      --color-text-tertiary: #777;
+      --color-border-tertiary: rgba(255,255,255,0.18);
+      --color-border-secondary: rgba(255,255,255,0.32);
+      --color-background-primary: #1f1f1f;
+      --color-background-secondary: #2a2a2a;
+      --color-canvas-bg: #1a1a1a;
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); margin: 0; padding: 24px 16px 60px; display: flex; justify-content: center; }
+  main { width: 100%; max-width: 760px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; padding: 20px 24px 16px; }
+  h1 { font-size: 16px; font-weight: 500; margin: 0 0 4px; }
+  .sub { font-family: 'IM Fell English', Georgia, serif; font-style: normal; font-feature-settings: "liga", "dlig"; font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .sub em { font-style: italic; }
+  button { border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+  button:hover { background: var(--color-background-secondary); }
+  button:active { transform: scale(0.96); }
+  input[type="range"] { accent-color: var(--color-text-primary); }
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  #stage{position:relative;width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--color-canvas-bg);border:0.5px solid var(--color-border-tertiary)}
+  #stage canvas{display:block;width:100%!important;height:100%!important;outline:none}
+  .legend{position:absolute;left:10px;top:10px;font-size:11px;color:var(--color-text-secondary);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+  .legend .row{display:flex;align-items:center;gap:6px}
+  .legend .swatch{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .views{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+  .vbtn-sm{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(4px);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);cursor:pointer}
+  @media (prefers-color-scheme: dark){.vbtn-sm{background:rgba(0,0,0,0.45)}}
+  .hint{font-size:11px;color:var(--color-text-tertiary);margin:6px 4px 14px;text-align:right}
+  .bc{display:flex;align-items:center;gap:12px;padding:8px 4px 12px}
+  .bp{width:36px;height:36px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .bp svg{width:10px;height:10px}
+  .bt{font-size:12px;color:var(--color-text-secondary);font-variant-numeric:tabular-nums;min-width:78px;text-align:right;flex-shrink:0}
+  .bs{flex:1;min-width:0}
+  .vt{display:flex;align-items:center;gap:8px;padding:0 4px 10px;flex-wrap:wrap}
+  .vbtn{font-size:11px;padding:5px 10px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;transition:opacity 0.15s,background 0.15s}
+  .vbtn:hover{background:var(--color-background-secondary)}
+  .vbtn .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .vbtn[aria-pressed="false"]{opacity:0.42}
+  .vbtn[aria-pressed="false"] .dot{opacity:0.4}
+  .vlbl{font-size:11px;color:var(--color-text-tertiary);margin-right:2px}
+  .psr{font-size:11px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;margin-left:auto}
+</style>
+</head>
+<body>
+<main>
+<h1>Bach · Crab Canon · BWV 1079</h1>
+<p class="sub">two voices share one line — one plays it forwards, the other backwards. the canon is exactly its own retrograde.</p>
+<h2 class="sr-only">3D visualization of Bach's Crab Canon as a precision object inside a glass vitrine, lit by an HDRI environment</h2>
+
+<div id="stage">
+  <div class="legend">
+    <div class="row"><span class="swatch" style="background:#C23838"></span>Voice 1 — forward</div>
+    <div class="row"><span class="swatch" style="background:#2C548A"></span>Voice 2 — reverse</div>
+  </div>
+  <div class="views">
+    <button class="vbtn-sm" data-view="3q">3/4</button>
+    <button class="vbtn-sm" data-view="top">top</button>
+    <button class="vbtn-sm" data-view="front">front</button>
+  </div>
+</div>
+
+<div class="bc">
+<button class="bp" id="bp" aria-label="Play"><svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg></button>
+<input type="range" class="bs" id="bs" min="0" max="38.5" step="0.05" value="0">
+<span class="bt" id="bt">0:00 / 0:38</span>
+</div>
+
+<div class="vt">
+<span class="vlbl">solo</span>
+<button class="vbtn" id="v0" aria-pressed="true"><span class="dot" style="background:#C23838"></span>Forward</button>
+<button class="vbtn" id="v1" aria-pressed="true"><span class="dot" style="background:#2C548A"></span>Backward</button>
+<button class="vbtn" id="lp" aria-pressed="true"><span style="font-size:13px;line-height:1;letter-spacing:-1px">∞</span> loop</button>
+<span class="psr" id="psr">t = 0.0 / 38.6</span>
+</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.43/Tone.js"></script>
+<!-- es-module-shims polyfills <script type="importmap"> on Safari ≤16.3
+     (macOS Monterey caps at Safari 15). No-op on browsers with native support. -->
+<script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const N=[[0,0,8,67],[0,8,16,70],[0,16,24,74],[0,24,32,75],[0,32,40,66],[0,44,52,74],[0,52,60,73],[0,60,68,72],[0,68,76,71],[0,76,84,70],[0,84,88,69],[0,88,92,68],[0,92,96,67],[0,96,100,66],[0,100,104,62],[0,104,108,67],[0,108,112,72],[0,112,120,70],[0,120,128,69],[0,128,136,67],[0,136,144,70],[0,144,146,74],[0,146,148,72],[0,148,150,74],[0,150,152,79],[0,152,154,74],[0,154,156,70],[0,156,158,69],[0,158,160,70],[0,160,162,72],[0,162,164,74],[0,164,166,76],[0,166,168,78],[0,168,170,79],[0,170,172,70],[0,172,174,72],[0,174,176,74],[0,176,178,75],[0,178,180,69],[0,180,182,70],[0,182,184,72],[0,184,186,74],[0,186,188,72],[0,188,190,70],[0,190,192,69],[0,192,194,70],[0,194,196,72],[0,196,198,74],[0,198,200,75],[0,200,202,77],[0,202,204,75],[0,204,206,74],[0,206,208,72],[0,208,210,74],[0,210,212,75],[0,212,214,77],[0,214,216,79],[0,216,218,80],[0,218,220,77],[0,220,222,75],[0,222,224,74],[0,224,226,76],[0,226,228,78],[0,228,230,79],[0,230,232,81],[0,232,234,82],[0,234,236,79],[0,236,238,78],[0,238,240,76],[0,240,242,78],[0,242,244,79],[0,244,246,81],[0,246,248,82],[0,248,250,84],[0,250,252,81],[0,252,254,74],[0,254,256,81],[0,256,258,79],[0,258,260,81],[0,260,262,82],[0,262,264,84],[0,264,266,82],[0,266,268,81],[0,268,270,79],[0,270,272,78],[0,272,276,79],[0,276,280,74],[0,280,284,70],[0,284,288,67],[1,0,4,67],[1,4,8,70],[1,8,12,74],[1,12,16,79],[1,16,18,78],[1,18,20,79],[1,20,22,81],[1,22,24,82],[1,24,26,84],[1,26,28,82],[1,28,30,81],[1,30,32,79],[1,32,34,81],[1,34,36,74],[1,36,38,81],[1,38,40,84],[1,40,42,82],[1,42,44,81],[1,44,46,79],[1,46,48,78],[1,48,50,76],[1,50,52,78],[1,52,54,79],[1,54,56,82],[1,56,58,81],[1,58,60,79],[1,60,62,78],[1,62,64,76],[1,64,66,74],[1,66,68,75],[1,68,70,77],[1,70,72,80],[1,72,74,79],[1,74,76,77],[1,76,78,75],[1,78,80,74],[1,80,82,72],[1,82,84,74],[1,84,86,75],[1,86,88,77],[1,88,90,75],[1,90,92,74],[1,92,94,72],[1,94,96,70],[1,96,98,69],[1,98,100,70],[1,100,102,72],[1,102,104,74],[1,104,106,72],[1,106,108,70],[1,108,110,69],[1,110,112,75],[1,112,114,74],[1,114,116,72],[1,116,118,70],[1,118,120,79],[1,120,122,78],[1,122,124,76],[1,124,126,74],[1,126,128,72],[1,128,130,70],[1,130,132,69],[1,132,134,70],[1,134,136,74],[1,136,138,79],[1,138,140,74],[1,140,142,72],[1,142,144,74],[1,144,152,70],[1,152,160,67],[1,160,168,69],[1,168,176,70],[1,176,180,72],[1,180,184,67],[1,184,188,62],[1,188,192,66],[1,192,196,67],[1,196,200,68],[1,200,204,69],[1,204,212,70],[1,212,220,71],[1,220,228,72],[1,228,236,73],[1,236,244,74],[1,248,256,66],[1,256,264,75],[1,264,272,74],[1,272,280,70],[1,280,288,67]];
+
+// === musical / temporal constants ===
+const TOT16=288, BPM=112, TPS=60/BPM/4, DUR=TOT16*TPS;
+
+// === HDRI selection ===
+// Alternates (swap by changing this single line):
+//   '../textures/museum_of_ethnography_2k.hdr' — warm museum interior, primary
+//   '../textures/vintage_measuring_lab_2k.hdr' — old scientific instrument vibe
+const HDRI_FILE='../textures/museum_of_ethnography_2k.hdr';
+
+// === geometry constants — bounded so the full structure fits the camera presets ===
+const X_RANGE=10, Y_RANGE=4, DEPTH=1.2;
+const PMIN=62, PMAX=84;
+
+// Single shared track. Voice 0 walks param=s (front-left → back-right, painted
+// red); voice 1 walks param=TOT16-s (back-right → front-left, painted blue).
+// The X-crossing is gone; the new structural mechanic is the colour-trail
+// swap — at the midpoint the left half is red and the right half blue, then
+// the two trails sweep through each other and end with the colours exchanged.
+// The diagonal (front-left ↔ back-right) is preserved from the original voice 0
+// route so the case still has its sculptural depth from the 3/4 view.
+function pos3D(s, p, voice){
+  const param = (voice===0) ? s : (TOT16 - s);
+  const x =  -X_RANGE/2 + (param/TOT16)*X_RANGE;
+  const y =  (p-PMIN)/(PMAX-PMIN)*Y_RANGE - Y_RANGE/2;
+  const z =   DEPTH - (param/TOT16)*2*DEPTH;
+  return new THREE.Vector3(x,y,z);
+}
+
+// === Three.js scene setup ===
+const stage=document.getElementById('stage');
+const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+const bgColor=isDark?0x1a1a1a:0xd6cbb1;
+
+// Cross-demo unified lighting — values match canon_per_motum_contrarium so
+// the trio of vitrines reads as one museum collection. 'o' (already-played)
+// dots stay warm rather than fading to grey; envMap and exposure lifted so
+// the warm-HDRI cast carries through; bloom threshold raised in lockstep so
+// wood specular stays out of the bloom path under the brighter exposure.
+const D_O   = isDark ? 0.18 : 0.70;
+const D_E   = isDark ? 0.22 : 0.32;
+const D_S_F = isDark ? 0.85 : 0.90;
+const O_O   = isDark ? 0.68 : 1.00;
+const O_E   = isDark ? 0.45 : 0.70;
+const ENV_MUL        = isDark ? 1.30 : 0.50;
+const LIGHT_MUL      = isDark ? 1.20 : 0.75;
+const EXPOSURE       = isDark ? 1.15 : 1.05;
+const BLOOM_STRENGTH = isDark ? 0.42 : 0.42;
+const BLOOM_THRESHOLD= isDark ? 1.00 : 0.92;
+const P_E_MUL        = isDark ? 1.0 : 3.2;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(bgColor);
+scene.fog=new THREE.Fog(bgColor, 16, 32);
+
+const camera=new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+// DPR cap at 1.5 — on Retina (DPR=2) cuts shaded pixels by ~44% with no
+// perceptible quality loss at typical viewing distance. On non-Retina (DPR=1)
+// this is a no-op.
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=EXPOSURE;
+// P1.2 — single soft shadow pass driven by keyL only (cost = 1 light × N casters × 2 receivers)
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement);
+
+// === environment map ===
+// Bootstrap with RoomEnvironment so brass/glass aren't pitch-black during the
+// async HDRI load, then replace as soon as the .hdr is parsed.
+const pmrem=new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+{
+  scene.environment=pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+}
+const rgbeLoader=new RGBELoader();
+rgbeLoader.load(HDRI_FILE, (hdrTex)=>{
+  hdrTex.mapping=THREE.EquirectangularReflectionMapping;
+  const envRT=pmrem.fromEquirectangular(hdrTex);
+  if(scene.environment) scene.environment.dispose();
+  scene.environment=envRT.texture;
+  hdrTex.dispose();
+  // NOTE: scene.background intentionally left as the flat color.
+
+  // === diagnostics =========================================================
+  console.log('=== HDRI DIAGNOSTIC ===');
+  console.log('HDRI texture loaded:', hdrTex);
+  console.log('scene.environment is set:', !!scene.environment);
+  console.log('scene.environmentIntensity:', scene.environmentIntensity); // r155+
+  console.log('renderer.toneMappingExposure:', renderer.toneMappingExposure);
+  console.log('=== MATERIAL DIAGNOSTIC ===');
+  console.log('baseMat.map:', baseMat.map);
+  console.log('baseMat.normalMap:', baseMat.normalMap);
+  console.log('baseMat.roughnessMap:', baseMat.roughnessMap);
+  console.log('baseMat.map.colorSpace:', baseMat.map?.colorSpace);
+  console.log('baseMat.normalMap.colorSpace:', baseMat.normalMap?.colorSpace);
+  console.log('baseMat.roughnessMap.colorSpace:', baseMat.roughnessMap?.colorSpace);
+  console.log('baseMat.metalness:', baseMat.metalness);
+  console.log('baseMat.roughness:', baseMat.roughness);
+  console.log('baseMat.envMapIntensity:', baseMat.envMapIntensity);
+
+  console.log('=== UV / SHADOW DIAGNOSTIC ===');
+  console.log('base.geometry.attributes.uv:', base.geometry.attributes.uv);
+  console.log('base.geometry.attributes.uv.array sample (first 16):',
+              Array.from(base.geometry.attributes.uv.array.slice(0, 16)));
+  const uvArr=base.geometry.attributes.uv.array;
+  let uMin=Infinity, uMax=-Infinity, vMin=Infinity, vMax=-Infinity;
+  for(let i=0;i<uvArr.length;i+=2){
+    uMin=Math.min(uMin, uvArr[i]);
+    uMax=Math.max(uMax, uvArr[i]);
+    vMin=Math.min(vMin, uvArr[i+1]);
+    vMax=Math.max(vMax, uvArr[i+1]);
+  }
+  console.log('UV range: U=['+uMin+', '+uMax+'], V=['+vMin+', '+vMax+']');
+  console.log('woodDiff.wrapS:', woodDiff.wrapS, '(1000=ClampToEdge, 1001=Repeat)');
+  console.log('woodDiff.wrapT:', woodDiff.wrapT);
+  console.log('base.castShadow:', base.castShadow, '(should be false)');
+  console.log('base.receiveShadow:', base.receiveShadow, '(should be true)');
+  console.log('keyL.shadow.bias:', keyL.shadow.bias);
+  console.log('keyL.shadow.normalBias:', keyL.shadow.normalBias);
+});
+
+// === wood textures (PBR) ===
+const texLoader=new THREE.TextureLoader();
+const woodDiff =texLoader.load('../textures/wood_table_001_diff_2k.jpg');
+const woodNorm =texLoader.load('../textures/wood_table_001_nor_gl_2k.jpg');
+const woodRough=texLoader.load('../textures/wood_table_001_rough_2k.jpg');
+woodDiff.colorSpace=THREE.SRGBColorSpace;
+// woodNorm and woodRough are data textures — keep linear (default).
+// RepeatWrapping is safe even when UV ∈ [0,1] (behaves identically to clamp);
+// guards against RoundedBoxGeometry's non-[0,1] UV scheme on the bevel arcs.
+for(const t of [woodDiff, woodNorm, woodRough]){
+  t.wrapS=THREE.RepeatWrapping;
+  t.wrapT=THREE.RepeatWrapping;
+}
+
+// postprocessing — soft bloom on emissive notes during play
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass=new UnrealBloomPass(new THREE.Vector2(2,2), BLOOM_STRENGTH, 0.75, BLOOM_THRESHOLD);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
+function resize(){
+  const w=stage.clientWidth, h=stage.clientHeight;
+  renderer.setSize(w, h, false);
+  composer.setSize(w, h);
+  bloomPass.setSize(w, h);
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+}
+resize();
+new ResizeObserver(resize).observe(stage);
+
+// === three-point lighting + hemisphere fill ===
+// C — HDRI now drives the soft museum ambience, so all analytic lights are pulled
+//     to ~⅓ of their pre-HDRI strength. The keyL/fillL/rimL/caseSpot still shape
+//     the silhouette (HDRI alone is direction-soft) but no longer dominate.
+scene.add(new THREE.HemisphereLight(
+  isDark?0x99aabb:0xc8d4e6,
+  isDark?0x332211:0x6b5840,
+  0.15 * LIGHT_MUL
+));
+// keyL — directional light providing the shadow-casting direction.
+// Boosted from 0.35 → 0.70: at grazing camera angles the wood floor's IBL
+// specular reflection of the HDRI was outshouting the direct-light term, and
+// since IBL isn't attenuated by the shadow map, the shadow visually washed
+// out from front view. Pairing this with reduced wood envMapIntensity (F2)
+// rebalances so the shadowed term is perceptually meaningful from all views.
+const keyL=new THREE.DirectionalLight(0xfff2dd, 0.70 * LIGHT_MUL);
+keyL.position.set(-7, 9, -5); // upper-left-back; throws shadows toward right-front-down, facing the camera in 3/4 and front views
+// Bind the light's target explicitly to scene origin so OrbitControls rotation
+// doesn't drift the shadow camera relative to the case.
+keyL.target.position.set(0, 0, 0);
+scene.add(keyL.target);
+keyL.castShadow=true;
+keyL.shadow.mapSize.width=2048;
+keyL.shadow.mapSize.height=2048;
+// Frustum widened from 20×16×30 to 28×24×40 so the entire 12×6 base + 5.4m
+// tall vitrine stays inside the shadow camera at every OrbitControls angle.
+keyL.shadow.camera.left=-14;
+keyL.shadow.camera.right=14;
+keyL.shadow.camera.top=12;
+keyL.shadow.camera.bottom=-12;
+keyL.shadow.camera.near=0.5;
+keyL.shadow.camera.far=40;
+keyL.shadow.camera.updateProjectionMatrix();
+keyL.shadow.bias=-0.0005;
+keyL.shadow.normalBias=0.02;
+scene.add(keyL);
+
+// Toggle to true to visualize the shadow camera frustum during debugging.
+const DEBUG_SHADOWS=false;
+if(DEBUG_SHADOWS){
+  scene.add(new THREE.CameraHelper(keyL.shadow.camera));
+}
+const fillL=new THREE.DirectionalLight(0x88aaff, 0.10 * LIGHT_MUL);
+fillL.position.set(-5, -1, -3);
+scene.add(fillL);
+const rimL=new THREE.DirectionalLight(0xffaa55, 0.15 * LIGHT_MUL);
+rimL.position.set(0, 4, -8);
+scene.add(rimL);
+
+const caseSpot=new THREE.PointLight(0xfff2dd, 0.20 * LIGHT_MUL, 30, 1.4);
+caseSpot.position.set(0, 4, 4);
+scene.add(caseSpot);
+
+// === orbit controls + view presets ===
+const controls=new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 0);
+controls.enableDamping=true;
+controls.dampingFactor=0.08;
+controls.minDistance=8;
+controls.maxDistance=24;
+controls.minPolarAngle=0.2;
+controls.maxPolarAngle=Math.PI*0.55;
+
+function setView(name){
+  if(name==='3q'){ camera.position.set(11, 5, 13); }
+  else if(name==='top'){ camera.position.set(0.01, 16, 0.01); }
+  else if(name==='front'){ camera.position.set(0, 2.5, 14); } // raised from y=0.5 so the base top isn't edge-on; without this, shadows compress into a near-invisible strip
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
+setView('3q');
+document.querySelectorAll('[data-view]').forEach(b=>{
+  b.addEventListener('click',()=>setView(b.dataset.view));
+});
+
+// === voice styling — red (forward) / blue (reverse) for the colour-swap demo ===
+// V1 paints the shared track red as it sweeps L→R; V2 paints it blue R→L.
+// Hues are pulled toward classic museum red/blue but kept matte enough that
+// they survive both HDRIs (warm museum + cool lab) without going neon under
+// the cool one. Material props (metalness, roughness, env, pE) inherited from
+// the prior terracotta/teal pair so the dot grain matches the sister demos.
+const VS=[
+  {color:0xC23838, emissive:0x4a1208, baseR:0.045, metalness:0.18, roughness:0.40, env:0.55, pE:1.45},
+  {color:0x2C548A, emissive:0x0a1f3a, baseR:0.045, metalness:0.20, roughness:0.42, env:0.55, pE:1.55}
+];
+const sphereGeoms=VS.map(v=>new THREE.SphereGeometry(v.baseR, 14, 12));
+
+// Shared palette for per-frame ownership colour lerps. DORM_COL is a warm taupe
+// that reads dim against the wood without disappearing and transitions cleanly
+// to either V_COL[0] (red) or V_COL[1] (blue) without a muddy intermediate.
+const DORM_COL=new THREE.Color(0x8a7460);
+const V_COL=[new THREE.Color(VS[0].color), new THREE.Color(VS[1].color)];
+const V_EMI=[new THREE.Color(VS[0].emissive), new THREE.Color(VS[1].emissive)];
+const EMI_DARK=new THREE.Color(0x000000);
+
+// === unified single-sphere model — voice 1 IS the exact retrograde of voice 0 ===
+// Every v=0 note (s, e, p) has a matching v=1 note (TOT16-e, TOT16-s, p) at
+// the same pitch (verified element-wise against the canon table). So each
+// musical pair shares ONE sphere on the shared track instead of two. The
+// previous build placed v=0 and v=1 spheres separately: their (param, pitch)
+// pairs collided at every contiguous note boundary on the right half (same
+// x/z, adjacent y) and read as duplicate spheres "alongside" the original.
+// Each sphere now flashes twice — at s*TPS (voice 0 attack) and at
+// (TOT16-e)*TPS (voice 1 retrograde attack of the same pitch) — and the
+// painted boundary advances per-sphere so the colour sweep tracks each
+// voice's audible note progression instead of the prior uniform-in-time /
+// non-uniform-in-notes drift (which made the painting visibly outpace the
+// audible note in the early phase of voice 0's coarse-duration intro).
+const v1Notes=N.filter(n=>n[0]===0);   // forward-voice table; drives positions, the curve, and per-sphere onsets
+const L=v1Notes.length;
+const voiceEnabled=[true, true];
+
+// Per-sphere onset times indexed by sphere k (= v=0 note k). Voice 0 reaches
+// sphere k at redOnsetT[k] = s_k*TPS; voice 1 reaches sphere k at
+// blueOnsetT[k] = (TOT16-e_k)*TPS — the moment the corresponding retrograde
+// note fires. Linear interpolation between adjacent k yields the painted
+// boundary's geometric u-value at any time t, so painting advances exactly
+// at each voice's audible playback rate.
+const redOnsetT  = v1Notes.map(([_,s,e,p]) => s*TPS);
+const blueOnsetT = v1Notes.map(([_,s,e,p]) => (TOT16-e)*TPS);
+
+// === build the single shared track ribbon ===
+// One tube traces voice 0's pitch contour from front-left (param 0) to
+// back-right (param TOT16). The Catmull-Rom curve passes exactly through
+// each v=0 control point at natural parameter t = k/(L-1), so we WANT
+// sphere k to land on tube ring k*N (some integer N) for clean painting.
+//
+// Three.js's TubeGeometry samples the curve via getPointAt(u), which
+// internally maps u → t through arc-length integration. With our canon's
+// uneven chord lengths (8-tick intro → long chords, 2-tick body → short
+// chords), arc-length and natural parameter diverge sharply: sphere 5
+// would land near ring 70 instead of ring 25 under default behaviour.
+// Overriding getUtoTmapping with the identity makes the tube sample
+// natural-t uniformly, so ring i sits at curve.getPoint(i/TUBE_TUB) and
+// sphere k = ring k*5 exactly. Frenet frames + UVs follow the same
+// override since they all route through getUtoTmapping.
+const TUBE_TUB=(L-1)*5, TUBE_RAD=6;
+const trackPoints=v1Notes.map(([_,s,e,p])=>pos3D(s, p, 0));
+const trackCurve=new THREE.CatmullRomCurve3(trackPoints);
+trackCurve.getUtoTmapping=(u)=>u;   // sample by natural-t so ring k*5 = sphere k
+const trackGeom=new THREE.TubeGeometry(trackCurve, TUBE_TUB, isDark?0.012:0.018, TUBE_RAD, false);
+const trackVertCount=(TUBE_TUB+1)*(TUBE_RAD+1);
+const trackColors=new Float32Array(trackVertCount*3);
+trackGeom.setAttribute('color', new THREE.BufferAttribute(trackColors, 3));
+const trackMat=new THREE.MeshBasicMaterial({
+  color:0xffffff,           // multiplied by vertex color → vertex color drives output
+  vertexColors:true,
+  transparent:true,
+  opacity:isDark?0.36:0.82
+});
+const trackMesh=new THREE.Mesh(trackGeom, trackMat);
+trackMesh.castShadow=true;
+scene.add(trackMesh);
+
+function updateTrackColors(t){
+  for(let i=0;i<=TUBE_TUB;i++){
+    // Step painting — when voice 0 fires sphere k at t=s_k*TPS the painted
+    // region must equal exactly [0, u_k], NOT lerped past u_k while voice 0
+    // is still sustaining note k. Equivalently: each ring is painted red as
+    // soon as voice 0 has fired the FIRST sphere whose u_k ≥ ring's u, i.e.,
+    // sphere index ceil(ui*(L-1)). For blue (R→L) it's the LAST sphere whose
+    // u_k ≤ ui, i.e., floor(ui*(L-1)). Between onsets the boundary holds at
+    // the current sphere; on each new onset it jumps to the next sphere.
+    const kF = (i/TUBE_TUB) * (L-1);
+    const kCeil  = Math.min(L-1, Math.max(0, Math.ceil(kF)));
+    const kFloor = Math.max(0, Math.min(L-1, Math.floor(kF)));
+    let tR = redOnsetT[kCeil];
+    let tB = blueOnsetT[kFloor];
+    if(!voiceEnabled[0]) tR = Infinity;   // muted voice never paints
+    if(!voiceEnabled[1]) tB = Infinity;
+    let target;
+    if(t<tR && t<tB)        target=DORM_COL;
+    else if(t>=tR && t<tB)  target=V_COL[0];
+    else if(t<tR && t>=tB)  target=V_COL[1];
+    else                    target=(tR>tB)?V_COL[0]:V_COL[1]; // most recent passage wins
+    const r=target.r, g=target.g, b=target.b;
+    const base=i*(TUBE_RAD+1)*3;
+    for(let j=0;j<=TUBE_RAD;j++){
+      const k=base + j*3;
+      trackColors[k]=r; trackColors[k+1]=g; trackColors[k+2]=b;
+    }
+  }
+  trackGeom.attributes.color.needsUpdate=true;
+}
+updateTrackColors(0);
+
+// =====================================================================
+// === VITRINE SHELL ===================================================
+// =====================================================================
+
+// shared antique-brass material — used by pillars, feet, nameplate sides, spire, collar, cradle
+const brassMat=new THREE.MeshStandardMaterial({
+  color:0xc9a060,            // antique gold cast — was 0xb8862f
+  metalness:0.92,            // real brass approaches full metal
+  roughness:0.32,            // a hair more roughness for machined micro-finish
+  envMapIntensity:1.2 * (isDark?1.0:0.7)
+});
+
+// 1. wood base (PBR walnut)
+// D — envMapIntensity raised from 0.5 → 1.0 so the HDRI's warm interior light
+//     reaches the wood; metalness:0.0 confirmed (wood is a pure dielectric).
+//     baseMat hoisted to module scope so the HDRI-load diagnostic can read it.
+// FIX 1 — roughness clamped to 1.0 (the physical max — GGX clamps anyway,
+//     so 1.2 was a no-op). envMapIntensity dropped from 1.0/0.6 → 0.5/0.4 so
+//     the HDRI's Fresnel-driven specular doesn't outshout keyL on the wood
+//     floor at grazing angles. Without this, the shadow visually disappears
+//     into the bright reflection in the front view.
+const baseMat=new THREE.MeshStandardMaterial({
+  map:woodDiff,
+  normalMap:woodNorm,
+  roughnessMap:woodRough,
+  metalness:0.0,
+  roughness:1.0,
+  normalScale:new THREE.Vector2(1.0, 1.0),
+  envMapIntensity:0.5 * (isDark?1.0:0.4)
+});
+// P1.1 — chamfered base. radius 0.06 softens the cut edges only; the wood
+// keeps its rectilinear identity. base hoisted out of the block so the
+// HDRI-load diagnostic can introspect its UVs.
+const baseGeom=new RoundedBoxGeometry(12, 0.6, 6, 4, 0.06);
+const base=new THREE.Mesh(baseGeom, baseMat);
+base.position.set(0, -3.0, 0);
+base.receiveShadow=true;
+scene.add(base);
+// brass inlay — slightly larger and positioned so its TOP sits 0.01 BELOW
+// the base top (y = -2.71). Center y = top - height/2 = -2.71 - 0.025 = -2.735.
+// This is the regression fix: previous center y=-2.71 with height 0.05 put
+// the inlay TOP at -2.685, *above* the wood, which laid a brass tile over
+// the entire base surface and hid the grain.
+const inlayGeom=new RoundedBoxGeometry(12.05, 0.05, 6.05, 4, 0.06);
+const inlay=new THREE.Mesh(inlayGeom, brassMat);
+inlay.position.set(0, -2.735, 0);
+inlay.castShadow=true;
+scene.add(inlay);
+
+// 2. four brass pillars + 8 horizontal frame rails — the case's 12 edges
+{
+  // 4 vertical corner pillars
+  const pillarGeom=new THREE.CylinderGeometry(0.05, 0.05, 5.4, 16);
+  const corners=[[ 5.8, 0,  2.8],[-5.8, 0,  2.8],[ 5.8, 0, -2.8],[-5.8, 0, -2.8]];
+  for(const [x,y,z] of corners){
+    const p=new THREE.Mesh(pillarGeom, brassMat);
+    p.position.set(x, y, z);
+    p.castShadow=true;
+    scene.add(p);
+  }
+  // FIX 2 — 8 horizontal rails (4 top, 4 bottom) restore the vitrine's frame
+  //   profile. Square 0.04×0.04 cross-section feels like a machined edge moulding.
+  //   Bottom rails sit at y=-2.7 (level with the base top), so they half-embed
+  //   into the wood — that's the intended "inset moulding" look, not a bug.
+  const railX=new THREE.BoxGeometry(11.6, 0.04, 0.04); // along X
+  const railZ=new THREE.BoxGeometry(0.04, 0.04, 5.6);  // along Z
+  const rails=[
+    // top frame
+    [railX, 0,  2.7,  2.8],
+    [railX, 0,  2.7, -2.8],
+    [railZ,  5.8,  2.7, 0],
+    [railZ, -5.8,  2.7, 0],
+    // bottom frame
+    [railX, 0, -2.7,  2.8],
+    [railX, 0, -2.7, -2.8],
+    [railZ,  5.8, -2.7, 0],
+    [railZ, -5.8, -2.7, 0],
+  ];
+  for(const [geom, x, y, z] of rails){
+    const r=new THREE.Mesh(geom, brassMat);
+    r.position.set(x, y, z);
+    r.castShadow=true;
+    scene.add(r);
+  }
+}
+
+// 3. glass case (top + 4 sides)
+// Avoiding `transmission` — three.js's transmission render target only includes
+// OPAQUE objects, so transmissive glass would hide the (transparent) ribbons
+// inside. Clearcoat + low opacity + depthWrite:false gives the glassy look
+// while keeping contents visible. envMapIntensity bumped from 1.2 to 1.6 now
+// that real HDRI reflections give the panels something pretty to catch.
+{
+  const glassMat=new THREE.MeshPhysicalMaterial({
+    color:0xffffff,
+    metalness:0,
+    roughness:0.08,
+    ior:1.5,
+    clearcoat:0.6,
+    clearcoatRoughness:0.08,
+    transparent:true,
+    opacity:0.06,
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.0
+  });
+
+  const top=new THREE.Mesh(new THREE.BoxGeometry(11.6, 0.08, 5.6), glassMat);
+  top.position.set(0, 2.7, 0);
+  scene.add(top);
+
+  const fbGeom=new THREE.PlaneGeometry(11.6, 5.4);
+  const front=new THREE.Mesh(fbGeom, glassMat);
+  front.position.set(0, 0, 2.8);
+  scene.add(front);
+  const back=new THREE.Mesh(fbGeom, glassMat);
+  back.position.set(0, 0, -2.8);
+  back.rotation.y=Math.PI;
+  scene.add(back);
+
+  const lrGeom=new THREE.PlaneGeometry(5.6, 5.4);
+  const left=new THREE.Mesh(lrGeom, glassMat);
+  left.position.set(-5.8, 0, 0);
+  left.rotation.y=Math.PI/2;
+  scene.add(left);
+  const right=new THREE.Mesh(lrGeom, glassMat);
+  right.position.set(5.8, 0, 0);
+  right.rotation.y=-Math.PI/2;
+  scene.add(right);
+}
+
+// 4. brass nameplate, engraved via CanvasTexture
+{
+  function makeNameplateTexture(){
+    const W=1200, H=200;
+    const cv=document.createElement('canvas');
+    cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const grad=ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,    '#d8a64a');
+    grad.addColorStop(0.45, '#b8862f');
+    grad.addColorStop(1,    '#8a5f1d');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,H);
+    ctx.globalAlpha=0.05;
+    for(let y=0;y<H;y+=2){
+      ctx.fillStyle = (y%4===0)?'#000':'#fff';
+      ctx.fillRect(0,y,W,1);
+    }
+    ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(60,38,16,0.45)';
+    ctx.lineWidth=2;
+    ctx.strokeRect(14,14,W-28,H-28);
+    ctx.strokeStyle='rgba(255,232,175,0.35)';
+    ctx.lineWidth=1;
+    ctx.strokeRect(15,15,W-30,H-30);
+
+    const SERIF='"Baskerville","Bodoni 72","Didot","Hoefler Text","Garamond","Times New Roman",serif';
+    const SERIF_IT='italic '+SERIF;
+    const PAD=80;
+    const MAX=W - PAD*2;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+
+    const line1='JOHANN SEBASTIAN BACH';
+    let f1=72;
+    ctx.font=`500 ${f1}px ${SERIF}`;
+    while(ctx.measureText(line1).width>MAX && f1>20){ f1-=2; ctx.font=`500 ${f1}px ${SERIF}`; }
+
+    const line2='Crab Canon   ·   BWV 1079';
+    let f2=42;
+    ctx.font=`${f2}px ${SERIF_IT}`;
+    while(ctx.measureText(line2).width>MAX && f2>14){ f2-=2; ctx.font=`${f2}px ${SERIF_IT}`; }
+
+    function engraved(text, font, x, y, mainColor){
+      ctx.font=font;
+      ctx.fillStyle='rgba(28, 16, 6, 0.85)';
+      ctx.fillText(text, x + 1.2, y + 1.2);
+      ctx.fillStyle='rgba(255, 232, 175, 0.55)';
+      ctx.fillText(text, x - 1.0, y - 1.0);
+      ctx.fillStyle=mainColor;
+      ctx.fillText(text, x, y);
+    }
+    engraved(line1, `500 ${f1}px ${SERIF}`,    W/2, H*0.40, '#3a230d');
+    engraved(line2, `${f2}px ${SERIF_IT}`,     W/2, H*0.72, '#3a230d');
+
+    const tex=new THREE.CanvasTexture(cv);
+    tex.anisotropy=8;
+    tex.colorSpace=THREE.SRGBColorSpace;
+    return tex;
+  }
+  const engravedTex=makeNameplateTexture();
+  const engravedFace=new THREE.MeshStandardMaterial({
+    map:engravedTex,
+    color:0xffffff,
+    metalness:0.7,
+    roughness:0.38,
+    envMapIntensity:1.0 * (isDark?1.0:0.6)
+  });
+  const plateMats=[brassMat, brassMat, engravedFace, brassMat, brassMat, brassMat];
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.04, 0.4), plateMats);
+  plate.position.set(0, -2.68, 2.85);
+  plate.castShadow=true;
+  scene.add(plate);
+}
+
+// === Crab logo — etched DIRECTLY into the wood top from assets/crab.svg ===
+// The SVG is rendered to a canvas as a black silhouette, then composited
+// multiple times at offsets and tinted colors to fake a recessed V-groove
+// engraving (outer drop shadow + main dark fill + inner upper-edge highlight).
+// The texture is mounted on a thin transparent decal plane laid 0.01 above the
+// wood top; alpha-zero outside the crab so the walnut grain reads through.
+{
+  function makeOverlayTexture(){
+    const W=1024, H=1024;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const tex=new THREE.CanvasTexture(cv);
+    tex.colorSpace=THREE.SRGBColorSpace;
+    tex.anisotropy=16;
+
+    const img=new Image();
+    img.onload=()=>{
+      // Pre-render the SVG to a "stamp" canvas, vertically flipped so the
+      // crab's head (top of SVG) ends up at canvas-bottom. With our plane
+      // rotation (rotation.x = -π/2), canvas-bottom maps to world +z (front),
+      // so the crab faces the front-view viewer.
+      const stamp=document.createElement('canvas');
+      stamp.width=W; stamp.height=H;
+      const sctx=stamp.getContext('2d');
+      const SC=1.5;                          // scale-up so the crab fills more of the texture
+      const sz=W*SC, ox=(W-sz)/2, oy=(H-sz)/2;
+      sctx.save();
+      sctx.translate(0, H);
+      sctx.scale(1, -1);
+      sctx.drawImage(img, ox, oy, sz, sz);
+      sctx.restore();
+
+      // tinted-offset pass — shape with a flat color, drop-shadow style.
+      // Used for OUTER shadows that leak past the silhouette edge.
+      const tintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        ctx.drawImage(tmp, 0, 0);
+      };
+      // inner-tinted-offset pass — same as tintPass but clipped to the
+      // ORIGINAL silhouette, so the result only shows INSIDE the crab.
+      // Used for inner upper-edge highlights (the bevel rim catching light).
+      const innerTintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        tctx.globalCompositeOperation='destination-in';
+        tctx.drawImage(stamp, 0, 0);
+        ctx.drawImage(tmp, 0, 0);
+      };
+
+      // Shared 5-pass engraving recipe — wider drop-shadow halo, pitch-black
+      // recess, and a two-pass bevel rim (warm primary + sharper catch-light)
+      // for clear visibility against the dark walnut.
+      tintPass('rgba(0, 0, 0, 0.60)', 4.5, 4.5);
+      tintPass('rgba(0, 0, 0, 0.45)', 2.0, 2.0);
+      tintPass('rgba(0, 0, 0, 1.0)', 0, 0);
+      innerTintPass('rgba(248, 218, 165, 0.85)', -2.5, -2.5);
+      innerTintPass('rgba(255, 240, 205, 0.55)', -1.0, -1.0);
+
+      tex.needsUpdate=true;
+    };
+    img.onerror=()=>{
+      console.warn('crab.svg failed to load; engraving overlay will be empty');
+    };
+    img.src='assets/pic/crab.svg';
+
+    return tex;
+  }
+
+  const tex=makeOverlayTexture();
+  const overlayMat=new THREE.MeshStandardMaterial({
+    map:tex,
+    transparent:true,
+    alphaTest:0.04,
+    roughness:0.85,
+    metalness:0.0,
+    envMapIntensity:0.5 * (isDark?1.0:0.6),
+    polygonOffset:true,
+    polygonOffsetFactor:-1,
+    polygonOffsetUnits:-1,
+  });
+  // 1.6 × 1.6 plane laid flat 0.01 above the wood top (y=-2.7 → -2.69), in the
+  // FRONT area between the central spire (z=0) and the nameplate (z=2.85).
+  // PlaneGeometry default normal +z; rotation.x = -π/2 lays it flat with normal
+  // pointing +y (up). DoubleSide as a safety net in case z-fight ever flips
+  // the visible face. With this rotation V=0 maps to world +z (front), so the
+  // crab — drawn with head at canvas-bottom — naturally faces forward.
+  overlayMat.side=THREE.DoubleSide;
+  const G=new THREE.PlaneGeometry(1.6, 1.6);
+  const overlay=new THREE.Mesh(G, overlayMat);
+  overlay.rotation.x=-Math.PI/2;
+  overlay.position.set(0, -2.69, 1.5);
+  // Skip castShadow — alpha-tested transparency would cast a square block
+  // shadow without a custom depth material.
+  overlay.receiveShadow=true;
+  scene.add(overlay);
+}
+
+// 6. central brass spire — one slim uniform-radius support at the midpoint of
+//    the diagonal track (param=TOT16/2 maps to x=0, z=0). This is where the
+//    two playheads meet and exchange ownership, so the spire still stands at
+//    the structural pivot of the piece.
+{
+  const tipY    = (70-PMIN)/(PMAX-PMIN)*Y_RANGE - Y_RANGE/2; // ≈ -0.55
+  const baseTopY= -2.7;
+  const spireH  = tipY - baseTopY;                           // ≈ 2.15
+  const spireY  = (tipY + baseTopY) / 2;
+  const spire=new THREE.Mesh(
+    new THREE.CylinderGeometry(0.06, 0.06, spireH, 18),
+    brassMat
+  );
+  spire.position.set(0, spireY, 0);
+  spire.castShadow=true;
+  scene.add(spire);
+}
+// =====================================================================
+
+// === build note dot meshes — one sphere per voice-0 note position ===
+// Each sphere stands in for both the v=0 note and its v=1 retrograde
+// counterpart at the same pitch. tRed / tBlue mark each voice's audible
+// attack on this position; enRed / enBlue mark the matching releases. The
+// sphere flashes (state 'p') whenever t lies inside an enabled voice's
+// attack→release window. Static material params come from voice 0 — voice
+// 0 and voice 1 differ only in the third decimal on metalness/roughness/env,
+// so the dynamic colour/emissive lerp carries the visible identity.
+const notes=[];
+function makeDot(k){
+  const [_, s, e, p] = v1Notes[k];
+  const sizeFactor=1+Math.min((e-s)/8, 0.5);
+  const tRed  = s*TPS;             // voice 0 attack
+  const enRed = e*TPS;
+  const tBlue = (TOT16 - e)*TPS;   // voice 1 attack of the retrograde-of-k note
+  const enBlue= (TOT16 - s)*TPS;
+  const mat=new THREE.MeshStandardMaterial({
+    color:DORM_COL.clone(),       // starts dormant; per-frame lerp drives it to V_COL[owner]
+    emissive:EMI_DARK.clone(),
+    emissiveIntensity:D_E,
+    roughness:VS[0].roughness,
+    metalness:VS[0].metalness,
+    envMapIntensity:VS[0].env * ENV_MUL,
+    transparent:true,
+    opacity:D_O
+  });
+  const mesh=new THREE.Mesh(sphereGeoms[0], mat);
+  mesh.position.copy(pos3D(s, p, 0));
+  const initialScale=sizeFactor*D_S_F;
+  mesh.scale.setScalar(initialScale);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  notes.push({
+    mesh, mat,
+    tRed, enRed, tBlue, enBlue,
+    baseSize:sizeFactor,
+    pE:VS[0].pE,
+    s:'d',
+    tO:D_O, tE:D_E, tS:initialScale, spd:3.5
+  });
+}
+for(let k=0; k<L; k++) makeDot(k);
+
+// Whichever playhead most recently passed this sphere's position owns the
+// colour. Returns 0 (red), 1 (blue), or -1 (neither has passed yet). A muted
+// voice is treated as never having passed.
+function ownerOf(n, t){
+  const r = voiceEnabled[0] && t >= n.tRed;
+  const b = voiceEnabled[1] && t >= n.tBlue;
+  if(!r && !b) return -1;
+  if(r && !b) return 0;
+  if(!r && b) return 1;
+  return (n.tRed > n.tBlue) ? 0 : 1;
+}
+
+// State this sphere should be in at time t.
+//   'p' — at least one enabled voice's attack→release window contains t
+//   'o' — at least one enabled voice has passed but neither is sounding now
+//   'd' — no enabled voice has reached this position yet
+function stateAt(n, t){
+  const playingR = voiceEnabled[0] && t >= n.tRed  && t < n.enRed;
+  const playingB = voiceEnabled[1] && t >= n.tBlue && t < n.enBlue;
+  if(playingR || playingB) return 'p';
+  const reachedR = voiceEnabled[0] && t >= n.tRed;
+  const reachedB = voiceEnabled[1] && t >= n.tBlue;
+  if(reachedR || reachedB) return 'o';
+  return 'd';
+}
+
+function setNote(n, s){
+  if(n.s===s) return;
+  n.s=s;
+  if(!voiceEnabled[0] && !voiceEnabled[1]){
+    n.tO=0.04; n.tE=0; n.tS=n.baseSize*0.7; n.spd=8; return;
+  }
+  if(s==='d'){
+    n.tO=D_O; n.tE=D_E; n.tS=n.baseSize*D_S_F; n.spd=3.5;
+  }else if(s==='p'){
+    n.tO=1.0; n.tE=n.pE*P_E_MUL; n.tS=n.baseSize*1.95; n.spd=20;
+  }else{
+    n.tO=O_O; n.tE=O_E; n.tS=n.baseSize*1.08; n.spd=2.4;
+  }
+}
+
+// (No separate playhead spheres or halo sprites. The note dots themselves
+//  serve as the playback indicator — they jump to peak emissive at attack
+//  and the track tube paints in real time. Adding floating playhead beads
+//  duplicated the signal and, because they sampled discrete-step pitch
+//  while the tube uses Catmull-Rom interpolation, drifted off the ribbon.)
+
+// === audio chain ===
+// Sampled instruments + concert-hall space. Bus tail:
+//   Comp → EQ → early reflections → long reverb → stereo widener → limiter.
+// Both voices use the SAME violin sampler — the crab canon's two parts are
+// one melodic line read forwards and backwards, so they must share timbre;
+// only stereo position (and the on-screen colour) tells them apart.
+const SBASE='https://nbrosowsky.github.io/tonejs-instruments/samples/';
+const limiter=new Tone.Limiter(-1).toDestination();
+const widener=new Tone.StereoWidener(0.55).connect(limiter);
+const reverb =new Tone.Reverb({decay:4.8, preDelay:0.06, wet:0.26}).connect(widener);
+const er     =new Tone.FeedbackDelay({delayTime:0.045, feedback:0.18, wet:0.16}).connect(reverb);
+const eq     =new Tone.EQ3({low:1, mid:0, high:-0.5}).connect(er);
+const comp   =new Tone.Compressor({threshold:-20, ratio:2.4, attack:0.01, release:0.18}).connect(eq);
+
+const v1Pan=new Tone.Panner(-0.28).connect(comp);
+const v2Pan=new Tone.Panner( 0.28).connect(comp);
+
+const violinUrls={
+  A3:'A3.mp3', A4:'A4.mp3', A5:'A5.mp3', A6:'A6.mp3',
+  C4:'C4.mp3', C5:'C5.mp3', C6:'C6.mp3', C7:'C7.mp3',
+  E4:'E4.mp3', E5:'E5.mp3', E6:'E6.mp3',
+  G3:'G3.mp3', G4:'G4.mp3', G5:'G5.mp3', G6:'G6.mp3'
+};
+const v1Synth=new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.2}).connect(v1Pan);
+const v2Synth=new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.2}).connect(v2Pan);
+v1Synth.volume.value=-7;
+v2Synth.volume.value=-7;
+const synths=[v1Synth, v2Synth];
+
+Tone.Transport.bpm.value=BPM;
+Tone.Transport.loop=true;
+Tone.Transport.loopStart=0;
+Tone.Transport.loopEnd=DUR;
+
+const evs=N.map(([v,s,e,p])=>({
+  voice:v,
+  time:s*TPS,
+  freq:440*Math.pow(2,(p-69)/12),
+  dur:Math.max((e-s)*TPS, 0.05)
+}));
+const part=new Tone.Part((t,e)=>{
+  if(!voiceEnabled[e.voice]) return;
+  synths[e.voice].triggerAttackRelease(e.freq, e.dur, t, 0.40 + Math.random()*0.12);
+}, evs);
+part.loop=true;
+part.loopEnd=DUR;
+part.start(0);
+
+// === UI plumbing ===
+const bp=document.getElementById('bp');
+const bs=document.getElementById('bs');
+const bt=document.getElementById('bt');
+const psr=document.getElementById('psr');
+const PLAY='<svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg>';
+const PAUSE='<svg viewBox="0 0 10 10"><rect x="2" y="1" width="2" height="8" fill="currentColor"/><rect x="6" y="1" width="2" height="8" fill="currentColor"/></svg>';
+
+let playing=false, scrubMode=false, loopEnabled=true, lastT=0;
+
+function fmt(t){const m=Math.floor(t/60), s=Math.floor(t-m*60); return m+':'+(s<10?'0':'')+s;}
+const TOT=fmt(DUR);
+
+function uui(t){
+  bt.textContent=fmt(t)+' / '+TOT;
+  if(!scrubMode) bs.value=t.toFixed(2);
+  psr.textContent='t = '+t.toFixed(1)+' / '+DUR.toFixed(1);
+}
+
+function resetVisualProgress(){
+  // stateAt() recomputes from t directly each frame; just clear the cached
+  // s flag so setNote(...) doesn't short-circuit on the next pass.
+  for(const n of notes) n.s=null;
+}
+
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(), 0.1);
+  controls.update();
+
+  // Force the shadow-camera target to refresh each frame — without this, the
+  // target's matrixWorld can go stale across view switches and the shadow
+  // map renders against an outdated light direction.
+  keyL.target.updateMatrixWorld();
+
+  const tNow=Tone.Transport.seconds;
+
+  if(playing){
+    if(loopEnabled && tNow+0.5<lastT) resetVisualProgress();
+    lastT=tNow;
+    uui(tNow);
+    if(!loopEnabled && tNow>=DUR-0.02){ pause(); }
+  }
+
+  updateTrackColors(tNow);
+
+  // Faster lerp rate for the colour channel only — opacity / scale keep
+  // their per-state spd, but the red ↔ blue overwrite has to be unmistakable
+  // on the second-half sweep (when each playhead repaints what the other
+  // already coloured), so colour transitions complete in ~250 ms regardless
+  // of state.
+  const colorA = 1 - Math.exp(-12 * dt);
+  for(let k=0;k<notes.length;k++){
+    const n=notes[k];
+    setNote(n, stateAt(n, tNow));
+    const a=1-Math.exp(-n.spd*dt);
+    n.mat.opacity += (n.tO-n.mat.opacity)*a;
+    n.mat.emissiveIntensity += (n.tE-n.mat.emissiveIntensity)*a;
+    const cs=n.mesh.scale.x;
+    n.mesh.scale.setScalar(cs+(n.tS-cs)*a);
+    const own=ownerOf(n, tNow);
+    n.mat.color.lerp(own<0 ? DORM_COL : V_COL[own], colorA);
+    n.mat.emissive.lerp(own<0 ? EMI_DARK : V_EMI[own], colorA);
+  }
+
+  composer.render();
+}
+animate();
+
+async function play(){
+  if(Tone.context.state!=='running') await Tone.start();
+  await Tone.loaded();
+  if(!loopEnabled && Tone.Transport.seconds>=DUR-0.05) seek(0);
+  playing=true;
+  Tone.Transport.start();
+  bp.innerHTML=PAUSE;
+  bp.setAttribute('aria-label','Pause');
+  lastT=Tone.Transport.seconds;
+}
+
+function pause(){
+  playing=false;
+  Tone.Transport.pause();
+  bp.innerHTML=PLAY;
+  bp.setAttribute('aria-label','Play');
+}
+
+function seek(t){
+  const wp=playing;
+  if(Tone.Transport.state==='started'){
+    Tone.Transport.pause();
+    for(const s of synths) s.releaseAll();
+  }
+  Tone.Transport.seconds=t;
+  lastT=t;
+  // stateAt() folds in both voices' attack/release windows AND prior-passage
+  // checks, so a single per-sphere call replaces the old sP/eP/tOther walk.
+  for(const n of notes){ n.s=null; setNote(n, stateAt(n, t)); }
+  updateTrackColors(t);
+  uui(t);
+  if(wp){ playing=true; Tone.Transport.start(); }
+}
+
+bp.addEventListener('click',()=>playing?pause():play());
+
+let scrubT;
+bs.addEventListener('input',()=>{
+  scrubMode=true;
+  bt.textContent=fmt(parseFloat(bs.value))+' / '+TOT;
+  clearTimeout(scrubT);
+  scrubT=setTimeout(()=>{ scrubMode=false; seek(parseFloat(bs.value)); }, 80);
+});
+
+function toggleVoice(v){
+  voiceEnabled[v]=!voiceEnabled[v];
+  document.getElementById('v'+v).setAttribute('aria-pressed', String(voiceEnabled[v]));
+  if(!voiceEnabled[v]) synths[v].releaseAll();
+  // Each sphere is shared between voices now, so a mute affects every sphere
+  // (not just one voice's set). Force the next animate frame to refresh from
+  // stateAt; refresh the painted track immediately so the muted voice's
+  // colour stops advancing.
+  for(const n of notes) n.s=null;
+  updateTrackColors(Tone.Transport.seconds);
+}
+document.getElementById('v0').addEventListener('click',()=>toggleVoice(0));
+document.getElementById('v1').addEventListener('click',()=>toggleVoice(1));
+
+const lpBtn=document.getElementById('lp');
+lpBtn.addEventListener('click',()=>{
+  loopEnabled=!loopEnabled;
+  Tone.Transport.loop=loopEnabled;
+  lpBtn.setAttribute('aria-pressed', String(loopEnabled));
+});
+
+for(const n of notes){ n.s=null; setNote(n,'d'); }
+bs.max=DUR.toFixed(2);
+uui(0);
+updateTrackColors(0);
+
+// URL ?t=N support — convenient for headless screenshots and direct linking
+// to a specific moment in the colour-paint sweep. Skips audio start (no
+// user gesture). Snaps note dot states + track ribbon colours to the seek
+// time so the painted state shows immediately.
+{
+  const qp = new URLSearchParams(location.search);
+  const tArg = parseFloat(qp.get('t'));
+  if(!isNaN(tArg)){
+    const tt = Math.max(0, Math.min(DUR-0.001, tArg));
+    Tone.Transport.seconds = tt;
+    lastT = tt;
+    // stateAt() drives the per-sphere state from tt directly; snap visuals
+    // to their target so the painted state shows without fade-in.
+    for(const n of notes){
+      n.s=null; setNote(n, stateAt(n, tt));
+      const own = ownerOf(n, tt);
+      const targetC = own<0 ? DORM_COL : V_COL[own];
+      const targetE = own<0 ? EMI_DARK : V_EMI[own];
+      n.mat.color.copy(targetC);
+      n.mat.emissive.copy(targetE);
+      n.mat.opacity = n.tO;
+      n.mat.emissiveIntensity = n.tE;
+      n.mesh.scale.setScalar(n.tS);
+    }
+    updateTrackColors(tt);
+    uui(tt);
+  }
+}
+</script>
+</body>
+</html>

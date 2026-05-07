@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bach · Canon a 2 per Augmentationem, contrario Motu · BWV 1079</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5a5a5a;
+    --color-text-tertiary: #8a8a8a;
+    --color-border-tertiary: rgba(0,0,0,0.15);
+    --color-border-secondary: rgba(0,0,0,0.3);
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f6f5f0;
+    --color-canvas-bg: #f1eee6;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e8e8;
+      --color-text-secondary: #aaa;
+      --color-text-tertiary: #777;
+      --color-border-tertiary: rgba(255,255,255,0.18);
+      --color-border-secondary: rgba(255,255,255,0.32);
+      --color-background-primary: #1f1f1f;
+      --color-background-secondary: #2a2a2a;
+      --color-canvas-bg: #1a1a1a;
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); margin: 0; padding: 24px 16px 60px; display: flex; justify-content: center; }
+  main { width: 100%; max-width: 760px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; padding: 20px 24px 16px; }
+  h1 { font-size: 16px; font-weight: 500; margin: 0 0 4px; }
+  .sub { font-family: 'IM Fell English', Georgia, serif; font-style: normal; font-feature-settings: "liga", "dlig"; font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .sub em { font-style: italic; }
+  button { border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+  button:hover { background: var(--color-background-secondary); }
+  button:active { transform: scale(0.96); }
+  input[type="range"] { accent-color: var(--color-text-primary); }
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  #stage{position:relative;width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--color-canvas-bg);border:0.5px solid var(--color-border-tertiary)}
+  #stage canvas{display:block;width:100%!important;height:100%!important;outline:none}
+  .legend{position:absolute;left:10px;top:10px;font-size:11px;color:var(--color-text-secondary);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+  .legend .row{display:flex;align-items:center;gap:6px}
+  .legend .swatch{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .views{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+  .vbtn-sm{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(4px);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);cursor:pointer}
+  @media (prefers-color-scheme: dark){.vbtn-sm{background:rgba(0,0,0,0.45)}}
+  .hint{font-size:11px;color:var(--color-text-tertiary);margin:6px 4px 14px;text-align:right}
+  .bc{display:flex;align-items:center;gap:12px;padding:8px 4px 12px}
+  .bp{width:36px;height:36px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .bp svg{width:10px;height:10px}
+  .bt{font-size:12px;color:var(--color-text-secondary);font-variant-numeric:tabular-nums;min-width:78px;text-align:right;flex-shrink:0}
+  .bs{flex:1;min-width:0}
+  .vt{display:flex;align-items:center;gap:8px;padding:0 4px 10px;flex-wrap:wrap}
+  .vbtn{font-size:11px;padding:5px 10px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;transition:opacity 0.15s,background 0.15s}
+  .vbtn:hover{background:var(--color-background-secondary)}
+  .vbtn .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .vbtn[aria-pressed="false"]{opacity:0.42}
+  .vbtn[aria-pressed="false"] .dot{opacity:0.4}
+  .vlbl{font-size:11px;color:var(--color-text-tertiary);margin-right:2px}
+  .psr{font-size:11px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;margin-left:auto}
+</style>
+</head>
+<body>
+<main>
+<h1>Bach · Canon a 2 per Augmentationem, contrario Motu · BWV 1079</h1>
+<p class="sub">violin plays the cello's line inverted and twice as slow — every violin <em>dash</em> sits directly above its cello <em>dot</em> across the y-mirror. viola weaves the King's theme on top.</p>
+<h2 class="sr-only">3D augmentation-canon visualization of Bach's Canon a 2 per Augmentationem, contrario Motu as a precision instrument inside a glass vitrine, lit by an HDRI environment</h2>
+
+<div id="stage">
+  <div class="legend">
+    <div class="row"><span class="swatch" style="background:#c9a55c;border:0.5px solid #4d2e0a"></span>Viola — King's theme</div>
+    <div class="row"><span class="swatch" style="background:#9fb392"></span>Viola — ornament</div>
+    <div class="row"><span class="swatch" style="background:#B86348"></span>Violin — augmented inverse (dash, above)</div>
+    <div class="row"><span class="swatch" style="background:#3F8788"></span>Cello — dux (dot, below)</div>
+  </div>
+  <div class="views">
+    <button class="vbtn-sm" data-view="3q">3/4</button>
+    <button class="vbtn-sm" data-view="top">top</button>
+    <button class="vbtn-sm" data-view="front">front</button>
+  </div>
+</div>
+
+<div class="bc">
+<button class="bp" id="bp" aria-label="Play"><svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg></button>
+<label class="sr-only" for="bs">Scrub timeline</label>
+<input type="range" class="bs" id="bs" min="0" max="88.2" step="0.05" value="0" aria-label="Scrub timeline">
+<span class="bt" id="bt">0:00 / 1:28</span>
+</div>
+
+<div class="vt">
+<span class="vlbl">solo</span>
+<button class="vbtn" id="v0" aria-pressed="true"><span class="dot" style="background:#c9a55c;border:0.5px solid #4d2e0a"></span>Skeleton</button>
+<button class="vbtn" id="v1" aria-pressed="true"><span class="dot" style="background:#d8b884"></span>Ornament</button>
+<button class="vbtn" id="v2" aria-pressed="true"><span class="dot" style="background:#B86348"></span>Violin</button>
+<button class="vbtn" id="v3" aria-pressed="true"><span class="dot" style="background:#3F8788"></span>Cello</button>
+<button class="vbtn" id="lp" aria-pressed="true"><span style="font-size:13px;line-height:1;letter-spacing:-1px">∞</span> loop</button>
+<span class="psr" id="psr">t = 0.0 / 88.2</span>
+</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.43/Tone.js"></script>
+<!-- es-module-shims polyfills <script type="importmap"> on Safari ≤16.3
+     (macOS Monterey caps at Safari 15). No-op on browsers with native support. -->
+<script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+// === note data — voice / start_step / end_step / midi_pitch ===
+//
+// IMPORTANT: this piece quantizes to **32nd-notes**, NOT the project default
+// 16ths. The cello's ornamental figuration runs in 32nds, and downsampling
+// to 16ths would collide pairs of distinct notes onto the same step. The
+// constants TPS, DUR below all use the 32nd-step convention; pos3D and the
+// state machine are unit-agnostic.
+//
+// Voice 0 = Viola SKELETON — the 12 "standard" core notes per cycle of the
+//           King's theme (the 13-note canonical sequence less note 12 = the
+//           implicit C♯4 that lives only inside the ornament). Anchors picked
+//           at fixed offsets from each cycle start (steps 0,16,32,48,64,80,96,
+//           112,128,144,168,208 within a 256-step cycle); for trill anchors
+//           the lowest pitch in the dense 32nd-note cluster is taken.
+// Voice 1 = Viola ORNAMENT — every other viola note (~600), the dressing.
+// Voice 2 = Violin — the augmented inverse: violin time = 2 × cello time + offset,
+//           violin pitch = 127 − cello pitch (mirror around D♯4/E4 = 63.5).
+// Voice 3 = Cello — the dux of the canon pair, the source line.
+const N=[[0,0,10,60],[0,16,27,63],[0,32,42,67],[0,48,59,68],[0,64,74,59],[0,80,91,67],[0,96,97,66],[0,112,123,65],[0,128,129,64],[0,144,164,63],[0,168,174,62],[0,208,219,60],[0,256,266,60],[0,272,283,63],[0,288,298,67],[0,304,315,68],[0,320,330,59],[0,336,347,67],[0,352,353,66],[0,368,379,65],[0,384,385,64],[0,400,420,63],[0,424,430,62],[0,464,475,60],[0,512,522,60],[0,528,539,63],[0,544,554,67],[0,560,571,68],[0,576,586,59],[0,592,603,67],[0,608,609,66],[0,624,635,65],[0,640,641,64],[0,656,676,63],[0,680,686,62],[0,720,731,60],[0,768,778,60],[0,784,795,63],[0,800,810,67],[0,816,827,68],[0,832,842,59],[0,848,859,67],[0,864,865,66],[0,880,891,65],[0,896,897,64],[0,912,932,63],[0,936,942,62],[0,976,987,60],[0,1024,1034,60],[0,1040,1051,63],[0,1056,1066,67],[0,1072,1083,68],[0,1088,1098,59],[0,1104,1115,67],[0,1120,1121,66],[0,1136,1147,65],[0,1152,1175,64],[1,10,12,59],[1,12,14,60],[1,14,16,62],[1,28,32,65],[1,42,44,63],[1,44,46,65],[1,46,48,67],[1,62,64,60],[1,74,76,55],[1,76,78,59],[1,78,80,62],[1,94,96,69],[1,97,98,67],[1,98,99,66],[1,98,99,67],[1,99,100,67],[1,100,101,66],[1,100,101,67],[1,101,102,67],[1,102,103,66],[1,102,103,67],[1,103,104,67],[1,104,105,66],[1,104,105,67],[1,105,106,67],[1,106,107,66],[1,106,107,67],[1,107,108,67],[1,108,109,66],[1,110,112,64],[1,126,128,67],[1,129,130,65],[1,130,131,64],[1,130,131,65],[1,131,132,65],[1,132,133,64],[1,132,133,65],[1,133,134,65],[1,134,135,64],[1,134,135,65],[1,135,136,65],[1,136,137,64],[1,136,137,65],[1,137,138,65],[1,138,139,64],[1,138,139,65],[1,139,140,65],[1,140,141,64],[1,142,144,62],[1,164,168,62],[1,174,176,61],[1,176,177,61],[1,177,178,63],[1,178,179,61],[1,178,179,63],[1,179,180,63],[1,180,181,61],[1,180,181,63],[1,181,182,63],[1,182,183,61],[1,182,184,60],[1,184,185,60],[1,185,186,61],[1,186,187,60],[1,186,187,61],[1,187,188,61],[1,188,189,60],[1,188,189,61],[1,189,190,61],[1,190,191,60],[1,190,192,59],[1,192,193,59],[1,193,194,60],[1,194,195,59],[1,194,195,60],[1,195,196,60],[1,196,197,59],[1,196,197,60],[1,197,198,60],[1,198,199,59],[1,198,199,60],[1,199,200,60],[1,200,201,59],[1,200,201,60],[1,201,202,60],[1,202,203,59],[1,202,203,60],[1,203,204,60],[1,204,205,59],[1,204,206,57],[1,206,208,55],[1,222,224,65],[1,224,234,63],[1,234,236,62],[1,236,238,60],[1,238,240,62],[1,240,241,62],[1,241,242,63],[1,242,243,62],[1,242,243,63],[1,243,244,63],[1,244,245,62],[1,244,245,63],[1,245,246,63],[1,246,247,62],[1,246,247,63],[1,247,248,63],[1,248,249,62],[1,248,249,63],[1,249,250,63],[1,250,251,62],[1,250,251,63],[1,251,252,63],[1,252,253,62],[1,252,256,60],[1,266,268,59],[1,268,270,60],[1,270,272,62],[1,284,288,65],[1,298,300,63],[1,300,302,65],[1,302,304,67],[1,318,320,60],[1,330,332,55],[1,332,334,59],[1,334,336,62],[1,350,352,69],[1,353,354,67],[1,354,355,66],[1,354,355,67],[1,355,356,67],[1,356,357,66],[1,356,357,67],[1,357,358,67],[1,358,359,66],[1,358,359,67],[1,359,360,67],[1,360,361,66],[1,360,361,67],[1,361,362,67],[1,362,363,66],[1,362,363,67],[1,363,364,67],[1,364,365,66],[1,366,368,64],[1,382,384,67],[1,385,386,65],[1,386,387,64],[1,386,387,65],[1,387,388,65],[1,388,389,64],[1,388,389,65],[1,389,390,65],[1,390,391,64],[1,390,391,65],[1,391,392,65],[1,392,393,64],[1,392,393,65],[1,393,394,65],[1,394,395,64],[1,394,395,65],[1,395,396,65],[1,396,397,64],[1,398,400,62],[1,420,424,62],[1,430,432,61],[1,432,433,61],[1,433,434,63],[1,434,435,61],[1,434,435,63],[1,435,436,63],[1,436,437,61],[1,436,437,63],[1,437,438,63],[1,438,439,61],[1,438,440,60],[1,440,441,60],[1,441,442,61],[1,442,443,60],[1,442,443,61],[1,443,444,61],[1,444,445,60],[1,444,445,61],[1,445,446,61],[1,446,447,60],[1,446,448,59],[1,448,449,59],[1,449,450,60],[1,450,451,59],[1,450,451,60],[1,451,452,60],[1,452,453,59],[1,452,453,60],[1,453,454,60],[1,454,455,59],[1,454,455,60],[1,455,456,60],[1,456,457,59],[1,456,457,60],[1,457,458,60],[1,458,459,59],[1,458,459,60],[1,459,460,60],[1,460,461,59],[1,460,462,57],[1,462,464,55],[1,478,480,65],[1,480,490,63],[1,490,492,62],[1,492,494,60],[1,494,496,62],[1,496,497,62],[1,497,498,63],[1,498,499,62],[1,498,499,63],[1,499,500,63],[1,500,501,62],[1,500,501,63],[1,501,502,63],[1,502,503,62],[1,502,503,63],[1,503,504,63],[1,504,505,62],[1,504,505,63],[1,505,506,63],[1,506,507,62],[1,506,507,63],[1,507,508,63],[1,508,509,62],[1,508,512,60],[1,522,524,59],[1,524,526,60],[1,526,528,62],[1,540,544,65],[1,554,556,63],[1,556,558,65],[1,558,560,67],[1,574,576,60],[1,586,588,55],[1,588,590,59],[1,590,592,62],[1,606,608,69],[1,609,610,67],[1,610,611,66],[1,610,611,67],[1,611,612,67],[1,612,613,66],[1,612,613,67],[1,613,614,67],[1,614,615,66],[1,614,615,67],[1,615,616,67],[1,616,617,66],[1,616,617,67],[1,617,618,67],[1,618,619,66],[1,618,619,67],[1,619,620,67],[1,620,621,66],[1,622,624,64],[1,638,640,67],[1,641,642,65],[1,642,643,64],[1,642,643,65],[1,643,644,65],[1,644,645,64],[1,644,645,65],[1,645,646,65],[1,646,647,64],[1,646,647,65],[1,647,648,65],[1,648,649,64],[1,648,649,65],[1,649,650,65],[1,650,651,64],[1,650,651,65],[1,651,652,65],[1,652,653,64],[1,654,656,62],[1,676,680,62],[1,686,688,61],[1,688,689,61],[1,689,690,63],[1,690,691,61],[1,690,691,63],[1,691,692,63],[1,692,693,61],[1,692,693,63],[1,693,694,63],[1,694,695,61],[1,694,696,60],[1,696,697,60],[1,697,698,61],[1,698,699,60],[1,698,699,61],[1,699,700,61],[1,700,701,60],[1,700,701,61],[1,701,702,61],[1,702,703,60],[1,702,704,59],[1,704,705,59],[1,705,706,60],[1,706,707,59],[1,706,707,60],[1,707,708,60],[1,708,709,59],[1,708,709,60],[1,709,710,60],[1,710,711,59],[1,710,711,60],[1,711,712,60],[1,712,713,59],[1,712,713,60],[1,713,714,60],[1,714,715,59],[1,714,715,60],[1,715,716,60],[1,716,717,59],[1,716,718,57],[1,718,720,55],[1,734,736,65],[1,736,746,63],[1,746,748,62],[1,748,750,60],[1,750,752,62],[1,752,753,62],[1,753,754,63],[1,754,755,62],[1,754,755,63],[1,755,756,63],[1,756,757,62],[1,756,757,63],[1,757,758,63],[1,758,759,62],[1,758,759,63],[1,759,760,63],[1,760,761,62],[1,760,761,63],[1,761,762,63],[1,762,763,62],[1,762,763,63],[1,763,764,63],[1,764,765,62],[1,764,768,60],[1,778,780,59],[1,780,782,60],[1,782,784,62],[1,796,800,65],[1,810,812,63],[1,812,814,65],[1,814,816,67],[1,830,832,60],[1,842,844,55],[1,844,846,59],[1,846,848,62],[1,862,864,69],[1,865,866,67],[1,866,867,66],[1,866,867,67],[1,867,868,67],[1,868,869,66],[1,868,869,67],[1,869,870,67],[1,870,871,66],[1,870,871,67],[1,871,872,67],[1,872,873,66],[1,872,873,67],[1,873,874,67],[1,874,875,66],[1,874,875,67],[1,875,876,67],[1,876,877,66],[1,878,880,64],[1,894,896,67],[1,897,898,65],[1,898,899,64],[1,898,899,65],[1,899,900,65],[1,900,901,64],[1,900,901,65],[1,901,902,65],[1,902,903,64],[1,902,903,65],[1,903,904,65],[1,904,905,64],[1,904,905,65],[1,905,906,65],[1,906,907,64],[1,906,907,65],[1,907,908,65],[1,908,909,64],[1,910,912,62],[1,932,936,62],[1,942,944,61],[1,944,945,61],[1,945,946,63],[1,946,947,61],[1,946,947,63],[1,947,948,63],[1,948,949,61],[1,948,949,63],[1,949,950,63],[1,950,951,61],[1,950,952,60],[1,952,953,60],[1,953,954,61],[1,954,955,60],[1,954,955,61],[1,955,956,61],[1,956,957,60],[1,956,957,61],[1,957,958,61],[1,958,959,60],[1,958,960,59],[1,960,961,59],[1,961,962,60],[1,962,963,59],[1,962,963,60],[1,963,964,60],[1,964,965,59],[1,964,965,60],[1,965,966,60],[1,966,967,59],[1,966,967,60],[1,967,968,60],[1,968,969,59],[1,968,969,60],[1,969,970,60],[1,970,971,59],[1,970,971,60],[1,971,972,60],[1,972,973,59],[1,972,974,57],[1,974,976,55],[1,990,992,65],[1,992,1002,63],[1,1002,1004,62],[1,1004,1006,60],[1,1006,1008,62],[1,1008,1009,62],[1,1009,1010,63],[1,1010,1011,62],[1,1010,1011,63],[1,1011,1012,63],[1,1012,1013,62],[1,1012,1013,63],[1,1013,1014,63],[1,1014,1015,62],[1,1014,1015,63],[1,1015,1016,63],[1,1016,1017,62],[1,1016,1017,63],[1,1017,1018,63],[1,1018,1019,62],[1,1018,1019,63],[1,1019,1020,63],[1,1020,1021,62],[1,1020,1024,60],[1,1034,1036,59],[1,1036,1038,60],[1,1038,1040,62],[1,1052,1056,65],[1,1066,1068,63],[1,1068,1070,65],[1,1070,1072,67],[1,1086,1088,60],[1,1098,1100,55],[1,1100,1102,59],[1,1102,1104,62],[1,1118,1120,69],[1,1121,1122,67],[1,1122,1123,66],[1,1122,1123,67],[1,1123,1124,67],[1,1124,1125,66],[1,1124,1125,67],[1,1125,1126,67],[1,1126,1127,66],[1,1126,1127,67],[1,1127,1128,67],[1,1128,1129,66],[1,1128,1129,67],[1,1129,1130,67],[1,1130,1131,66],[1,1130,1131,67],[1,1131,1132,67],[1,1132,1133,66],[1,1134,1136,64],[1,1150,1152,67],[2,20,22,67],[2,22,24,65],[2,24,36,63],[2,36,40,62],[2,40,63,60],[2,66,68,62],[2,68,70,63],[2,70,72,65],[2,72,83,67],[2,84,88,69],[2,88,100,71],[2,100,104,72],[2,104,114,74],[2,114,116,79],[2,116,118,77],[2,118,120,75],[2,120,132,74],[2,132,136,71],[2,136,151,72],[2,180,184,64],[2,184,196,65],[2,196,200,67],[2,200,211,65],[2,212,216,70],[2,216,228,68],[2,228,232,67],[2,232,243,68],[2,244,248,72],[2,248,260,70],[2,260,264,68],[2,264,275,67],[2,276,280,72],[2,280,292,67],[2,292,296,69],[2,296,307,71],[2,308,312,75],[2,312,324,71],[2,324,328,72],[2,328,351,74],[2,354,356,72],[2,356,358,74],[2,358,360,75],[2,360,371,74],[2,372,374,72],[2,374,376,71],[2,376,388,77],[2,388,390,76],[2,390,392,74],[2,392,417,72],[2,417,418,70],[2,418,419,68],[2,419,420,67],[2,420,421,65],[2,421,422,63],[2,422,423,62],[2,423,424,60],[2,424,434,59],[2,434,436,60],[2,436,438,62],[2,438,440,63],[2,440,452,62],[2,452,456,68],[2,456,466,67],[2,466,468,79],[2,468,470,77],[2,470,472,75],[2,472,491,74],[2,492,496,77],[2,496,500,75],[2,500,504,74],[2,504,508,72],[2,508,512,71],[2,512,516,72],[2,516,520,74],[2,520,531,75],[2,532,534,67],[2,534,536,65],[2,536,548,63],[2,548,552,62],[2,552,575,60],[2,578,580,62],[2,580,582,63],[2,582,584,65],[2,584,595,67],[2,596,600,69],[2,600,612,71],[2,612,616,72],[2,616,626,74],[2,626,628,79],[2,628,630,77],[2,630,632,75],[2,632,644,74],[2,644,648,71],[2,648,663,72],[2,692,696,64],[2,696,708,65],[2,708,712,67],[2,712,723,65],[2,724,728,70],[2,728,740,68],[2,740,744,67],[2,744,755,68],[2,756,760,72],[2,760,772,70],[2,772,776,68],[2,776,787,67],[2,788,792,72],[2,792,804,67],[2,804,808,69],[2,808,819,71],[2,820,824,75],[2,824,836,71],[2,836,840,72],[2,840,863,74],[2,866,868,72],[2,868,870,74],[2,870,872,75],[2,872,883,74],[2,884,886,72],[2,886,888,71],[2,888,900,77],[2,900,902,76],[2,902,904,74],[2,904,929,72],[2,929,930,70],[2,930,931,68],[2,931,932,67],[2,932,933,65],[2,933,934,63],[2,934,935,62],[2,935,936,60],[2,936,946,59],[2,946,948,60],[2,948,950,62],[2,950,952,63],[2,952,964,62],[2,964,968,68],[2,968,978,67],[2,978,980,79],[2,980,982,77],[2,982,984,75],[2,984,1003,74],[2,1004,1008,77],[2,1008,1012,75],[2,1012,1016,74],[2,1016,1020,72],[2,1020,1024,71],[2,1024,1028,72],[2,1028,1032,74],[2,1032,1043,75],[2,1044,1046,67],[2,1046,1048,65],[2,1048,1060,63],[2,1060,1064,62],[2,1064,1087,60],[2,1090,1092,62],[2,1092,1094,63],[2,1094,1096,65],[2,1096,1107,67],[2,1108,1112,69],[2,1112,1124,71],[2,1124,1128,72],[2,1128,1138,74],[2,1138,1140,79],[2,1140,1142,77],[2,1142,1144,75],[2,1144,1156,74],[2,1156,1160,71],[2,1160,1175,72],[3,6,7,60],[3,7,8,62],[3,8,14,63],[3,14,16,65],[3,16,27,67],[3,29,30,65],[3,30,31,63],[3,31,32,62],[3,32,38,60],[3,38,40,58],[3,40,46,56],[3,46,48,55],[3,48,53,53],[3,53,54,48],[3,54,55,50],[3,55,56,52],[3,56,62,53],[3,62,64,56],[3,64,72,55],[3,86,88,63],[3,88,94,62],[3,94,96,60],[3,96,102,62],[3,102,104,57],[3,104,110,59],[3,110,112,60],[3,112,118,59],[3,118,120,55],[3,120,126,57],[3,126,128,59],[3,128,134,60],[3,134,136,55],[3,136,142,60],[3,142,144,58],[3,144,150,56],[3,150,152,51],[3,152,158,56],[3,158,160,55],[3,160,171,53],[3,173,174,55],[3,174,175,53],[3,175,176,52],[3,176,182,53],[3,182,183,55],[3,183,184,56],[3,184,190,50],[3,190,191,51],[3,191,192,53],[3,192,204,55],[3,204,205,57],[3,205,206,59],[3,206,207,60],[3,206,207,62],[3,206,207,63],[3,207,208,65],[3,208,209,67],[3,208,213,68],[3,213,214,67],[3,214,215,65],[3,215,216,64],[3,216,222,65],[3,222,224,59],[3,224,229,60],[3,229,230,48],[3,230,231,50],[3,231,232,51],[3,232,242,53],[3,242,244,50],[3,244,246,51],[3,246,248,53],[3,248,250,55],[3,250,252,56],[3,252,254,55],[3,254,256,53],[3,256,262,51],[3,262,263,60],[3,263,264,62],[3,264,270,63],[3,270,272,65],[3,272,283,67],[3,285,286,65],[3,286,287,63],[3,287,288,62],[3,288,294,60],[3,294,296,58],[3,296,302,56],[3,302,304,55],[3,304,309,53],[3,309,310,48],[3,310,311,50],[3,311,312,52],[3,312,318,53],[3,318,320,56],[3,320,328,55],[3,342,344,63],[3,344,350,62],[3,350,352,60],[3,352,358,62],[3,358,360,57],[3,360,366,59],[3,366,368,60],[3,368,374,59],[3,374,376,55],[3,376,382,57],[3,382,384,59],[3,384,390,60],[3,390,392,55],[3,392,398,60],[3,398,400,58],[3,400,406,56],[3,406,408,51],[3,408,414,56],[3,414,416,55],[3,416,427,53],[3,429,430,55],[3,430,431,53],[3,431,432,52],[3,432,438,53],[3,438,439,55],[3,439,440,56],[3,440,446,50],[3,446,447,51],[3,447,448,53],[3,448,460,55],[3,460,461,57],[3,461,462,59],[3,462,463,60],[3,462,463,62],[3,462,463,63],[3,463,464,65],[3,464,465,67],[3,464,469,68],[3,469,470,67],[3,470,471,65],[3,471,472,64],[3,472,478,65],[3,478,480,59],[3,480,485,60],[3,485,486,48],[3,486,487,50],[3,487,488,51],[3,488,498,53],[3,498,500,50],[3,500,502,51],[3,502,504,53],[3,504,506,55],[3,506,508,56],[3,508,510,55],[3,510,512,53],[3,512,518,51],[3,518,519,60],[3,519,520,62],[3,520,526,63],[3,526,528,65],[3,528,539,67],[3,541,542,65],[3,542,543,63],[3,543,544,62],[3,544,550,60],[3,550,552,58],[3,552,558,56],[3,558,560,55],[3,560,565,53],[3,565,566,48],[3,566,567,50],[3,567,568,52],[3,568,574,53],[3,574,576,56],[3,576,584,55],[3,598,600,63],[3,600,606,62],[3,606,608,60],[3,608,614,62],[3,614,616,57],[3,616,622,59],[3,622,624,60],[3,624,630,59],[3,630,632,55],[3,632,638,57],[3,638,640,59],[3,640,646,60],[3,646,648,55],[3,648,654,60],[3,654,656,58],[3,656,662,56],[3,662,664,51],[3,664,670,56],[3,670,672,55],[3,672,683,53],[3,685,686,55],[3,686,687,53],[3,687,688,52],[3,688,694,53],[3,694,695,55],[3,695,696,56],[3,696,702,50],[3,702,703,51],[3,703,704,53],[3,704,716,55],[3,716,717,57],[3,717,718,59],[3,718,719,60],[3,718,719,62],[3,718,719,63],[3,719,720,65],[3,720,721,67],[3,720,725,68],[3,725,726,67],[3,726,727,65],[3,727,728,64],[3,728,734,65],[3,734,736,59],[3,736,741,60],[3,741,742,48],[3,742,743,50],[3,743,744,51],[3,744,754,53],[3,754,756,50],[3,756,758,51],[3,758,760,53],[3,760,762,55],[3,762,764,56],[3,764,766,55],[3,766,768,53],[3,768,774,51],[3,774,775,60],[3,775,776,62],[3,776,782,63],[3,782,784,65],[3,784,795,67],[3,797,798,65],[3,798,799,63],[3,799,800,62],[3,800,806,60],[3,806,808,58],[3,808,814,56],[3,814,816,55],[3,816,821,53],[3,821,822,48],[3,822,823,50],[3,823,824,52],[3,824,830,53],[3,830,832,56],[3,832,840,55],[3,854,856,63],[3,856,862,62],[3,862,864,60],[3,864,870,62],[3,870,872,57],[3,872,878,59],[3,878,880,60],[3,880,886,59],[3,886,888,55],[3,888,894,57],[3,894,896,59],[3,896,902,60],[3,902,904,55],[3,904,910,60],[3,910,912,58],[3,912,918,56],[3,918,920,51],[3,920,926,56],[3,926,928,55],[3,928,939,53],[3,941,942,55],[3,942,943,53],[3,943,944,52],[3,944,950,53],[3,950,951,55],[3,951,952,56],[3,952,958,50],[3,958,959,51],[3,959,960,53],[3,960,972,55],[3,972,973,57],[3,973,974,59],[3,974,975,60],[3,974,975,62],[3,974,975,63],[3,975,976,65],[3,976,977,67],[3,976,981,68],[3,981,982,67],[3,982,983,65],[3,983,984,64],[3,984,990,65],[3,990,992,59],[3,992,997,60],[3,997,998,48],[3,998,999,50],[3,999,1000,51],[3,1000,1010,53],[3,1010,1012,50],[3,1012,1014,51],[3,1014,1016,53],[3,1016,1018,55],[3,1018,1020,56],[3,1020,1022,55],[3,1022,1024,53],[3,1024,1030,51],[3,1030,1031,60],[3,1031,1032,62],[3,1032,1038,63],[3,1038,1040,65],[3,1040,1051,67],[3,1053,1054,65],[3,1054,1055,63],[3,1055,1056,62],[3,1056,1062,60],[3,1062,1064,58],[3,1064,1070,56],[3,1070,1072,55],[3,1072,1077,53],[3,1077,1078,48],[3,1078,1079,50],[3,1079,1080,52],[3,1080,1086,53],[3,1086,1088,56],[3,1088,1096,55],[3,1110,1112,63],[3,1112,1118,62],[3,1118,1120,60],[3,1120,1126,62],[3,1126,1128,57],[3,1128,1134,59],[3,1134,1136,60],[3,1136,1142,59],[3,1142,1144,55],[3,1144,1150,57],[3,1150,1152,59],[3,1152,1175,60]];
+
+// === musical / temporal constants ===
+// 1175 32nd-steps ≈ 36.7 bars of 4/4. BPM=100 lands DUR ≈ 88.1s. The slower
+// tempo also keeps each 32nd-note ornament audible — at the original 132 BPM
+// the trills compress into ~57 ms per step and lose articulation against the
+// long augmented-violin sustains.
+//
+// MIRROR_AXIS=63.5 is between D♯4(63) and E4(64); cello and violin pitches
+// summing to 127 reflect exactly across this y=0 plane.
+const TOT_STEPS=1175, BPM=100;
+const TPS=60/BPM/8;            // seconds per 32nd-step (note: 8, not 4 — 32nd grid)
+const DUR=TOT_STEPS*TPS;
+const MIRROR_AXIS=63.5;
+
+// === HDRI selection ===
+const HDRI_FILE='../textures/museum_of_ethnography_2k.hdr';
+
+// === geometry constants ===
+// Same 12×6 footprint as per_motum / crab. Four z-layers:
+//   viola skeleton (deep gold)  — forward, in front of the canon pair
+//   viola ornament (sage green) — just behind the skeleton, the "dressing"
+//   violin (terracotta)         — just above the y=0 mirror plane
+//   cello  (teal)               — just below the y=0 mirror plane (statement 1)
+//                                 statement 2 sits a touch deeper (Z_CELLO_2)
+// Mirror axis is the y=0 plane.
+const X_RANGE=10;
+const PITCH_SCALE=0.13;        // 16 st max distance from axis → ±2.08 world units
+const SWU=X_RANGE/TOT_STEPS;   // step world unit — for converting (e-s) into world-x bar length
+const Z_VIOLA_SK = 0.65;
+const Z_VIOLA_OR = 0.55;
+const Z_VIOLIN   = 0.05;
+const Z_CELLO    = -0.05;
+const Z_CELLO_2  = -0.18;      // cello's wrapped second pass — slightly deeper
+
+// === Augmentation mirror encoding ===
+// The canon's law: violin_step = 2 × cello_step + 8 (offset 8 = violin's
+// entry delay relative to cello). Equivalently cello_step = (violin_step - 8) / 2.
+// To make the mirror VISUALLY immediate, we plot cello with x compressed 2×
+// (so cello's "thematic position" runs at violin's clock speed, not cello's
+// MIDI clock). With shared y mapping y = (p - 63.5)·scale, mirror partners
+// then sit at the SAME x with OPPOSITE y, and the two ribbons are literal
+// reflections across y=0.
+// Cello plays through ~2× in one wall-clock pass, so its x wraps around
+// the box at TOT_STEPS — second pass ("statement 2") is rendered at z =
+// Z_CELLO_2, slightly behind statement 1. The first cello note lands on
+// the same visual x as the first violin note.
+const CELLO_X_COMPRESSION = 2;
+const CELLO_X_OFFSET      = 8;
+
+function pitchY(p){ return (p-MIRROR_AXIS)*PITCH_SCALE; }
+function stepX(s){ return (s/TOT_STEPS - 0.5)*X_RANGE; }
+
+// Cello visual-step (after compression + wrap). Returns {vs, pass} — vs is
+// the wrapped step in [0, TOT_STEPS), pass ∈ {0, 1, 2} indicates which sweep.
+function celloVS(s){
+  const raw = CELLO_X_COMPRESSION * s + CELLO_X_OFFSET;
+  return { vs: raw - Math.floor(raw / TOT_STEPS) * TOT_STEPS, pass: Math.floor(raw / TOT_STEPS) };
+}
+
+// pos3D — used for ribbon control points and (sphere) note positions.
+// For cello bar centers we compute x directly in makeDot from start+end so
+// the bar centers correctly.
+function pos3D(s, p, voice){
+  let x, z;
+  if(voice===3){
+    const { vs, pass } = celloVS(s);
+    x = stepX(vs);
+    z = (pass >= 1) ? Z_CELLO_2 : Z_CELLO;
+  } else {
+    x = stepX(s);
+    z = voice===0 ? Z_VIOLA_SK
+      : voice===1 ? Z_VIOLA_OR
+      : Z_VIOLIN;
+  }
+  return new THREE.Vector3(x, pitchY(p), z);
+}
+
+// === Three.js scene setup ===
+const stage=document.getElementById('stage');
+const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+const bgColor=isDark?0x1a1a1a:0xd6cbb1;
+
+// Cross-demo unified palette — values copied verbatim from per_motum so all
+// three vitrines read as one museum collection under either mode.
+const D_O   = isDark ? 0.18 : 0.70;
+const D_E   = isDark ? 0.22 : 0.32;
+const D_S_F = isDark ? 0.85 : 0.90;
+const O_O   = isDark ? 0.68 : 1.00;
+const O_E   = isDark ? 0.45 : 0.70;
+const ENV_MUL        = isDark ? 1.30 : 0.50;
+const LIGHT_MUL      = isDark ? 1.20 : 0.75;
+const EXPOSURE       = isDark ? 1.15 : 1.05;
+const BLOOM_STRENGTH = isDark ? 0.42 : 0.42;
+const BLOOM_THRESHOLD= isDark ? 1.00 : 0.92;
+const P_E_MUL        = isDark ? 1.0 : 3.2;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(bgColor);
+scene.fog=new THREE.Fog(bgColor, 16, 32);
+
+const camera=new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=EXPOSURE;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement);
+
+// === environment map ===
+const pmrem=new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+{
+  scene.environment=pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+}
+const rgbeLoader=new RGBELoader();
+rgbeLoader.load(HDRI_FILE, (hdrTex)=>{
+  hdrTex.mapping=THREE.EquirectangularReflectionMapping;
+  const envRT=pmrem.fromEquirectangular(hdrTex);
+  if(scene.environment) scene.environment.dispose();
+  scene.environment=envRT.texture;
+  hdrTex.dispose();
+});
+
+// === wood textures (PBR) ===
+const texLoader=new THREE.TextureLoader();
+const woodDiff =texLoader.load('../textures/wood_table_001_diff_2k.jpg');
+const woodNorm =texLoader.load('../textures/wood_table_001_nor_gl_2k.jpg');
+const woodRough=texLoader.load('../textures/wood_table_001_rough_2k.jpg');
+woodDiff.colorSpace=THREE.SRGBColorSpace;
+for(const t of [woodDiff, woodNorm, woodRough]){
+  t.wrapS=THREE.RepeatWrapping;
+  t.wrapT=THREE.RepeatWrapping;
+}
+
+// postprocessing — soft bloom on emissive notes during play
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass=new UnrealBloomPass(new THREE.Vector2(2,2), BLOOM_STRENGTH, 0.75, BLOOM_THRESHOLD);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
+function resize(){
+  const w=stage.clientWidth, h=stage.clientHeight;
+  renderer.setSize(w, h, false);
+  composer.setSize(w, h);
+  bloomPass.setSize(w, h);
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+}
+resize();
+new ResizeObserver(resize).observe(stage);
+
+// === three-point lighting + hemisphere fill ===
+scene.add(new THREE.HemisphereLight(
+  isDark?0x99aabb:0xc8d4e6,
+  isDark?0x332211:0x6b5840,
+  0.15 * LIGHT_MUL
+));
+const keyL=new THREE.DirectionalLight(0xfff2dd, 0.70 * LIGHT_MUL);
+keyL.position.set(-7, 9, -5);
+keyL.target.position.set(0, 0, 0);
+scene.add(keyL.target);
+keyL.castShadow=true;
+keyL.shadow.mapSize.width=2048;
+keyL.shadow.mapSize.height=2048;
+keyL.shadow.camera.left=-14;
+keyL.shadow.camera.right=14;
+keyL.shadow.camera.top=12;
+keyL.shadow.camera.bottom=-12;
+keyL.shadow.camera.near=0.5;
+keyL.shadow.camera.far=40;
+keyL.shadow.camera.updateProjectionMatrix();
+keyL.shadow.bias=-0.0005;
+keyL.shadow.normalBias=0.02;
+scene.add(keyL);
+
+const fillL=new THREE.DirectionalLight(0x88aaff, 0.10 * LIGHT_MUL);
+fillL.position.set(-5, -1, -3);
+scene.add(fillL);
+const rimL=new THREE.DirectionalLight(0xffaa55, 0.15 * LIGHT_MUL);
+rimL.position.set(0, 4, -8);
+scene.add(rimL);
+
+const caseSpot=new THREE.PointLight(0xfff2dd, 0.20 * LIGHT_MUL, 30, 1.4);
+caseSpot.position.set(0, 4, 4);
+scene.add(caseSpot);
+
+// === orbit controls + view presets ===
+const controls=new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 0);
+controls.enableDamping=true;
+controls.dampingFactor=0.08;
+controls.minDistance=8;
+controls.maxDistance=24;
+controls.minPolarAngle=0.2;
+controls.maxPolarAngle=Math.PI*0.55;
+
+function setView(name){
+  if(name==='3q'){ camera.position.set(11, 5, 13); }
+  else if(name==='top'){ camera.position.set(0.01, 16, 0.01); }
+  else if(name==='front'){ camera.position.set(0, 2.5, 14); }
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
+setView('3q');
+document.querySelectorAll('[data-view]').forEach(b=>{
+  b.addEventListener('click',()=>setView(b.dataset.view));
+});
+
+// === voice styling
+// 0 Viola Skeleton — deep gold, sphere (anchor)
+// 1 Viola Ornament — sage green (the user-requested green), sphere (filigree)
+//                    sage was chosen against gold for clear "decoration vs structure"
+//                    reading; the cool warm-grey-green sits well next to brass + walnut
+//                    without competing with cello's blue-green teal.
+// 2 Violin — terracotta, BAR (horizontal dash); bar length = (e-s)·SWU.
+//                    Violin is the augmented voice — its long sustains read as
+//                    long bars, signalling "held / slow" against the cello dux.
+// 3 Cello  — teal, sphere (compressed x). Cello plays the fast dux at 32nd
+//                    rate; spheres preserve "discrete event" feel and let the
+//                    cello's quickness contrast against violin's long dashes.
+//                    Cello's x is compressed 2× so each cello sphere lands
+//                    directly under its augmented violin partner — the mirror
+//                    pair reads as "long dash above / single dot below" at
+//                    the same x and opposite y.
+const VS=[
+  {color:0xc9a55c, emissive:0x4d2e0a, baseR:0.080, metalness:0.62, roughness:0.28, env:0.70, pE:1.40},
+  {color:0x9fb392, emissive:0x2a3a25, baseR:0.030, metalness:0.20, roughness:0.55, env:0.50, pE:1.10},
+  {color:0xB86348, emissive:0x4a1c0a, baseR:0.045, metalness:0.20, roughness:0.40, env:0.55, pE:1.55},
+  {color:0x3F8788, emissive:0x0E3537, baseR:0.034, metalness:0.22, roughness:0.42, env:0.55, pE:1.45}
+];
+// Per-voice shape: viola (0,1) → spheres; violin (2) → bars (long dashes); cello (3) → spheres.
+const SHAPES=['sphere','sphere','bar','sphere'];
+const sphereGeoms=VS.map((v,i)=> SHAPES[i]==='sphere' ? new THREE.SphereGeometry(v.baseR, 14, 12) : null);
+
+// === ribbon construction ===
+// voice 0: skeleton ribbon — through the 12-per-cycle King's theme cores; smooth golden spine
+// voice 1: ornament ribbon — through ALL viola notes in time order
+// voice 2: violin ribbon — through violin notes at natural x
+// voice 3: cello ribbon — split at wrap boundaries so the curve doesn't
+//          back-jump across the box on every wrap
+const violaAll=N.filter(n=>n[0]===0||n[0]===1).slice().sort((a,b)=>a[1]-b[1]);
+
+function ribbonMat(voice){
+  return new THREE.MeshBasicMaterial({
+    color:VS[voice].color,
+    transparent:true,
+    opacity: voice===1 ? (isDark?0.22:0.50)
+           : voice===3 ? (isDark?0.28:0.62)        // cello ribbon a touch faded — bars carry the data
+                       : (isDark?0.32:0.74)
+  });
+}
+function ribbonRadius(voice){
+  return voice===0 ? (isDark?0.026:0.038)
+       : voice===1 ? (isDark?0.008:0.012)
+       : voice===2 ? (isDark?0.012:0.018)        // ribbons subtler now that bars carry the data
+                   : (isDark?0.008:0.012);
+}
+function buildTube(points, voice){
+  if(points.length<2) return null;
+  const curve=new THREE.CatmullRomCurve3(points);
+  const tubeGeom=new THREE.TubeGeometry(curve, Math.min(points.length*4, 800), ribbonRadius(voice), 6, false);
+  const mesh=new THREE.Mesh(tubeGeom, ribbonMat(voice));
+  mesh.castShadow=true;
+  scene.add(mesh);
+  return mesh;
+}
+function buildPath(notes, voice){
+  if(voice===3){
+    // Cello: bucket into passes (statement 1 / 2) so each ribbon is monotonic in x
+    const buckets={};
+    for(const [_,s,e,p] of notes){
+      const { vs, pass } = celloVS(s);
+      const k = Math.min(pass, 1);   // collapse pass≥1 onto statement 2
+      (buckets[k] ||= []).push(new THREE.Vector3(stepX(vs), pitchY(p), k>=1 ? Z_CELLO_2 : Z_CELLO));
+    }
+    // sort each bucket by x so the spline is a clean left-to-right contour
+    for(const k in buckets) buckets[k].sort((a,b)=>a.x-b.x);
+    return Object.values(buckets).map(pts => buildTube(pts, voice)).filter(Boolean);
+  }
+  return buildTube(notes.map(([_,s,e,p])=>pos3D(s, p, voice)), voice);
+}
+
+// voiceRibbons[v] is either a single Mesh or an array of Meshes (cello).
+const voiceRibbons=[
+  buildPath(N.filter(n=>n[0]===0), 0),
+  buildPath(violaAll, 1),
+  buildPath(N.filter(n=>n[0]===2), 2),
+  buildPath(N.filter(n=>n[0]===3), 3),
+];
+
+// =====================================================================
+// === VITRINE SHELL ===================================================
+// =====================================================================
+
+const brassMat=new THREE.MeshStandardMaterial({
+  color:0xc9a060,
+  metalness:0.92,
+  roughness:0.32,
+  envMapIntensity:1.2 * (isDark?1.0:0.7)
+});
+
+// 1. wood base (PBR walnut)
+const baseMat=new THREE.MeshStandardMaterial({
+  map:woodDiff,
+  normalMap:woodNorm,
+  roughnessMap:woodRough,
+  metalness:0.0,
+  roughness:1.0,
+  normalScale:new THREE.Vector2(1.0, 1.0),
+  envMapIntensity:0.5 * (isDark?1.0:0.4)
+});
+const baseGeom=new RoundedBoxGeometry(12, 0.6, 6, 4, 0.06);
+const base=new THREE.Mesh(baseGeom, baseMat);
+base.position.set(0, -3.0, 0);
+base.receiveShadow=true;
+scene.add(base);
+const inlayGeom=new RoundedBoxGeometry(12.05, 0.05, 6.05, 4, 0.06);
+const inlay=new THREE.Mesh(inlayGeom, brassMat);
+inlay.position.set(0, -2.735, 0);
+inlay.castShadow=true;
+scene.add(inlay);
+
+// 2. four brass pillars + 8 horizontal frame rails
+{
+  const pillarGeom=new THREE.CylinderGeometry(0.05, 0.05, 5.4, 16);
+  const corners=[[ 5.8, 0,  2.8],[-5.8, 0,  2.8],[ 5.8, 0, -2.8],[-5.8, 0, -2.8]];
+  for(const [x,y,z] of corners){
+    const p=new THREE.Mesh(pillarGeom, brassMat);
+    p.position.set(x, y, z);
+    p.castShadow=true;
+    scene.add(p);
+  }
+  const railX=new THREE.BoxGeometry(11.6, 0.04, 0.04);
+  const railZ=new THREE.BoxGeometry(0.04, 0.04, 5.6);
+  const rails=[
+    [railX, 0,  2.7,  2.8],
+    [railX, 0,  2.7, -2.8],
+    [railZ,  5.8,  2.7, 0],
+    [railZ, -5.8,  2.7, 0],
+    [railX, 0, -2.7,  2.8],
+    [railX, 0, -2.7, -2.8],
+    [railZ,  5.8, -2.7, 0],
+    [railZ, -5.8, -2.7, 0],
+  ];
+  for(const [geom, x, y, z] of rails){
+    const r=new THREE.Mesh(geom, brassMat);
+    r.position.set(x, y, z);
+    r.castShadow=true;
+    scene.add(r);
+  }
+}
+
+// 3. glass case (top + 4 sides)
+{
+  const glassMat=new THREE.MeshPhysicalMaterial({
+    color:0xffffff,
+    metalness:0,
+    roughness:0.08,
+    ior:1.5,
+    clearcoat:0.6,
+    clearcoatRoughness:0.08,
+    transparent:true,
+    opacity:0.06,
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.0
+  });
+  const top=new THREE.Mesh(new THREE.BoxGeometry(11.6, 0.08, 5.6), glassMat);
+  top.position.set(0, 2.7, 0);
+  scene.add(top);
+  const fbGeom=new THREE.PlaneGeometry(11.6, 5.4);
+  const front=new THREE.Mesh(fbGeom, glassMat);
+  front.position.set(0, 0, 2.8);
+  scene.add(front);
+  const back=new THREE.Mesh(fbGeom, glassMat);
+  back.position.set(0, 0, -2.8);
+  back.rotation.y=Math.PI;
+  scene.add(back);
+  const lrGeom=new THREE.PlaneGeometry(5.6, 5.4);
+  const left=new THREE.Mesh(lrGeom, glassMat);
+  left.position.set(-5.8, 0, 0);
+  left.rotation.y=Math.PI/2;
+  scene.add(left);
+  const right=new THREE.Mesh(lrGeom, glassMat);
+  right.position.set(5.8, 0, 0);
+  right.rotation.y=-Math.PI/2;
+  scene.add(right);
+}
+
+// =====================================================================
+// === MIRROR PLANE — the piece-specific structural element ===========
+// =====================================================================
+// Single near-invisible glass plane at y=0 spanning the full case interior.
+// This is the literal D♯/E mirror axis: violin and cello pitches summing to
+// 127 reflect exactly across this plane. Unlike per_motum there is NO
+// rule-break region: the mirror law holds throughout the canon.
+//
+// Material recipe carried verbatim from per_motum's pristine half — clearcoat
+// catches the HDRI like polished water; opacity low enough that the panel
+// is essentially invisible from straight on, and reveals itself only at
+// grazing angles or under direct HDRI specular.
+{
+  const PLATE_W = 11.6;
+  const PLATE_D = 5.4;
+  const pristineMat=new THREE.MeshPhysicalMaterial({
+    color:0xfff2cc,
+    metalness:0.0,
+    roughness:0.06,
+    ior:1.5,
+    clearcoat:0.9,
+    clearcoatRoughness:0.06,
+    transparent:true,
+    opacity:0.04,
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.4 * (isDark?1.0:0.85)
+  });
+  const pristine=new THREE.Mesh(new THREE.PlaneGeometry(PLATE_W, PLATE_D), pristineMat);
+  pristine.rotation.x=-Math.PI/2;
+  pristine.position.set(0, 0, 0);
+  pristine.castShadow=false;
+  pristine.receiveShadow=false;
+  scene.add(pristine);
+
+  // Hairline brass perimeter — same recipe as per_motum: with the plate
+  // itself nearly invisible, this thin frame is what tells the viewer there
+  // IS a structural plane at y=0. Same 0.04×0.04 cross-section as the top/
+  // bottom vitrine rails — reads as "this case has a third moulding,
+  // halfway up".
+  const rimRailX=new THREE.BoxGeometry(PLATE_W, 0.04, 0.04);
+  const rimRailZ=new THREE.BoxGeometry(0.04, 0.04, PLATE_D);
+  const rims=[
+    [rimRailX, 0, 0,  PLATE_D/2],
+    [rimRailX, 0, 0, -PLATE_D/2],
+    [rimRailZ,  PLATE_W/2, 0, 0],
+    [rimRailZ, -PLATE_W/2, 0, 0],
+  ];
+  for(const [geom, x, y, z] of rims){
+    const r=new THREE.Mesh(geom, brassMat);
+    r.position.set(x, y, z);
+    r.castShadow=true;
+    scene.add(r);
+  }
+}
+
+// 4. brass nameplate, engraved via CanvasTexture
+{
+  function makeNameplateTexture(){
+    const W=1200, H=200;
+    const cv=document.createElement('canvas');
+    cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const grad=ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,    '#d8a64a');
+    grad.addColorStop(0.45, '#b8862f');
+    grad.addColorStop(1,    '#8a5f1d');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,H);
+    ctx.globalAlpha=0.05;
+    for(let y=0;y<H;y+=2){
+      ctx.fillStyle = (y%4===0)?'#000':'#fff';
+      ctx.fillRect(0,y,W,1);
+    }
+    ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(60,38,16,0.45)';
+    ctx.lineWidth=2;
+    ctx.strokeRect(14,14,W-28,H-28);
+    ctx.strokeStyle='rgba(255,232,175,0.35)';
+    ctx.lineWidth=1;
+    ctx.strokeRect(15,15,W-30,H-30);
+
+    const SERIF='"Baskerville","Bodoni 72","Didot","Hoefler Text","Garamond","Times New Roman",serif';
+    const SERIF_IT='italic '+SERIF;
+    const PAD=80;
+    const MAX=W - PAD*2;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+
+    const line1='JOHANN SEBASTIAN BACH';
+    let f1=72;
+    ctx.font=`500 ${f1}px ${SERIF}`;
+    while(ctx.measureText(line1).width>MAX && f1>20){ f1-=2; ctx.font=`500 ${f1}px ${SERIF}`; }
+
+    const line2='Canon a 2 per Augmentationem, contrario Motu   ·   BWV 1079';
+    let f2=40;
+    ctx.font=`${f2}px ${SERIF_IT}`;
+    while(ctx.measureText(line2).width>MAX && f2>14){ f2-=2; ctx.font=`${f2}px ${SERIF_IT}`; }
+
+    function engraved(text, font, x, y, mainColor){
+      ctx.font=font;
+      ctx.fillStyle='rgba(28, 16, 6, 0.85)';
+      ctx.fillText(text, x + 1.2, y + 1.2);
+      ctx.fillStyle='rgba(255, 232, 175, 0.55)';
+      ctx.fillText(text, x - 1.0, y - 1.0);
+      ctx.fillStyle=mainColor;
+      ctx.fillText(text, x, y);
+    }
+    engraved(line1, `500 ${f1}px ${SERIF}`,    W/2, H*0.40, '#3a230d');
+    engraved(line2, `${f2}px ${SERIF_IT}`,     W/2, H*0.72, '#3a230d');
+
+    const tex=new THREE.CanvasTexture(cv);
+    tex.anisotropy=8;
+    tex.colorSpace=THREE.SRGBColorSpace;
+    return tex;
+  }
+  const engravedTex=makeNameplateTexture();
+  const engravedFace=new THREE.MeshStandardMaterial({
+    map:engravedTex,
+    color:0xffffff,
+    metalness:0.7,
+    roughness:0.38,
+    envMapIntensity:1.0 * (isDark?1.0:0.6)
+  });
+  const plateMats=[brassMat, brassMat, engravedFace, brassMat, brassMat, brassMat];
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.04, 0.4), plateMats);
+  plate.position.set(0, -2.68, 2.85);
+  plate.castShadow=true;
+  scene.add(plate);
+}
+
+// === Engraved emblem — Escher "Day and Night" tessellated birds ======
+// Same engraving used by canon_per_motum_contrarium so the Vitrine series
+// reads as one collection. Two opposing flocks of stylized birds tessellate
+// into a single rhombus — a graphic counterpart to mirror-canon writing.
+// We sample the reference PNG (assets/pic/day-and-night.png) per-pixel:
+// pixels darker than L=95 become recessed silhouettes (black bird bodies +
+// outlines around the white birds), reproducing the tessellation in a
+// single engraving pass.
+//
+// If getImageData throws (canvas tainted under file:// origin), we fall
+// back to drawing the whole PNG as a single stamp; serve via a local HTTP
+// server (`python3 -m http.server` from the project root) for the proper
+// thresholded result.
+{
+  function makeOverlayTexture(){
+    const W=1024, H=768;
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const tex=new THREE.CanvasTexture(cv);
+    tex.colorSpace=THREE.SRGBColorSpace;
+    tex.anisotropy=16;
+
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>{
+      const work=document.createElement('canvas');
+      work.width=W; work.height=H;
+      const wctx=work.getContext('2d');
+      wctx.imageSmoothingEnabled=true;
+      wctx.imageSmoothingQuality='high';
+      wctx.save();
+      wctx.translate(0, H);
+      wctx.scale(1, -1);
+      const imgAR=img.width/img.height, cvAR=W/H;
+      let dw, dh;
+      if(imgAR > cvAR){ dw=W*0.94; dh=dw/imgAR; }
+      else            { dh=H*0.94; dw=dh*imgAR; }
+      const dx=(W-dw)/2, dy=(H-dh)/2;
+      wctx.drawImage(img, dx, dy, dw, dh);
+      wctx.restore();
+
+      const stamp=document.createElement('canvas');
+      stamp.width=W; stamp.height=H;
+      const stampCtx=stamp.getContext('2d');
+
+      try {
+        const src=wctx.getImageData(0,0,W,H).data;
+        const stampImg=stampCtx.createImageData(W,H);
+        for(let i=0; i<src.length; i+=4){
+          if(src[i+3] < 8) continue;
+          const L = 0.299*src[i] + 0.587*src[i+1] + 0.114*src[i+2];
+          if(L < 95){
+            stampImg.data[i+3]=255;
+          }
+        }
+        stampCtx.putImageData(stampImg, 0, 0);
+      } catch(e) {
+        console.warn(
+          'day-and-night.png: getImageData blocked (', e.message, '). Using whole-image stamp fallback. ' +
+          'Serve the page via a local HTTP server (e.g. `python3 -m http.server`) for the proper thresholded engraving.'
+        );
+        stampCtx.drawImage(work, 0, 0);
+      }
+
+      const tintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        ctx.drawImage(tmp, 0, 0);
+      };
+      const innerTintPass=(color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(stamp, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        tctx.globalCompositeOperation='destination-in';
+        tctx.drawImage(stamp, 0, 0);
+        ctx.drawImage(tmp, 0, 0);
+      };
+
+      // Shared 5-pass engraving recipe — wider drop-shadow halo, pitch-black
+      // recess, and a two-pass bevel rim (warm primary + sharper catch-light)
+      // for clear visibility against the dark walnut.
+      tintPass('rgba(0, 0, 0, 0.60)', 4.5, 4.5);
+      tintPass('rgba(0, 0, 0, 0.45)', 2.0, 2.0);
+      tintPass('rgba(0, 0, 0, 1.0)', 0, 0);
+      innerTintPass('rgba(248, 218, 165, 0.85)', -2.5, -2.5);
+      innerTintPass('rgba(255, 240, 205, 0.55)', -1.0, -1.0);
+
+      tex.needsUpdate=true;
+    };
+    img.onerror=(e)=>{
+      console.warn('day-and-night.png failed to load; engraving overlay will be empty', e);
+    };
+    img.src='assets/pic/day-and-night.png';
+
+    return tex;
+  }
+
+  const tex=makeOverlayTexture();
+  const overlayMat=new THREE.MeshStandardMaterial({
+    map:tex,
+    transparent:true,
+    alphaTest:0.04,
+    roughness:0.85,
+    metalness:0.0,
+    envMapIntensity:0.5 * (isDark?1.0:0.6),
+    polygonOffset:true,
+    polygonOffsetFactor:-1,
+    polygonOffsetUnits:-1,
+  });
+  overlayMat.side=THREE.DoubleSide;
+  // 2.0 × 1.5 plane (4:3, matches PNG aspect), laid flat 0.01 above the
+  // wood top, between the case interior and the nameplate. Same dimensions
+  // and position as canon_per_motum_contrarium for a consistent inset.
+  const G=new THREE.PlaneGeometry(2.0, 1.5);
+  const overlay=new THREE.Mesh(G, overlayMat);
+  overlay.rotation.x=-Math.PI/2;
+  overlay.position.set(0, -2.69, 1.80);
+  overlay.receiveShadow=true;
+  scene.add(overlay);
+}
+
+// =====================================================================
+// === COMPRESSION SPRINGS — left & right ends of the violin track =====
+// =====================================================================
+// Two brass coil springs flank the violin (the augmented voice). Each spring
+// connects a side wall of the case to the closest end of the violin's bar
+// row, drawn as a tightly-coiled compressed helix — the visual metaphor is
+// that this voice is being "squeezed" into the case width: at true MIDI
+// time the augmented violin would extend twice as wide as cello (which is
+// the source dux); to fit it in the same case, we've compressed cello's x
+// 2× into the box, so violin appears "held in place" against the walls by
+// these compressed springs. The springs read as static structural fixtures
+// on first viewing and do not respond to playback.
+//
+// Coil density (~10 turns per world unit) is intentionally tight — a relaxed
+// spring would suggest "free to move", which is the opposite of the meaning.
+{
+  const violinNotes = N.filter(n => n[0] === 2);
+  const vFirst = violinNotes[0];
+  const vLast  = violinNotes[violinNotes.length - 1];
+  const violLeftX  = stepX(vFirst[1]);                                    // start x of first violin bar
+  const violRightX = stepX(vLast[1]) + (vLast[2] - vLast[1]) * SWU;       // end x of last violin bar
+  const violLeftY  = pitchY(vFirst[3]);                                   // y of first violin note's pitch
+  const violRightY = pitchY(vLast[3]);                                    // y of last violin note's pitch
+  const CASE_LEFT_X  = -5.8;
+  const CASE_RIGHT_X = +5.8;
+  const SPRING_Z = Z_VIOLIN;
+  const COIL_R = 0.075;          // helix radius — thinner than before for tighter "compressed" read
+  const WIRE_R = 0.008;          // tube cross-section — slim brass wire
+  const TURNS_PER_UNIT = 18;     // ~18 coils per world unit — visibly squashed
+  const SEG_PER_TURN = 24;
+  const RAMP_FRAC = 0.05;        // first/last 5% of the helix tapers radius from 0 → COIL_R → 0
+                                 // so both ends of the coil meet the axis EXACTLY at the
+                                 // endpoint (case wall on one side, violin bar tip on the other)
+
+  function makeSpring(x1, y1, x2, y2){
+    const len = x2 - x1;
+    const turns = Math.max(6, Math.round(len * TURNS_PER_UNIT));
+    const N_seg = Math.max(96, turns * SEG_PER_TURN);
+    const points = [];
+    for(let i=0; i<=N_seg; i++){
+      const t = i / N_seg;
+      const x = x1 + len * t;
+      const yAxis = y1 + (y2 - y1) * t;            // axis lerps between endpoint y's
+      const a = 2 * Math.PI * turns * t;
+      // Radius envelope: 0 at the very ends, full COIL_R in the middle. This
+      // is what makes both endpoints land ON the axis (i.e. exactly on the
+      // case wall and on the violin bar tip), instead of floating one COIL_R
+      // away — a uniform-radius helix would.
+      let r;
+      if(t < RAMP_FRAC)         r = COIL_R * (t / RAMP_FRAC);
+      else if(t > 1 - RAMP_FRAC) r = COIL_R * ((1 - t) / RAMP_FRAC);
+      else                       r = COIL_R;
+      points.push(new THREE.Vector3(x, yAxis + Math.cos(a)*r, SPRING_Z + Math.sin(a)*r));
+    }
+    const curve = new THREE.CatmullRomCurve3(points);
+    const geom = new THREE.TubeGeometry(curve, N_seg*2, WIRE_R, 6, false);
+    const mesh = new THREE.Mesh(geom, brassMat);
+    mesh.castShadow = true;
+    scene.add(mesh);
+    return mesh;
+  }
+
+  // Left: case wall ↔ first violin bar start, both ends at first-note y.
+  // Right: last violin bar end ↔ case wall, both ends at last-note y.
+  makeSpring(CASE_LEFT_X, violLeftY,  violLeftX,    violLeftY);
+  makeSpring(violRightX,  violRightY, CASE_RIGHT_X, violRightY);
+}
+
+// =====================================================================
+
+// === build note meshes ===
+// For SPHERES (viola voices), radius scales with note duration via sizeFactor.
+// For BARS (canon-pair voices), the BoxGeometry is built per-note at the right
+// world length (so duration is encoded in geometry, not scale.x); only
+// scale.y/scale.z animate during state changes — i.e. bars "swell" radially
+// when played, but never change length. This is what preserves the
+// "mirror partners share the same width" invariant under animation.
+//
+// Cello bar length includes the 2× compression so partners match width.
+//
+// For cello bars that straddle a wrap boundary, we just plot at the start-x
+// and accept that the bar's right end may extend past the right edge of the
+// box for a tiny fraction of cello notes. Splitting the bar is not worth it.
+const notes=[];
+function makeMesh(s, e, p, voice){
+  const isBar = SHAPES[voice]==='bar';
+  const sizeFactor = isBar ? 1.0 : (1 + Math.min((e-s)/16, 0.6));
+  const mat=new THREE.MeshStandardMaterial({
+    color:VS[voice].color,
+    emissive:VS[voice].emissive,
+    emissiveIntensity:D_E,
+    roughness:VS[voice].roughness,
+    metalness:VS[voice].metalness,
+    envMapIntensity:VS[voice].env * ENV_MUL,
+    transparent:true,
+    opacity:D_O
+  });
+
+  let mesh;
+  if(isBar){
+    const compression = (voice===3) ? CELLO_X_COMPRESSION : 1;
+    const barLen = Math.max((e-s) * compression * SWU, 0.04);   // floor so 1-step notes are still visible
+    // Box bar — width along x is barLen, square cross-section of side 2·baseR.
+    const r = VS[voice].baseR;
+    const geom = new THREE.BoxGeometry(barLen, r*2, r*2);
+    mesh = new THREE.Mesh(geom, mat);
+    // Center the bar between its start and end on the appropriate visual x.
+    let cx, z;
+    if(voice===3){
+      const { vs, pass } = celloVS(s);
+      cx = stepX(vs) + barLen/2;
+      z  = (pass>=1) ? Z_CELLO_2 : Z_CELLO;
+    } else {
+      cx = stepX(s) + barLen/2;
+      z  = Z_VIOLIN;
+    }
+    mesh.position.set(cx, pitchY(p), z);
+    // scale.x stays at 1 (length is in geometry); scale.y/z animate radially.
+    mesh.scale.set(1, D_S_F, D_S_F);
+  } else {
+    mesh = new THREE.Mesh(sphereGeoms[voice], mat);
+    mesh.position.copy(pos3D(s, p, voice));
+    mesh.scale.setScalar(sizeFactor * D_S_F);
+  }
+  mesh.castShadow = true;
+  scene.add(mesh);
+  notes.push({
+    mesh, mat, voice, isBar,
+    st:s*TPS, en:e*TPS,
+    s_step:s, e_step:e, pitch:p,
+    baseSize:sizeFactor,
+    pE:VS[voice].pE,
+    s:'d',
+    tO:D_O, tE:D_E, tS:sizeFactor*D_S_F, spd:3.5
+  });
+}
+for(const [v,s,e,p] of N) makeMesh(s, e, p, v);
+
+const sO=notes.slice().sort((a,b)=>a.st-b.st);
+const eO=notes.slice().sort((a,b)=>a.en-b.en);
+let sP=0, eP=0;
+
+const voiceEnabled=[true, true, true, true];
+
+function setNote(n, s){
+  if(n.s===s) return;
+  n.s=s;
+  if(!voiceEnabled[n.voice]){
+    n.tO=0.04; n.tE=0; n.tS=n.baseSize*0.7; n.spd=8; return;
+  }
+  if(s==='d'){
+    n.tO=D_O; n.tE=D_E; n.tS=n.baseSize*D_S_F; n.spd=3.5;
+  }else if(s==='p'){
+    n.tO=1.0; n.tE=n.pE*P_E_MUL; n.tS=n.baseSize*1.95; n.spd=20;
+  }else{
+    n.tO=O_O; n.tE=O_E; n.tS=n.baseSize*1.08; n.spd=2.4;
+  }
+}
+
+// === playheads (one per voice) ===
+function makePlayhead(voice){
+  const mat=new THREE.MeshStandardMaterial({
+    color:0xffffff,
+    emissive:VS[voice].color,
+    emissiveIntensity:1.4,
+    envMapIntensity:0,
+    transparent:true,
+    opacity:0
+  });
+  // Skeleton playhead a touch larger so it reads as the "lead" against the
+  // (smaller) ornament playhead when both happen to be visible during a
+  // skeleton note's tail.
+  const r = voice===0 ? 0.13 : 0.10;
+  const mesh=new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), mat);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  return mesh;
+}
+const ph=[makePlayhead(0), makePlayhead(1), makePlayhead(2), makePlayhead(3)];
+
+const haloTex=(()=>{
+  const cv=document.createElement('canvas'); cv.width=cv.height=128;
+  const ctx=cv.getContext('2d');
+  const g=ctx.createRadialGradient(64,64,4,64,64,64);
+  g.addColorStop(0,'rgba(255,255,255,1)');
+  g.addColorStop(0.3,'rgba(255,255,255,0.4)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(cv);
+})();
+function makeHalo(voice){
+  const m=new THREE.Sprite(new THREE.SpriteMaterial({map:haloTex, transparent:true, opacity:0, depthWrite:false}));
+  const sc = voice===0 ? 0.70 : 0.55;
+  m.scale.set(sc,sc,sc);
+  scene.add(m);
+  return m;
+}
+const halo=[makeHalo(0), makeHalo(1), makeHalo(2), makeHalo(3)];
+
+// === per-voice playhead tracking — pitch at any sub-step time ===
+// pitchAtTime[v][i] is the MIDI pitch of voice v at integer 32nd-step i, or
+// -1 if the voice has no note sustained at that step.
+const pitchAtTime=[
+  new Array(TOT_STEPS).fill(-1),
+  new Array(TOT_STEPS).fill(-1),
+  new Array(TOT_STEPS).fill(-1),
+  new Array(TOT_STEPS).fill(-1),
+];
+for(const [v,s,e,p] of N){
+  for(let i=s; i<e && i<TOT_STEPS; i++) pitchAtTime[v][i]=p;
+}
+// Fill-forward for violin (v=2) and cello (v=3) only — these voices have
+// natural phrase pauses where holding the previous pitch keeps the playhead
+// stable on the last note. For viola sub-voices (skeleton & ornament) we
+// LEAVE the rests as -1: skeleton and ornament alternate without overlap,
+// so the skeleton playhead should disappear during ornament passages and
+// vice versa. Otherwise BOTH viola playheads would be visible everywhere
+// and the alternation between standard and dressing would be unreadable.
+for(const v of [2, 3]){
+  let last=-1;
+  for(let i=0; i<TOT_STEPS; i++){
+    if(pitchAtTime[v][i] >= 0) last = pitchAtTime[v][i];
+    else if(last >= 0) pitchAtTime[v][i] = last;
+  }
+}
+
+// === audio chain ===
+// Sampled instruments + concert-hall space:
+//   Comp → EQ → early reflections → long reverb → stereo widener → limiter.
+// Viola (cantus firmus) is rendered with a harp sampler — plucked, gilded,
+// reads as the gold engraving the visual treats it as. Violin is the
+// augmented-inverse line; cello is the dux.
+const SBASE='https://nbrosowsky.github.io/tonejs-instruments/samples/';
+const limiter=new Tone.Limiter(-1).toDestination();
+const widener=new Tone.StereoWidener(0.55).connect(limiter);
+const reverb =new Tone.Reverb({decay:4.6, preDelay:0.06, wet:0.24}).connect(widener);
+const er     =new Tone.FeedbackDelay({delayTime:0.045, feedback:0.18, wet:0.14}).connect(reverb);
+const eq     =new Tone.EQ3({low:1, mid:0, high:-0.5}).connect(er);
+const comp   =new Tone.Compressor({threshold:-20, ratio:2.4, attack:0.01, release:0.18}).connect(eq);
+
+// Viola centred (King's theme is the structural lead), violin slightly left,
+// cello slightly right. The stereo image mirrors the y-axis: violin and cello
+// flank, viola threads down the middle.
+const violaPan = new Tone.Panner( 0.0 ).connect(comp);
+const violPan  = new Tone.Panner(-0.28).connect(comp);
+const celloPan = new Tone.Panner( 0.28).connect(comp);
+
+const harpUrls={
+  A2:'A2.mp3', A4:'A4.mp3', A6:'A6.mp3',
+  B1:'B1.mp3', B3:'B3.mp3', B5:'B5.mp3',
+  C3:'C3.mp3', C5:'C5.mp3',
+  D2:'D2.mp3', D4:'D4.mp3', D6:'D6.mp3', D7:'D7.mp3',
+  E1:'E1.mp3', E3:'E3.mp3', E5:'E5.mp3',
+  F2:'F2.mp3', F4:'F4.mp3', F6:'F6.mp3', F7:'F7.mp3',
+  G1:'G1.mp3', G3:'G3.mp3', G5:'G5.mp3'
+};
+const violinUrls={
+  A3:'A3.mp3', A4:'A4.mp3', A5:'A5.mp3', A6:'A6.mp3',
+  C4:'C4.mp3', C5:'C5.mp3', C6:'C6.mp3', C7:'C7.mp3',
+  E4:'E4.mp3', E5:'E5.mp3', E6:'E6.mp3',
+  G3:'G3.mp3', G4:'G4.mp3', G5:'G5.mp3', G6:'G6.mp3'
+};
+const celloUrls={
+  A2:'A2.mp3', A3:'A3.mp3', A4:'A4.mp3',
+  C2:'C2.mp3', C3:'C3.mp3', C4:'C4.mp3', C5:'C5.mp3',
+  E2:'E2.mp3', E3:'E3.mp3', E4:'E4.mp3',
+  G2:'G2.mp3', G3:'G3.mp3', G4:'G4.mp3'
+};
+
+// Single harp sampler shared by skeleton (0) and ornament (1) so the King's
+// theme and its decoration come from one instrument with one acoustic.
+const violaSynth=new Tone.Sampler({urls:harpUrls,   baseUrl:SBASE+'harp/',   release:2.0}).connect(violaPan);
+const violSynth =new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.4}).connect(violPan);
+const celloSynth=new Tone.Sampler({urls:celloUrls,  baseUrl:SBASE+'cello/',  release:1.6}).connect(celloPan);
+violaSynth.volume.value=-8;
+violSynth.volume.value =-9;
+celloSynth.volume.value=-8;
+
+// voice index → synth lookup. Skeleton (0) and Ornament (1) both → viola/harp.
+const synths=[violaSynth, violaSynth, violSynth, celloSynth];
+
+Tone.Transport.bpm.value=BPM;
+Tone.Transport.loop=true;
+Tone.Transport.loopStart=0;
+Tone.Transport.loopEnd=DUR;
+
+const evs=N.map(([v,s,e,p])=>({
+  voice:v,
+  time:s*TPS,
+  freq:440*Math.pow(2,(p-69)/12),
+  dur:Math.max((e-s)*TPS, 0.04)
+}));
+const part=new Tone.Part((t,e)=>{
+  if(!voiceEnabled[e.voice]) return;
+  // Velocity per voice. Skeleton (the King's theme) leads; ornament is the
+  // softer decoration; violin (augmented inverse) and cello (dux) sit just
+  // below the skeleton so the cantus firmus stays the readable spine.
+  const vel = e.voice===0 ? 0.55
+            : e.voice===1 ? 0.30 + Math.random()*0.05
+            : e.voice===2 ? 0.45 + Math.random()*0.05
+                          : 0.42 + Math.random()*0.05;
+  // Ornament events get ±2 ms timing jitter so simultaneous trill notes
+  // don't phase-stack on the exact same audio frame.
+  const tt = e.voice===1 ? t + (Math.random()-0.5)*0.004 : t;
+  synths[e.voice].triggerAttackRelease(e.freq, e.dur, tt, vel);
+}, evs);
+part.loop=true;
+part.loopEnd=DUR;
+part.start(0);
+
+// === UI plumbing ===
+const bp=document.getElementById('bp');
+const bs=document.getElementById('bs');
+const bt=document.getElementById('bt');
+const psr=document.getElementById('psr');
+const PLAY='<svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg>';
+const PAUSE='<svg viewBox="0 0 10 10"><rect x="2" y="1" width="2" height="8" fill="currentColor"/><rect x="6" y="1" width="2" height="8" fill="currentColor"/></svg>';
+
+let playing=false, scrubMode=false, loopEnabled=true, lastT=0;
+
+function fmt(t){const m=Math.floor(t/60), s=Math.floor(t-m*60); return m+':'+(s<10?'0':'')+s;}
+const TOT=fmt(DUR);
+
+function updatePlayheads(t){
+  if(t<0 || (t>=DUR && !loopEnabled)){
+    for(let v=0; v<4; v++){
+      ph[v].material.opacity=0;
+      halo[v].material.opacity=0;
+    }
+    return;
+  }
+  const tt=Math.min(t, DUR-0.001);
+  const sFloat=tt/TPS;
+  const i=Math.max(0, Math.min(TOT_STEPS-1, Math.floor(sFloat)));
+  for(let v=0; v<4; v++){
+    const p=pitchAtTime[v][i];
+    if(p<0 || !voiceEnabled[v]){
+      ph[v].material.opacity=0;
+      halo[v].material.opacity=0;
+      continue;
+    }
+    const pos=pos3D(sFloat, p, v);
+    ph[v].position.copy(pos);
+    halo[v].position.copy(pos);
+    ph[v].material.opacity=0.85;
+    halo[v].material.opacity=0.32;
+  }
+}
+
+function uui(t){
+  bt.textContent=fmt(t)+' / '+TOT;
+  if(!scrubMode) bs.value=t.toFixed(2);
+  psr.textContent='t = '+t.toFixed(1)+' / '+DUR.toFixed(1);
+  updatePlayheads(t);
+}
+
+function resetVisualProgress(){
+  sP=0; eP=0;
+  for(const n of notes){ n.s=null; setNote(n,'d'); }
+}
+
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(), 0.1);
+  controls.update();
+
+  keyL.target.updateMatrixWorld();
+
+  if(playing){
+    const t=Tone.Transport.seconds;
+    if(loopEnabled && t+0.5<lastT) resetVisualProgress();
+    lastT=t;
+    while(sP<sO.length && sO[sP].st<=t){ setNote(sO[sP],'p'); sP++; }
+    while(eP<eO.length && eO[eP].en<=t){ setNote(eO[eP],'o'); eP++; }
+    uui(t);
+    if(!loopEnabled && t>=DUR-0.02){ pause(); }
+  }
+
+  for(let k=0;k<notes.length;k++){
+    const n=notes[k];
+    const a=1-Math.exp(-n.spd*dt);
+    n.mat.opacity += (n.tO-n.mat.opacity)*a;
+    n.mat.emissiveIntensity += (n.tE-n.mat.emissiveIntensity)*a;
+    if(n.isBar){
+      // bars: only animate radial axes; length is fixed in geometry so the
+      // mirror-pair "same width" invariant holds at every animation phase.
+      const cy=n.mesh.scale.y;
+      const newR = cy + (n.tS - cy)*a;
+      n.mesh.scale.y = newR;
+      n.mesh.scale.z = newR;
+    } else {
+      const cs=n.mesh.scale.x;
+      n.mesh.scale.setScalar(cs+(n.tS-cs)*a);
+    }
+  }
+
+  composer.render();
+}
+animate();
+
+async function play(){
+  if(Tone.context.state!=='running') await Tone.start();
+  await Tone.loaded();
+  if(!loopEnabled && Tone.Transport.seconds>=DUR-0.05) seek(0);
+  playing=true;
+  Tone.Transport.start();
+  bp.innerHTML=PAUSE;
+  bp.setAttribute('aria-label','Pause');
+  lastT=Tone.Transport.seconds;
+}
+
+function pause(){
+  playing=false;
+  Tone.Transport.pause();
+  bp.innerHTML=PLAY;
+  bp.setAttribute('aria-label','Play');
+}
+
+function seek(t){
+  const wp=playing;
+  if(Tone.Transport.state==='started'){
+    Tone.Transport.pause();
+    for(const s of [violaSynth, violSynth, celloSynth]) s.releaseAll();
+  }
+  Tone.Transport.seconds=t;
+  lastT=t;
+  for(const n of notes) n.s=null;
+  sP=0; eP=0;
+  while(sP<sO.length && sO[sP].st<=t){
+    const n=sO[sP];
+    setNote(n, n.en<=t?'o':'p');
+    sP++;
+  }
+  while(eP<eO.length && eO[eP].en<=t) eP++;
+  for(let i=sP; i<sO.length; i++) setNote(sO[i],'d');
+  uui(t);
+  if(wp){ playing=true; Tone.Transport.start(); }
+}
+
+bp.addEventListener('click',()=>playing?pause():play());
+
+let scrubT;
+bs.addEventListener('input',()=>{
+  scrubMode=true;
+  bt.textContent=fmt(parseFloat(bs.value))+' / '+TOT;
+  clearTimeout(scrubT);
+  scrubT=setTimeout(()=>{ scrubMode=false; seek(parseFloat(bs.value)); }, 80);
+});
+
+function toggleVoice(v){
+  voiceEnabled[v]=!voiceEnabled[v];
+  document.getElementById('v'+v).setAttribute('aria-pressed', String(voiceEnabled[v]));
+  if(!voiceEnabled[v]) synths[v].releaseAll();
+  for(const n of notes) if(n.voice===v){ const cs=n.s; n.s=null; setNote(n, cs||'d'); }
+  // Cello ribbon is split into multiple meshes (one per pass); toggle each.
+  const r=voiceRibbons[v];
+  if(r){
+    if(Array.isArray(r)) for(const m of r) m.visible=voiceEnabled[v];
+    else r.visible=voiceEnabled[v];
+  }
+}
+document.getElementById('v0').addEventListener('click',()=>toggleVoice(0));
+document.getElementById('v1').addEventListener('click',()=>toggleVoice(1));
+document.getElementById('v2').addEventListener('click',()=>toggleVoice(2));
+document.getElementById('v3').addEventListener('click',()=>toggleVoice(3));
+
+const lpBtn=document.getElementById('lp');
+lpBtn.addEventListener('click',()=>{
+  loopEnabled=!loopEnabled;
+  Tone.Transport.loop=loopEnabled;
+  lpBtn.setAttribute('aria-pressed', String(loopEnabled));
+});
+
+for(const n of notes){ n.s=null; setNote(n,'d'); }
+bs.max=DUR.toFixed(2);
+uui(0);
+</script>
+</body>
+</html>

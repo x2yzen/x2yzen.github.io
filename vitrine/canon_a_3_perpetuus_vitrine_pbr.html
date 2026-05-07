@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bach · Canon perpetuus a 3 · BWV 1079</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #5a5a5a;
+    --color-text-tertiary: #8a8a8a;
+    --color-border-tertiary: rgba(0,0,0,0.15);
+    --color-border-secondary: rgba(0,0,0,0.3);
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f6f5f0;
+    --color-canvas-bg: #f1eee6;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-primary: #e8e8e8;
+      --color-text-secondary: #aaa;
+      --color-text-tertiary: #777;
+      --color-border-tertiary: rgba(255,255,255,0.18);
+      --color-border-secondary: rgba(255,255,255,0.32);
+      --color-background-primary: #1f1f1f;
+      --color-background-secondary: #2a2a2a;
+      --color-canvas-bg: #1a1a1a;
+    }
+  }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); background: var(--color-background-secondary); margin: 0; padding: 24px 16px 60px; display: flex; justify-content: center; }
+  main { width: 100%; max-width: 760px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; padding: 20px 24px 16px; }
+  h1 { font-size: 16px; font-weight: 500; margin: 0 0 4px; }
+  .sub { font-family: 'IM Fell English', Georgia, serif; font-style: normal; font-feature-settings: "liga", "dlig"; font-size: 14px; line-height: 1.5; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .sub em { font-style: italic; }
+  button { border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; transition: background 0.15s; }
+  button:hover { background: var(--color-background-secondary); }
+  button:active { transform: scale(0.96); }
+  input[type="range"] { accent-color: var(--color-text-primary); }
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  #stage{position:relative;width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--color-canvas-bg);border:0.5px solid var(--color-border-tertiary)}
+  #stage canvas{display:block;width:100%!important;height:100%!important;outline:none}
+  .legend{position:absolute;left:10px;top:10px;font-size:11px;color:var(--color-text-secondary);display:flex;flex-direction:column;gap:3px;pointer-events:none}
+  .legend .row{display:flex;align-items:center;gap:6px}
+  .legend .swatch{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .views{position:absolute;right:10px;top:10px;display:flex;gap:6px}
+  .vbtn-sm{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(4px);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);cursor:pointer}
+  @media (prefers-color-scheme: dark){.vbtn-sm{background:rgba(0,0,0,0.45)}}
+  .hint{font-size:11px;color:var(--color-text-tertiary);margin:6px 4px 14px;text-align:right}
+  .bc{display:flex;align-items:center;gap:12px;padding:8px 4px 12px}
+  .bp{width:36px;height:36px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+  .bp svg{width:10px;height:10px}
+  .bt{font-size:12px;color:var(--color-text-secondary);font-variant-numeric:tabular-nums;min-width:96px;text-align:right;flex-shrink:0}
+  .bs{flex:1;min-width:0}
+  .vt{display:flex;align-items:center;gap:8px;padding:0 4px 10px;flex-wrap:wrap}
+  .vbtn{font-size:11px;padding:5px 10px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;transition:opacity 0.15s,background 0.15s}
+  .vbtn:hover{background:var(--color-background-secondary)}
+  .vbtn .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .vbtn[aria-pressed="false"]{opacity:0.42}
+  .vbtn[aria-pressed="false"] .dot{opacity:0.4}
+  .vlbl{font-size:11px;color:var(--color-text-tertiary);margin-right:2px}
+  .psr{font-size:11px;color:var(--color-text-tertiary);font-variant-numeric:tabular-nums;margin-left:auto}
+</style>
+</head>
+<body>
+<main>
+<h1>Bach · Canon perpetuus a 3 · BWV 1079</h1>
+<p class="sub">three voices lock at fixed phase on an endless wheel — flute and violin are exact y-mirrors across the bass continuo, and the canon never resolves.</p>
+<h2 class="sr-only">3D circular visualization of Bach's Canon perpetuus a 3 as a precision instrument inside a glass vitrine, lit by an HDRI environment</h2>
+
+<div id="stage">
+  <div class="legend">
+    <div class="row"><span class="swatch" style="background:#B86348"></span>Flute — above the mirror</div>
+    <div class="row"><span class="swatch" style="background:#3F8788"></span>Violin — below the mirror (inverted, +4 bars)</div>
+    <div class="row"><span class="swatch" style="background:#C9994A;border:0.5px solid #4A2D08"></span>Bass — King's theme (gilded)</div>
+  </div>
+  <div class="views">
+    <button class="vbtn-sm" data-view="3q">3/4</button>
+    <button class="vbtn-sm" data-view="top">top</button>
+    <button class="vbtn-sm" data-view="front">front</button>
+  </div>
+</div>
+
+<div class="bc">
+<button class="bp" id="bp" aria-label="Play"><svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg></button>
+<label class="sr-only" for="bs">Scrub timeline</label>
+<input type="range" class="bs" id="bs" min="0" max="48" step="0.05" value="0" aria-label="Scrub timeline">
+<span class="bt" id="bt">bar 0.0 / 60</span>
+</div>
+
+<div class="vt">
+<span class="vlbl">solo</span>
+<button class="vbtn" id="v0" aria-pressed="true"><span class="dot" style="background:#B86348"></span>Flute</button>
+<button class="vbtn" id="v1" aria-pressed="true"><span class="dot" style="background:#3F8788"></span>Violin</button>
+<button class="vbtn" id="v2" aria-pressed="true"><span class="dot" style="background:#C9994A;border:0.5px solid #4A2D08"></span>Bass</button>
+<span class="psr" id="psr">cycle 1 · θ = 0°</span>
+</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.43/Tone.js"></script>
+<!-- es-module-shims polyfills <script type="importmap"> on Safari ≤16.3 -->
+<script async src="https://unpkg.com/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+// === note data — voice / body_s / body_e / midi_pitch / [isTheme for bass] ===
+// Generated by draft/extract_canon_a_3.py from 11_Canon_a_3_perpetuus.mid.
+//   voice 0 = Flute (cantus), voice 1 = Violin (= 151 - flute_p, synth-mirrored
+//   so the canon's strict-inversion structure is geometrically perfect),
+//   voice 2 = Bass continuo (free counterpoint with hidden King's theme).
+// body_s / body_e are each voice's INTERNAL time, [0..480]. The +0/+32/+8
+// audio phase offsets are applied below at scheduling time only — visual
+// layout uses body_s directly so flute & violin at the same body internal
+// time sit at the same angle (perfect vertical mirror). isTheme=1 marks
+// the ~11 bass notes that anchor the Royal-theme contour.
+const N=[[0,0,2,72],[0,2,4,74],[0,4,8,75],[0,8,12,72],[0,12,18,79],[0,18,19,77],[0,19,20,79],[0,20,24,80],[0,24,28,72],[0,28,30,71],[0,30,32,69],[0,32,36,67],[0,40,48,79],[0,48,52,78],[0,52,64,77],[0,64,66,76],[0,66,68,74],[0,68,72,76],[0,72,76,75],[0,76,80,75],[0,80,82,77],[0,82,84,75],[0,84,86,74],[0,86,88,72],[0,88,90,71],[0,90,92,69],[0,92,98,67],[0,98,99,69],[0,99,100,71],[0,100,104,72],[0,104,108,84],[0,108,112,83],[0,112,116,82],[0,116,120,81],[0,120,124,80],[0,124,134,79],[0,134,136,77],[0,136,138,75],[0,138,140,79],[0,140,142,72],[0,142,144,71],[0,144,146,72],[0,146,148,75],[0,148,150,74],[0,150,152,72],[0,152,154,74],[0,154,156,77],[0,156,158,75],[0,158,160,77],[0,160,164,79],[0,164,172,72],[0,172,176,72],[0,176,180,70],[0,180,184,69],[0,184,188,68],[0,188,196,67],[0,214,216,80],[0,216,218,79],[0,218,220,77],[0,220,222,76],[0,222,224,74],[0,224,226,72],[0,226,228,74],[0,228,230,76],[0,230,232,77],[0,232,234,79],[0,234,236,76],[0,236,238,77],[0,238,240,76],[0,240,242,74],[0,242,244,76],[0,244,246,77],[0,246,248,79],[0,248,250,81],[0,250,252,83],[0,252,256,84],[0,256,258,82],[0,258,260,80],[0,260,264,79],[0,264,268,81],[0,268,276,82],[0,280,282,74],[0,282,284,72],[0,284,288,70],[0,288,292,74],[0,292,298,67],[0,298,299,69],[0,299,300,67],[0,300,304,66],[0,304,308,74],[0,308,310,75],[0,310,312,77],[0,312,316,79],[0,320,328,67],[0,328,332,68],[0,332,343,69],[0,344,346,70],[0,346,348,72],[0,348,352,70],[0,352,360,71],[0,360,362,69],[0,362,364,70],[0,364,366,72],[0,366,368,74],[0,368,370,75],[0,370,372,77],[0,372,378,79],[0,378,379,77],[0,379,380,75],[0,380,384,74],[0,384,388,62],[0,388,392,63],[0,392,396,64],[0,396,400,65],[0,400,404,66],[0,404,414,67],[0,414,416,69],[0,416,418,71],[0,418,420,67],[0,420,422,74],[0,422,424,75],[0,424,426,74],[0,426,428,71],[0,428,430,72],[0,430,432,74],[0,432,434,72],[0,434,436,69],[0,436,438,71],[0,438,440,69],[0,440,444,67],[0,444,455,74],[0,456,460,76],[0,460,464,77],[0,464,468,78],[0,468,476,79],[1,0,2,79],[1,2,4,77],[1,4,8,76],[1,8,12,79],[1,12,18,72],[1,18,19,74],[1,19,20,72],[1,20,24,71],[1,24,28,79],[1,28,30,80],[1,30,32,82],[1,32,36,84],[1,40,48,72],[1,48,52,73],[1,52,64,74],[1,64,66,75],[1,66,68,77],[1,68,72,75],[1,72,76,76],[1,76,80,76],[1,80,82,74],[1,82,84,76],[1,84,86,77],[1,86,88,79],[1,88,90,80],[1,90,92,82],[1,92,98,84],[1,98,99,82],[1,99,100,80],[1,100,104,79],[1,104,108,67],[1,108,112,68],[1,112,116,69],[1,116,120,70],[1,120,124,71],[1,124,134,72],[1,134,136,74],[1,136,138,76],[1,138,140,72],[1,140,142,79],[1,142,144,80],[1,144,146,79],[1,146,148,76],[1,148,150,77],[1,150,152,79],[1,152,154,77],[1,154,156,74],[1,156,158,76],[1,158,160,74],[1,160,164,72],[1,164,172,79],[1,172,176,79],[1,176,180,81],[1,180,184,82],[1,184,188,83],[1,188,196,84],[1,214,216,71],[1,216,218,72],[1,218,220,74],[1,220,222,75],[1,222,224,77],[1,224,226,79],[1,226,228,77],[1,228,230,75],[1,230,232,74],[1,232,234,72],[1,234,236,75],[1,236,238,74],[1,238,240,75],[1,240,242,77],[1,242,244,75],[1,244,246,74],[1,246,248,72],[1,248,250,70],[1,250,252,68],[1,252,256,67],[1,256,258,69],[1,258,260,71],[1,260,264,72],[1,264,268,70],[1,268,276,69],[1,280,282,77],[1,282,284,79],[1,284,288,81],[1,288,292,77],[1,292,298,84],[1,298,299,82],[1,299,300,84],[1,300,304,85],[1,304,308,77],[1,308,310,76],[1,310,312,74],[1,312,316,72],[1,320,328,84],[1,328,332,83],[1,332,343,82],[1,344,346,81],[1,346,348,79],[1,348,352,81],[1,352,360,80],[1,360,362,82],[1,362,364,81],[1,364,366,79],[1,366,368,77],[1,368,370,76],[1,370,372,74],[1,372,378,72],[1,378,379,74],[1,379,380,76],[1,380,384,77],[1,384,388,89],[1,388,392,88],[1,392,396,87],[1,396,400,86],[1,400,404,85],[1,404,414,84],[1,414,416,82],[1,416,418,80],[1,418,420,84],[1,420,422,77],[1,422,424,76],[1,424,426,77],[1,426,428,80],[1,428,430,79],[1,430,432,77],[1,432,434,79],[1,434,436,82],[1,436,438,80],[1,438,440,82],[1,440,444,84],[1,444,455,77],[1,456,460,75],[1,460,464,74],[1,464,468,73],[1,468,476,72],[2,0,4,56,0],[2,4,6,55,0],[2,6,8,48,1],[2,8,10,50,0],[2,10,12,51,1],[2,12,14,53,0],[2,14,16,55,0],[2,16,18,56,0],[2,18,20,53,0],[2,20,22,55,0],[2,22,24,54,0],[2,24,26,55,0],[2,26,28,57,0],[2,28,30,58,0],[2,30,32,57,0],[2,32,34,58,0],[2,34,36,55,0],[2,36,40,57,0],[2,40,44,50,0],[2,44,46,55,0],[2,46,48,57,0],[2,48,50,59,0],[2,50,52,55,1],[2,52,56,60,0],[2,56,60,48,0],[2,62,64,61,0],[2,64,66,60,0],[2,66,68,58,0],[2,68,70,56,0],[2,70,72,55,0],[2,72,78,53,0],[2,78,80,51,0],[2,80,82,50,0],[2,82,84,48,0],[2,84,86,47,0],[2,86,88,45,0],[2,88,92,43,0],[2,92,94,44,1],[2,94,96,48,0],[2,96,98,46,0],[2,98,100,44,0],[2,100,102,43,0],[2,102,104,41,0],[2,104,106,43,0],[2,106,108,36,0],[2,108,112,41,0],[2,112,118,53,0],[2,118,120,50,0],[2,120,122,51,0],[2,122,124,53,0],[2,124,128,51,0],[2,128,132,48,0],[2,132,136,53,0],[2,138,140,54,0],[2,140,144,55,0],[2,144,148,43,1],[2,148,152,48,0],[2,152,154,60,0],[2,154,156,58,0],[2,156,160,56,0],[2,160,162,55,0],[2,162,164,53,0],[2,164,168,52,0],[2,168,172,48,0],[2,172,176,53,0],[2,176,180,41,0],[2,180,184,48,0],[2,184,190,60,0],[2,190,192,61,0],[2,192,194,60,0],[2,194,196,58,0],[2,196,198,56,0],[2,198,200,55,0],[2,200,202,53,1],[2,202,204,51,0],[2,204,208,50,0],[2,208,212,55,0],[2,212,216,48,0],[2,216,224,60,0],[2,224,228,58,0],[2,228,232,57,0],[2,232,234,59,0],[2,234,236,60,0],[2,236,238,62,0],[2,238,240,65,0],[2,240,242,63,0],[2,242,244,62,0],[2,244,248,60,0],[2,248,252,48,0],[2,256,260,53,0],[2,260,264,58,0],[2,264,268,46,0],[2,272,276,50,0],[2,276,280,55,0],[2,280,286,53,0],[2,286,288,51,1],[2,288,290,50,0],[2,290,292,48,0],[2,292,294,50,1],[2,294,296,48,0],[2,296,298,46,0],[2,298,300,45,0],[2,300,302,43,0],[2,302,304,45,0],[2,304,306,47,0],[2,306,308,48,0],[2,308,310,50,0],[2,310,312,51,0],[2,312,314,53,0],[2,314,316,50,0],[2,316,318,47,0],[2,318,320,50,0],[2,320,322,48,0],[2,322,324,47,0],[2,324,326,48,0],[2,326,328,50,0],[2,328,330,51,0],[2,330,332,48,0],[2,332,334,50,0],[2,334,336,48,0],[2,336,338,46,0],[2,338,340,45,0],[2,340,342,43,0],[2,342,344,55,0],[2,344,346,56,0],[2,346,348,55,0],[2,348,350,53,0],[2,350,352,51,0],[2,352,354,53,0],[2,354,356,55,0],[2,356,358,57,0],[2,358,360,59,0],[2,360,362,60,1],[2,362,364,62,0],[2,364,366,63,0],[2,366,368,65,0],[2,368,374,67,0],[2,374,376,55,0],[2,376,378,57,0],[2,378,380,58,0],[2,380,382,60,0],[2,382,384,58,0],[2,384,386,57,0],[2,386,388,55,0],[2,388,390,53,0],[2,390,392,51,0],[2,392,394,50,0],[2,394,396,48,0],[2,396,398,46,0],[2,398,400,48,0],[2,400,402,46,0],[2,402,404,45,1],[2,404,406,43,0],[2,406,408,55,0],[2,408,410,53,0],[2,410,412,51,0],[2,412,416,50,0],[2,416,420,43,0],[2,420,424,48,0],[2,424,428,36,0],[2,428,440,43,0],[2,440,442,55,0],[2,442,444,57,0],[2,444,448,58,0],[2,448,452,55,1],[2,452,458,62,0],[2,458,459,60,0],[2,459,460,62,0],[2,460,470,63,0],[2,470,472,53,0],[2,472,474,51,0],[2,474,476,50,0],[2,476,478,48,0],[2,478,480,51,0]];
+
+// === musical / temporal constants ===
+// MIDI is in 2/2 cut time (alla breve): 1 measure = 8 sixteenths.
+// Body period 60 measures = 480 sixteenths. BPM 150 (= 75 half-notes/min,
+// the felt-pulse tempo) → 0.4 s/measure → body cycle ≈ 24 s. The whole
+// thing then loops indefinitely (the piece HAS no cadence).
+const TOT16=480, BPM=150, TPS=60/BPM/4, DUR=TOT16*TPS;
+
+// Audio-only phase offsets in 16ths. Visual layout uses body_s directly.
+const AUDIO_OFFSET = [0, 32, 8];   // flute, violin, bass
+
+// === HDRI selection — primary museum interior; alternate is the lab variant ===
+const HDRI_FILE='../textures/museum_of_ethnography_2k.hdr';
+
+// === geometry constants ===
+// Square footprint — radial composition has no privileged horizontal axis.
+// Disc shrunk ~22% from the original (R_TICK 3.5→2.7) so the front-most
+// hour tick clears the brass nameplate at z=3.45, and the engraved emblem
+// has room to sit in the front strip without colliding with either.
+const R_INNER  = 1.5;       // canon-pair ring (flute above + violin below)
+const R_OUTER  = 2.4;       // bass continuo ring
+const R_TICK   = 2.7;       // 60-tick clock-face perimeter at ~2.7
+const PITCH_AXIS_FV = 75.5; // C5↔G5 inversion axis: flute_p + violin_p = 151
+const PITCH_SCALE_FV = 0.14;// 13.5 semitones (max excursion) → ±1.89 world units; fits inside the 5.4-tall vitrine with margin
+const BASS_AXIS = 51.5;     // bass body pitch median ≈ Eb3
+const BASS_SCALE = 0.04;    // bass spans 36..67 (31 semitones) → ±0.62 world units; small excursion keeps the bass ring legibly flat
+
+// pos3D — cylindrical layout. body_s is each voice's INTERNAL body time,
+// so flute body[k] and violin body[k] sit at the same θ — vertical mirror.
+// θ chosen so body_s=0 sits at "12 o'clock" (back, -z) and the wheel sweeps
+// clockwise viewed from above; aesthetics over math conventions.
+function pos3D(body_s, p, voice){
+  const phase = ((body_s % TOT16) + TOT16) % TOT16 / TOT16;
+  const theta = -Math.PI/2 + phase * 2*Math.PI;
+  const r = (voice===2) ? R_OUTER : R_INNER;
+  const y = (voice===2) ? (p - BASS_AXIS) * BASS_SCALE
+                        : (p - PITCH_AXIS_FV) * PITCH_SCALE_FV;
+  return new THREE.Vector3(r*Math.cos(theta), y, r*Math.sin(theta));
+}
+
+// Playhead helper — universal step T → spatial point on the right ring.
+// Each voice's playhead sits at the angle of its currently-sounding note,
+// which has body internal time (T - audio_offset) mod TOT16. With the +0/+32/+8
+// offsets, the three playheads are locked at 0°/+6°/+24° apart — the visual
+// signature of the canon's immutable phase relationship.
+function playheadPos(T, voice){
+  const internal = ((T - AUDIO_OFFSET[voice]) % TOT16 + TOT16) % TOT16;
+  // Use the pitch the voice is actually sounding right now, so the playhead
+  // floats with the melody instead of riding the disc.
+  const p = pitchAtBody[voice][Math.floor(internal)];
+  if(p === undefined) return null;
+  return pos3D(internal, p, voice);
+}
+
+// === Three.js scene setup ===
+const stage=document.getElementById('stage');
+const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+const bgColor=isDark?0x1a1a1a:0xd6cbb1;
+
+// Cross-demo unified ambience — values match the per-Motum / per-Tonos siblings
+// so the four-vitrine collection reads as one museum installation.
+const D_O   = isDark ? 0.18 : 0.70;
+const D_E   = isDark ? 0.22 : 0.32;
+const D_S_F = isDark ? 0.85 : 0.90;
+const O_O   = isDark ? 0.68 : 1.00;
+const O_E   = isDark ? 0.45 : 0.70;
+const ENV_MUL        = isDark ? 1.30 : 0.50;
+const LIGHT_MUL      = isDark ? 1.20 : 0.75;
+const EXPOSURE       = isDark ? 1.15 : 1.05;
+const BLOOM_STRENGTH = isDark ? 0.42 : 0.42;
+const BLOOM_THRESHOLD= isDark ? 1.00 : 0.92;
+const P_E_MUL        = isDark ? 1.0  : 3.2;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(bgColor);
+scene.fog=new THREE.Fog(bgColor, 16, 34);
+
+const camera=new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=EXPOSURE;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement);
+
+// === environment map — RoomEnvironment bootstrap → HDRI swap ===
+const pmrem=new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+{
+  scene.environment=pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+}
+const rgbeLoader=new RGBELoader();
+rgbeLoader.load(HDRI_FILE, (hdrTex)=>{
+  hdrTex.mapping=THREE.EquirectangularReflectionMapping;
+  const envRT=pmrem.fromEquirectangular(hdrTex);
+  if(scene.environment) scene.environment.dispose();
+  scene.environment=envRT.texture;
+  hdrTex.dispose();
+});
+
+// === wood textures (PBR walnut) ===
+const texLoader=new THREE.TextureLoader();
+const woodDiff =texLoader.load('../textures/wood_table_001_diff_2k.jpg');
+const woodNorm =texLoader.load('../textures/wood_table_001_nor_gl_2k.jpg');
+const woodRough=texLoader.load('../textures/wood_table_001_rough_2k.jpg');
+woodDiff.colorSpace=THREE.SRGBColorSpace;
+for(const t of [woodDiff, woodNorm, woodRough]){
+  t.wrapS=THREE.RepeatWrapping;
+  t.wrapT=THREE.RepeatWrapping;
+}
+
+// postprocessing — soft bloom on emissive notes during play
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass=new UnrealBloomPass(new THREE.Vector2(2,2), BLOOM_STRENGTH, 0.75, BLOOM_THRESHOLD);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
+
+function resize(){
+  const w=stage.clientWidth, h=stage.clientHeight;
+  renderer.setSize(w, h, false);
+  composer.setSize(w, h);
+  bloomPass.setSize(w, h);
+  camera.aspect=w/h;
+  camera.updateProjectionMatrix();
+}
+resize();
+new ResizeObserver(resize).observe(stage);
+
+// === lighting — keyL is the only shadow caster ===
+scene.add(new THREE.HemisphereLight(
+  isDark?0x99aabb:0xc8d4e6,
+  isDark?0x332211:0x6b5840,
+  0.15 * LIGHT_MUL
+));
+const keyL=new THREE.DirectionalLight(0xfff2dd, 0.70 * LIGHT_MUL);
+keyL.position.set(-7, 9, -5);
+keyL.target.position.set(0, 0, 0);
+scene.add(keyL.target);
+keyL.castShadow=true;
+keyL.shadow.mapSize.width=2048;
+keyL.shadow.mapSize.height=2048;
+// Frustum sized for the 8×8 base + 5.4 vitrine, with margin for the radial
+// composition's outer ticks at R≈3.5.
+keyL.shadow.camera.left=-12;
+keyL.shadow.camera.right=12;
+keyL.shadow.camera.top=12;
+keyL.shadow.camera.bottom=-12;
+keyL.shadow.camera.near=0.5;
+keyL.shadow.camera.far=40;
+keyL.shadow.camera.updateProjectionMatrix();
+keyL.shadow.bias=-0.0005;
+keyL.shadow.normalBias=0.02;
+scene.add(keyL);
+
+const fillL=new THREE.DirectionalLight(0x88aaff, 0.10 * LIGHT_MUL);
+fillL.position.set(-5, -1, -3);
+scene.add(fillL);
+const rimL=new THREE.DirectionalLight(0xffaa55, 0.15 * LIGHT_MUL);
+rimL.position.set(0, 4, -8);
+scene.add(rimL);
+
+const caseSpot=new THREE.PointLight(0xfff2dd, 0.20 * LIGHT_MUL, 30, 1.4);
+caseSpot.position.set(0, 4, 4);
+scene.add(caseSpot);
+
+// === orbit controls + view presets ===
+const controls=new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 0);
+controls.enableDamping=true;
+controls.dampingFactor=0.08;
+controls.minDistance=8;
+controls.maxDistance=22;
+controls.minPolarAngle=0.05;     // allow nearly-top view (the killer angle)
+controls.maxPolarAngle=Math.PI*0.55;
+
+function setView(name){
+  if(name==='3q'){     camera.position.set(8.5, 5.5, 9.5); }
+  else if(name==='top'){   camera.position.set(0.01, 14, 0.01); }
+  else if(name==='front'){ camera.position.set(0, 1.6, 12.5); } // y=1.6 — high enough for the disc top to read, low enough to see the mirror split clearly
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
+// URL hash (#top / #front / #3q) selects the initial view; defaults to 3q.
+// Useful for direct linking to a particular angle and for headless screenshots.
+const initView = (location.hash || '#3q').replace(/^#/, '');
+setView(['3q','top','front'].includes(initView) ? initView : '3q');
+document.querySelectorAll('[data-view]').forEach(b=>{
+  b.addEventListener('click',()=>setView(b.dataset.view));
+});
+
+// === voice styling — flute (above mirror, terracotta), violin (below, teal),
+// bass (gilded skeleton + dim amber decoration). Same convention as the
+// per-Motum demo: warm above the mirror, cool below.
+const VS=[
+  // Flute — terracotta, real-side of mirror
+  {color:0xB86348, emissive:0x4a1c0a, baseR:0.050, metalness:0.18, roughness:0.40, env:0.55, pE:1.45},
+  // Violin — teal, reflection-side
+  {color:0x3F8788, emissive:0x0E3537, baseR:0.050, metalness:0.20, roughness:0.42, env:0.55, pE:1.55},
+  // Bass — DECORATION default (dim amber). Theme notes override at makeDot()
+  // with the gold/larger/stronger-emissive treatment defined in VS_BASS_THEME.
+  {color:0x8a6440, emissive:0x2a1808, baseR:0.040, metalness:0.30, roughness:0.45, env:0.50, pE:1.30}
+];
+// Bass-theme override: the Royal-theme skeleton notes are gilded and slightly
+// larger so they read as the "monument beads" against quieter decoration.
+const VS_BASS_THEME = {
+  color:0xC9994A, emissive:0x4A2D08, baseR:0.062,
+  metalness:0.62, roughness:0.30, env:0.65, pE:1.20
+};
+const sphereGeoms=VS.map(v=>new THREE.SphereGeometry(v.baseR, 14, 12));
+const sphereGeomBassTheme=new THREE.SphereGeometry(VS_BASS_THEME.baseR, 16, 14);
+
+// === split notes by voice ===
+const voiceNotes=[N.filter(n=>n[0]===0), N.filter(n=>n[0]===1), N.filter(n=>n[0]===2)];
+
+// === build a closed CatmullRom tube ribbon per voice ===
+// The body wraps seamlessly at body_s=480 → body_s=0; closed:true on the
+// curve makes the tube join its tail to its head with smooth tangent
+// continuity. No special boundary handling needed.
+function buildRibbon(notes, voice){
+  if(notes.length<2) return null;
+  // Sort by body_s, then sample positions. Bass uses a thicker tube so the
+  // outer ring reads as a distinct "rail" against the inner canon pair.
+  const sorted = notes.slice().sort((a,b)=>a[1]-b[1]);
+  const points = sorted.map(([_, s, e, p])=>pos3D(s, p, voice));
+  const curve = new THREE.CatmullRomCurve3(points, /*closed*/ true, 'catmullrom', 0.5);
+  const r = (voice===2) ? (isDark?0.014:0.020) : (isDark?0.012:0.018);
+  const tubeGeom = new THREE.TubeGeometry(curve, 600, r, 6, /*closed*/ true);
+  const mat = new THREE.MeshBasicMaterial({
+    color: (voice===2) ? VS_BASS_THEME.color : VS[voice].color,  // bass ribbon is gold (the theme's color); decoration dots will sit on it
+    transparent:true,
+    opacity: isDark?0.30:0.72
+  });
+  const mesh = new THREE.Mesh(tubeGeom, mat);
+  mesh.castShadow = true;
+  scene.add(mesh);
+  return mesh;
+}
+const voiceRibbons=[
+  buildRibbon(voiceNotes[0], 0),
+  buildRibbon(voiceNotes[1], 1),
+  buildRibbon(voiceNotes[2], 2)
+];
+
+// =====================================================================
+// === VITRINE SHELL ===================================================
+// =====================================================================
+
+const brassMat=new THREE.MeshStandardMaterial({
+  color:0xc9a060,
+  metalness:0.92,
+  roughness:0.32,
+  envMapIntensity:1.2 * (isDark?1.0:0.7)
+});
+
+// 1. wood base — square 8×8 footprint, befits the radial composition.
+const baseMat=new THREE.MeshStandardMaterial({
+  map:woodDiff,
+  normalMap:woodNorm,
+  roughnessMap:woodRough,
+  metalness:0.0,
+  roughness:1.0,
+  normalScale:new THREE.Vector2(1.0, 1.0),
+  envMapIntensity:0.5 * (isDark?1.0:0.4)
+});
+const baseGeom=new RoundedBoxGeometry(8, 0.6, 8, 4, 0.06);
+const base=new THREE.Mesh(baseGeom, baseMat);
+base.position.set(0, -3.0, 0);
+base.receiveShadow=true;
+scene.add(base);
+// brass inlay — top sits 0.01 below wood top to prevent z-fight
+const inlayGeom=new RoundedBoxGeometry(8.05, 0.05, 8.05, 4, 0.06);
+const inlay=new THREE.Mesh(inlayGeom, brassMat);
+inlay.position.set(0, -2.735, 0);
+inlay.castShadow=true;
+scene.add(inlay);
+
+// 2. four brass pillars + 8 horizontal frame rails
+{
+  const pillarGeom=new THREE.CylinderGeometry(0.05, 0.05, 5.4, 16);
+  const corners=[[ 3.9, 0,  3.9],[-3.9, 0,  3.9],[ 3.9, 0, -3.9],[-3.9, 0, -3.9]];
+  for(const [x,y,z] of corners){
+    const p=new THREE.Mesh(pillarGeom, brassMat);
+    p.position.set(x, y, z);
+    p.castShadow=true;
+    scene.add(p);
+  }
+  // 8 rails — top + bottom, square frame
+  const railLen=7.7;
+  const railX=new THREE.BoxGeometry(railLen, 0.04, 0.04);
+  const railZ=new THREE.BoxGeometry(0.04, 0.04, railLen);
+  const rails=[
+    [railX, 0,  2.7,  3.9],
+    [railX, 0,  2.7, -3.9],
+    [railZ,  3.9,  2.7, 0],
+    [railZ, -3.9,  2.7, 0],
+    [railX, 0, -2.7,  3.9],
+    [railX, 0, -2.7, -3.9],
+    [railZ,  3.9, -2.7, 0],
+    [railZ, -3.9, -2.7, 0],
+  ];
+  for(const [geom, x, y, z] of rails){
+    const r=new THREE.Mesh(geom, brassMat);
+    r.position.set(x, y, z);
+    r.castShadow=true;
+    scene.add(r);
+  }
+}
+
+// 3. glass case (top + 4 sides) — same opacity/clearcoat recipe as the
+//    sister vitrines. NO transmission (would hide the inner ribbons).
+{
+  const glassMat=new THREE.MeshPhysicalMaterial({
+    color:0xffffff,
+    metalness:0,
+    roughness:0.08,
+    ior:1.5,
+    clearcoat:0.6,
+    clearcoatRoughness:0.08,
+    transparent:true,
+    opacity:0.06,
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.0
+  });
+
+  const top=new THREE.Mesh(new THREE.BoxGeometry(7.7, 0.08, 7.7), glassMat);
+  top.position.set(0, 2.7, 0);
+  scene.add(top);
+
+  const sideGeom=new THREE.PlaneGeometry(7.7, 5.4);
+  const front=new THREE.Mesh(sideGeom, glassMat);
+  front.position.set(0, 0, 3.9);
+  scene.add(front);
+  const back=new THREE.Mesh(sideGeom, glassMat);
+  back.position.set(0, 0, -3.9);
+  back.rotation.y=Math.PI;
+  scene.add(back);
+  const left=new THREE.Mesh(sideGeom, glassMat);
+  left.position.set(-3.9, 0, 0);
+  left.rotation.y=Math.PI/2;
+  scene.add(left);
+  const right=new THREE.Mesh(sideGeom, glassMat);
+  right.position.set(3.9, 0, 0);
+  right.rotation.y=-Math.PI/2;
+  scene.add(right);
+}
+
+// =====================================================================
+// === MIRROR DISC + CLOCK PERIMETER (the piece-specific elements) =====
+// =====================================================================
+// A faint glass annulus at y=0 between the central spire and the inner
+// ring — visible only via clearcoat catch. This is the "axis c↔g" surface;
+// the flute ribbon weaves above it, the violin's exact reflection below.
+{
+  const mirrorMat=new THREE.MeshPhysicalMaterial({
+    color:0xfff2cc,
+    metalness:0.0,
+    roughness:0.06,
+    ior:1.5,
+    clearcoat:0.9,
+    clearcoatRoughness:0.06,
+    transparent:true,
+    opacity:0.05,
+    side:THREE.DoubleSide,
+    depthWrite:false,
+    envMapIntensity:1.4 * (isDark?1.0:0.85)
+  });
+  // RingGeometry is flat in xy; rotate to xz so it lies horizontal at y=0.
+  const mirror=new THREE.Mesh(
+    new THREE.RingGeometry(0.18, R_INNER + 0.30, 96, 1),
+    mirrorMat
+  );
+  mirror.rotation.x = -Math.PI/2;
+  mirror.position.y = 0;
+  // Transparent + depthWrite:false → cannot participate in the shadow pass.
+  scene.add(mirror);
+}
+
+// 60-tick brass clock perimeter at R_TICK, on the wood top. Every 5th tick
+// is a thicker/longer "hour" mark — the natural 12 segments correspond to
+// the 12 five-measure phrases of the body. The "12 o'clock" mark (body_s=0)
+// is doubled into a small brass anchor dot just outside the perimeter, so
+// the eye can find the cycle origin from any view.
+{
+  const minTickGeom=new THREE.BoxGeometry(0.10, 0.012, 0.026);  // long axis = x; we rotate around y so it points radially
+  const hourTickGeom=new THREE.BoxGeometry(0.18, 0.020, 0.040);
+  const N_TICK = 60;
+  for(let i=0; i<N_TICK; i++){
+    const phase = i / N_TICK;
+    const theta = -Math.PI/2 + phase * 2*Math.PI;
+    const isHour = (i % 5 === 0);
+    const len = isHour ? 0.18 : 0.10;
+    // Place tick so its INNER end lies at R_TICK; outer end at R_TICK + len.
+    const cx = (R_TICK + len/2) * Math.cos(theta);
+    const cz = (R_TICK + len/2) * Math.sin(theta);
+    const m = new THREE.Mesh(isHour ? hourTickGeom : minTickGeom, brassMat);
+    m.position.set(cx, -2.69, cz);
+    // Default geom long axis = x; rotation.y = -theta orients it radially outward.
+    m.rotation.y = -theta;
+    m.castShadow = true;
+    scene.add(m);
+  }
+  // 12 o'clock anchor dot
+  {
+    const anchor = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.06, 0.06, 0.014, 18),
+      brassMat
+    );
+    anchor.position.set(0, -2.685, -(R_TICK + 0.36));
+    anchor.castShadow = true;
+    scene.add(anchor);
+  }
+}
+
+// 4. brass nameplate, engraved via CanvasTexture
+{
+  function makeNameplateTexture(){
+    const W=1200, H=200;
+    const cv=document.createElement('canvas');
+    cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const grad=ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,    '#d8a64a');
+    grad.addColorStop(0.45, '#b8862f');
+    grad.addColorStop(1,    '#8a5f1d');
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,W,H);
+    ctx.globalAlpha=0.05;
+    for(let y=0;y<H;y+=2){
+      ctx.fillStyle = (y%4===0)?'#000':'#fff';
+      ctx.fillRect(0,y,W,1);
+    }
+    ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(60,38,16,0.45)';
+    ctx.lineWidth=2;
+    ctx.strokeRect(14,14,W-28,H-28);
+    ctx.strokeStyle='rgba(255,232,175,0.35)';
+    ctx.lineWidth=1;
+    ctx.strokeRect(15,15,W-30,H-30);
+
+    const SERIF='"Baskerville","Bodoni 72","Didot","Hoefler Text","Garamond","Times New Roman",serif';
+    const SERIF_IT='italic '+SERIF;
+    const PAD=80;
+    const MAX=W - PAD*2;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+
+    const line1='JOHANN SEBASTIAN BACH';
+    let f1=72;
+    ctx.font=`500 ${f1}px ${SERIF}`;
+    while(ctx.measureText(line1).width>MAX && f1>20){ f1-=2; ctx.font=`500 ${f1}px ${SERIF}`; }
+
+    const line2='Canon perpetuus a 3   ·   BWV 1079';
+    let f2=42;
+    ctx.font=`${f2}px ${SERIF_IT}`;
+    while(ctx.measureText(line2).width>MAX && f2>14){ f2-=2; ctx.font=`${f2}px ${SERIF_IT}`; }
+
+    function engraved(text, font, x, y, mainColor){
+      ctx.font=font;
+      ctx.fillStyle='rgba(28, 16, 6, 0.85)';
+      ctx.fillText(text, x + 1.2, y + 1.2);
+      ctx.fillStyle='rgba(255, 232, 175, 0.55)';
+      ctx.fillText(text, x - 1.0, y - 1.0);
+      ctx.fillStyle=mainColor;
+      ctx.fillText(text, x, y);
+    }
+    engraved(line1, `500 ${f1}px ${SERIF}`,    W/2, H*0.40, '#3a230d');
+    engraved(line2, `${f2}px ${SERIF_IT}`,     W/2, H*0.72, '#3a230d');
+
+    const tex=new THREE.CanvasTexture(cv);
+    tex.anisotropy=8;
+    tex.colorSpace=THREE.SRGBColorSpace;
+    return tex;
+  }
+  const engravedTex=makeNameplateTexture();
+  const engravedFace=new THREE.MeshStandardMaterial({
+    map:engravedTex,
+    color:0xffffff,
+    metalness:0.7,
+    roughness:0.38,
+    envMapIntensity:1.0 * (isDark?1.0:0.6)
+  });
+  const plateMats=[brassMat, brassMat, engravedFace, brassMat, brassMat, brassMat];
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.04, 0.4), plateMats);
+  plate.position.set(0, -2.68, 3.65);
+  plate.castShadow=true;
+  scene.add(plate);
+}
+
+// === Engraved emblem — Penrose impossible-staircase ===
+// Bach's Canon perpetuus is the musical analogue of Penrose's impossible
+// staircase: it climbs/falls forever within a closed loop, never resolving.
+// Sampled from assets/pic/penrose_staircase.png with the same line/shadow
+// luminance-band split used by the per-Tonos sibling — calibrated to the
+// PNG's actual histogram:
+//   * lines  (L<90)          → engraved as full walnut-black strokes
+//   * shadow (130 ≤ L ≤ 170) → engraved as dim walnut fill (the
+//     darkest face / impossibility-anchor region)
+// If getImageData throws (canvas tainted under file:// origin), we fall
+// back to drawing the whole PNG as a single stamp; serve the page via a
+// local HTTP server (`python3 -m http.server`) for the proper threshold.
+{
+  function makeOverlayTexture(){
+    const W=1024, H=768;     // 4:3 — matches PNG aspect, plane 0.78×0.585
+    const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+    const ctx=cv.getContext('2d');
+    const tex=new THREE.CanvasTexture(cv);
+    tex.colorSpace=THREE.SRGBColorSpace;
+    tex.anisotropy=16;
+
+    const img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=()=>{
+      // Letterbox-fit the PNG into the canvas, rotated 180° so the staircase's
+      // "high step" reads upright when looked at from the nameplate (+z) side.
+      // (CanvasTexture.flipY=true + plane rotation.x=-π/2 mean canvas-top maps
+      //  to world +z; the staircase PNG already has its tall steps at image-top,
+      //  so we want PNG-top → world +z, i.e. NO V-flip + an H-flip to keep the
+      //  staircase's left/right reading consistent with the source image.)
+      const work=document.createElement('canvas');
+      work.width=W; work.height=H;
+      const wctx=work.getContext('2d');
+      wctx.imageSmoothingEnabled=true;
+      wctx.imageSmoothingQuality='high';
+      wctx.save();
+      wctx.translate(W, 0);
+      wctx.scale(-1, 1);   // H-flip; texture's UV-flipY handles the V mapping
+      const imgAR=img.width/img.height, cvAR=W/H;
+      let dw, dh;
+      if(imgAR > cvAR){ dw=W*0.94; dh=dw/imgAR; }
+      else            { dh=H*0.94; dw=dh*imgAR; }
+      const dx=(W-dw)/2, dy=(H-dh)/2;
+      wctx.drawImage(img, dx, dy, dw, dh);
+      wctx.restore();
+
+      const lineCv=document.createElement('canvas');
+      lineCv.width=W; lineCv.height=H;
+      const shCv=document.createElement('canvas');
+      shCv.width=W; shCv.height=H;
+      let haveShadowMask=false;
+
+      try {
+        // Per-pixel threshold via getImageData. Line band widened to L<90 so
+        // anti-aliased stroke edges count too — the PNG strokes are only
+        // ~3px after letterboxing into 1024×768; without AA inclusion the
+        // engraved line core is sub-pixel and disappears at grazing angles.
+        const src=wctx.getImageData(0,0,W,H).data;
+        const lineImg=lineCv.getContext('2d').createImageData(W,H);
+        const shImg=shCv.getContext('2d').createImageData(W,H);
+        for(let i=0; i<src.length; i+=4){
+          if(src[i+3] < 8) continue;
+          const L = 0.299*src[i] + 0.587*src[i+1] + 0.114*src[i+2];
+          if(L < 90){
+            lineImg.data[i+3]=255;
+          } else if(L >= 130 && L <= 170){
+            shImg.data[i+3]=255;
+          }
+        }
+        lineCv.getContext('2d').putImageData(lineImg, 0, 0);
+        shCv.getContext('2d').putImageData(shImg, 0, 0);
+
+        // Dilate the line mask by ~3px via 3×3 stamp (source-over union)
+        // so the engraved line width survives in world units on the small
+        // 0.78m plane.
+        const dil=document.createElement('canvas');
+        dil.width=W; dil.height=H;
+        const dctx=dil.getContext('2d');
+        for(let oy=-1; oy<=1; oy++){
+          for(let ox=-1; ox<=1; ox++){
+            dctx.drawImage(lineCv, ox, oy);
+          }
+        }
+        const lc=lineCv.getContext('2d');
+        lc.clearRect(0,0,W,H);
+        lc.drawImage(dil, 0, 0);
+
+        haveShadowMask=true;
+      } catch(e) {
+        console.warn(
+          'Penrose: getImageData blocked (', e.message, '). Using whole-image stamp fallback. ' +
+          'Serve the page via a local HTTP server (e.g. `python3 -m http.server`) for the proper line/shadow split.'
+        );
+        lineCv.getContext('2d').drawImage(work, 0, 0);
+        haveShadowMask=false;
+      }
+
+      const tintPassFrom=(srcCv, color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(srcCv, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        ctx.drawImage(tmp, 0, 0);
+      };
+      const innerTintPassFrom=(srcCv, color, offX, offY)=>{
+        const tmp=document.createElement('canvas');
+        tmp.width=W; tmp.height=H;
+        const tctx=tmp.getContext('2d');
+        tctx.drawImage(srcCv, offX, offY);
+        tctx.globalCompositeOperation='source-in';
+        tctx.fillStyle=color;
+        tctx.fillRect(0,0,W,H);
+        tctx.globalCompositeOperation='destination-in';
+        tctx.drawImage(srcCv, 0, 0);
+        ctx.drawImage(tmp, 0, 0);
+      };
+
+      if(haveShadowMask){
+        // Impossibility-anchor fill — deep walnut, behind everything.
+        tintPassFrom(shCv, 'rgba(20, 10, 3, 0.90)', 0, 0);
+      }
+      // Shared 5-pass engraving recipe — wider drop-shadow halo, pitch-black
+      // recess, and a two-pass bevel rim (warm primary + sharper catch-light)
+      // for clear visibility against the dark walnut.
+      tintPassFrom(lineCv, 'rgba(0, 0, 0, 0.60)', 4.5, 4.5);
+      tintPassFrom(lineCv, 'rgba(0, 0, 0, 0.45)', 2.0, 2.0);
+      tintPassFrom(lineCv, 'rgba(0, 0, 0, 1.0)', 0, 0);
+      innerTintPassFrom(lineCv, 'rgba(248, 218, 165, 0.85)', -2.5, -2.5);
+      innerTintPassFrom(lineCv, 'rgba(255, 240, 205, 0.55)', -1.0, -1.0);
+
+      tex.needsUpdate=true;
+    };
+    img.onerror=(e)=>{
+      console.warn('penrose_staircase.png failed to load; engraving overlay will be empty', e);
+    };
+    img.src='assets/pic/penrose_staircase.png';
+
+    return tex;
+  }
+
+  const tex=makeOverlayTexture();
+  const overlayMat=new THREE.MeshStandardMaterial({
+    map:tex,
+    transparent:true,
+    alphaTest:0.04,
+    roughness:0.85,
+    metalness:0.0,
+    envMapIntensity:0.5 * (isDark?1.0:0.6),
+    polygonOffset:true,
+    polygonOffsetFactor:-1,
+    polygonOffsetUnits:-1,
+  });
+  overlayMat.side=THREE.DoubleSide;
+  // 1.00×0.75 (4:3) plane laid flat 0.01 above the wood top, tucked
+  // into the front-right corner of the wood base — the empty L-shaped
+  // region outside the clock ring (R_TICK=2.7) and to the right of the
+  // nameplate (which occupies x∈[-1.3,+1.3]). Centre at (2.7, 2.7):
+  // plane spans x ∈ [2.2, 3.2], z ∈ [2.325, 3.075]. Closest corner to
+  // origin is (2.2, 2.325), radius 3.20 — well clear of the outermost
+  // hour-tick edge at 2.88, and 0.7+ inboard of the corner pillar at
+  // (3.9, _, 3.9).
+  const G=new THREE.PlaneGeometry(1.00, 0.75);
+  const overlay=new THREE.Mesh(G, overlayMat);
+  overlay.rotation.x=-Math.PI/2;
+  overlay.position.set(2.7, -2.69, 2.7);
+  overlay.receiveShadow=true;
+  scene.add(overlay);
+}
+
+// 6. central brass spire — full vitrine height, thin uniform-radius cylinder.
+//    Marks the rotation axis of the wheel; from top view it's a single
+//    bright dot at the geometric center.
+{
+  const spire=new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.05, 5.4, 18),
+    brassMat
+  );
+  spire.position.set(0, 0, 0);
+  spire.castShadow=true;
+  scene.add(spire);
+}
+// =====================================================================
+
+// === pitch-at-body table — used by the playhead helper ===
+// For each voice, a 480-element array giving the pitch sounding at body
+// internal time t. Built ONCE from N; constant after that.
+const pitchAtBody=[new Array(TOT16), new Array(TOT16), new Array(TOT16)];
+for(const [v,s,e,p] of N){
+  const sI = Math.max(0, Math.min(TOT16, s));
+  const eI = Math.max(0, Math.min(TOT16, e));
+  for(let i=sI; i<eI; i++) pitchAtBody[v][i]=p;
+}
+
+// === build note dot meshes ===
+const notes=[];
+function makeDot(s, e, p, voice, isTheme){
+  const sizeFactor = 1 + Math.min((e-s)/8, 0.55);
+  // Bass theme notes use the gilded VS_BASS_THEME palette + a fatter sphere;
+  // every other note uses voice-default VS[voice].
+  const useTheme = (voice===2 && isTheme);
+  const vs = useTheme ? VS_BASS_THEME : VS[voice];
+  const geom = useTheme ? sphereGeomBassTheme : sphereGeoms[voice];
+  const mat=new THREE.MeshStandardMaterial({
+    color:vs.color,
+    emissive:vs.emissive,
+    emissiveIntensity:D_E,
+    roughness:vs.roughness,
+    metalness:vs.metalness,
+    envMapIntensity:vs.env * ENV_MUL,
+    transparent:true,
+    opacity:D_O
+  });
+  const mesh=new THREE.Mesh(geom, mat);
+  mesh.position.copy(pos3D(s, p, voice));
+  // Theme notes lift a touch larger overall so they read as monuments.
+  const sizeMul = useTheme ? 1.25 : 1.0;
+  const initialScale = sizeFactor * D_S_F * sizeMul;
+  mesh.scale.setScalar(initialScale);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  notes.push({
+    mesh, mat, voice,
+    body_s:s, body_e:e,
+    audio_s:((s + AUDIO_OFFSET[voice]) % TOT16) * TPS,
+    audio_e:((s + AUDIO_OFFSET[voice]) % TOT16 + (e - s)) * TPS,
+    baseSize:sizeFactor * sizeMul,
+    pE:vs.pE,
+    s:'d',
+    tO:D_O, tE:D_E, tS:initialScale, spd:3.5
+  });
+}
+for(const [v,s,e,p,isTheme] of N) makeDot(s, e, p, v, isTheme===1);
+
+// Sort by audio_s / audio_e so the per-frame state-machine scan is O(1)
+// amortized (two pointers). audio_e may exceed DUR for notes whose tail
+// crosses the loop seam — that's fine for the visual lifecycle pass.
+const sO=notes.slice().sort((a,b)=>a.audio_s - b.audio_s);
+const eO=notes.slice().sort((a,b)=>a.audio_e - b.audio_e);
+let sP=0, eP=0;
+
+const voiceEnabled=[true, true, true];
+
+function setNote(n, s){
+  if(n.s===s) return;
+  n.s=s;
+  if(!voiceEnabled[n.voice]){
+    n.tO=0.04; n.tE=0; n.tS=n.baseSize*0.7; n.spd=8; return;
+  }
+  if(s==='d'){
+    n.tO=D_O; n.tE=D_E; n.tS=n.baseSize*D_S_F; n.spd=3.5;
+  }else if(s==='p'){
+    n.tO=1.0; n.tE=n.pE*P_E_MUL; n.tS=n.baseSize*1.95; n.spd=20;
+  }else{
+    n.tO=O_O; n.tE=O_E; n.tS=n.baseSize*1.08; n.spd=2.4;
+  }
+}
+
+// === three playheads — small bright spheres + halo sprites, one per voice ===
+function makePlayhead(voice){
+  const mat=new THREE.MeshStandardMaterial({
+    color:0xffffff,
+    emissive:VS[voice].color,
+    emissiveIntensity:1.4,
+    envMapIntensity:0,
+    transparent:true,
+    opacity:0
+  });
+  const mesh=new THREE.Mesh(new THREE.SphereGeometry(0.10, 16, 12), mat);
+  mesh.castShadow=true;
+  scene.add(mesh);
+  return mesh;
+}
+const ph=[makePlayhead(0), makePlayhead(1), makePlayhead(2)];
+
+const haloTex=(()=>{
+  const cv=document.createElement('canvas'); cv.width=cv.height=128;
+  const ctx=cv.getContext('2d');
+  const g=ctx.createRadialGradient(64,64,4,64,64,64);
+  g.addColorStop(0,'rgba(255,255,255,1)');
+  g.addColorStop(0.3,'rgba(255,255,255,0.4)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(cv);
+})();
+function makeHalo(){
+  const m=new THREE.Sprite(new THREE.SpriteMaterial({map:haloTex, transparent:true, opacity:0, depthWrite:false}));
+  m.scale.set(0.50,0.50,0.50);
+  scene.add(m);
+  return m;
+}
+const halos=[makeHalo(), makeHalo(), makeHalo()];
+
+// === audio chain ===
+// Sampled chamber trio (flute / violin / cello continuo) routed through a
+// concert-hall bus tail:
+//   Comp → EQ → early reflections → long reverb → stereo widener → limiter.
+const SBASE='https://nbrosowsky.github.io/tonejs-instruments/samples/';
+const limiter=new Tone.Limiter(-1).toDestination();
+const widener=new Tone.StereoWidener(0.55).connect(limiter);
+const reverb =new Tone.Reverb({decay:5.4, preDelay:0.06, wet:0.28}).connect(widener);
+const er     =new Tone.FeedbackDelay({delayTime:0.045, feedback:0.18, wet:0.16}).connect(reverb);
+const eq     =new Tone.EQ3({low:1, mid:0, high:-0.5}).connect(er);
+const comp   =new Tone.Compressor({threshold:-20, ratio:2.4, attack:0.01, release:0.18}).connect(eq);
+
+const flutePan = new Tone.Panner(-0.32).connect(comp);
+const violinPan= new Tone.Panner(+0.32).connect(comp);
+const bassPan  = new Tone.Panner( 0.0 ).connect(comp);
+
+const fluteUrls={
+  A4:'A4.mp3', A5:'A5.mp3', A6:'A6.mp3',
+  C4:'C4.mp3', C5:'C5.mp3', C6:'C6.mp3', C7:'C7.mp3',
+  E4:'E4.mp3', E5:'E5.mp3', E6:'E6.mp3'
+};
+const violinUrls={
+  A3:'A3.mp3', A4:'A4.mp3', A5:'A5.mp3', A6:'A6.mp3',
+  C4:'C4.mp3', C5:'C5.mp3', C6:'C6.mp3', C7:'C7.mp3',
+  E4:'E4.mp3', E5:'E5.mp3', E6:'E6.mp3',
+  G3:'G3.mp3', G4:'G4.mp3', G5:'G5.mp3', G6:'G6.mp3'
+};
+const celloUrls={
+  A2:'A2.mp3', A3:'A3.mp3', A4:'A4.mp3',
+  C2:'C2.mp3', C3:'C3.mp3', C4:'C4.mp3', C5:'C5.mp3',
+  E2:'E2.mp3', E3:'E3.mp3', E4:'E4.mp3',
+  G2:'G2.mp3', G3:'G3.mp3', G4:'G4.mp3'
+};
+
+const fluteSynth =new Tone.Sampler({urls:fluteUrls,  baseUrl:SBASE+'flute/',  release:1.6}).connect(flutePan);
+const violinSynth=new Tone.Sampler({urls:violinUrls, baseUrl:SBASE+'violin/', release:1.4}).connect(violinPan);
+const bassSynth  =new Tone.Sampler({urls:celloUrls,  baseUrl:SBASE+'cello/',  release:1.6}).connect(bassPan);
+fluteSynth.volume.value =-9;
+violinSynth.volume.value=-7;
+bassSynth.volume.value  =-8;
+
+const synths=[fluteSynth, violinSynth, bassSynth];
+
+Tone.Transport.bpm.value=BPM;
+Tone.Transport.loop=true;     // perpetual — never disabled
+Tone.Transport.loopStart=0;
+Tone.Transport.loopEnd=DUR;
+
+// Apply the +0/+32/+8 phase offsets here only — at audio scheduling.
+// Notes whose body_e exceeds TOT16 are clamped at the loop seam (the synth
+// release fires at DUR, the next attack is the same body_s in the next
+// cycle — musically a near-imperceptible ~0.02s gap on the few sustains
+// that span the seam, since the next cycle re-attacks a fresh sustain).
+const evs = N.map(([v, body_s, body_e, p])=>({
+  voice:v,
+  time: (((body_s + AUDIO_OFFSET[v]) % TOT16) * TPS),
+  freq: 440 * Math.pow(2, (p - 69) / 12),
+  // Cap duration at the loop seam so the noteOff doesn't fire past loopEnd
+  // (Tone schedules absolute times; past-loopEnd events are silently dropped).
+  dur:  Math.max(Math.min((body_e - body_s), TOT16 - ((body_s + AUDIO_OFFSET[v]) % TOT16)) * TPS, 0.05)
+}));
+const part=new Tone.Part((t,e)=>{
+  if(!voiceEnabled[e.voice]) return;
+  const vel = e.voice===2
+    ? 0.45 + Math.random()*0.08      // bass — steadier
+    : 0.40 + Math.random()*0.12;     // canon pair — small jitter to breathe
+  synths[e.voice].triggerAttackRelease(e.freq, e.dur, t, vel);
+}, evs);
+part.loop=true;
+part.loopEnd=DUR;
+part.start(0);
+
+// === UI plumbing ===
+const bp=document.getElementById('bp');
+const bs=document.getElementById('bs');
+const bt=document.getElementById('bt');
+const psr=document.getElementById('psr');
+const PLAY='<svg viewBox="0 0 10 10"><polygon points="2,1 8,5 2,9" fill="currentColor"/></svg>';
+const PAUSE='<svg viewBox="0 0 10 10"><rect x="2" y="1" width="2" height="8" fill="currentColor"/><rect x="6" y="1" width="2" height="8" fill="currentColor"/></svg>';
+
+let playing=false, scrubMode=false, lastT=0;
+let cycleCount=0;
+
+function updatePsr(){
+  // Show current angular position of the flute playhead — gives the eye a
+  // continuous polar readout that matches the visible wheel.
+  const t = Tone.Transport.seconds;
+  const internal = ((t / TPS) % TOT16 + TOT16) % TOT16;
+  const deg = Math.round((internal/TOT16) * 360);
+  psr.textContent = `cycle ${cycleCount+1} · θ = ${deg}°`;
+}
+
+function updatePlayheads(t){
+  if(t<0){
+    for(const m of ph) m.material.opacity=0;
+    for(const h of halos) h.material.opacity=0;
+    return;
+  }
+  const T = t / TPS;     // universal step (real-valued for smooth playhead)
+  for(let v=0; v<3; v++){
+    const pos = playheadPos(T, v);
+    if(!pos){
+      ph[v].material.opacity = 0;
+      halos[v].material.opacity = 0;
+      continue;
+    }
+    ph[v].position.copy(pos);
+    halos[v].position.copy(pos);
+    if(voiceEnabled[v]){
+      ph[v].material.opacity = 0.85;
+      halos[v].material.opacity = 0.32;
+    } else {
+      // Soloing-out a voice mutes its playhead so the eye doesn't keep
+      // tracking a "ghost" against silence.
+      ph[v].material.opacity = 0;
+      halos[v].material.opacity = 0;
+    }
+  }
+}
+
+function uui(t){
+  // Time readout in MUSICAL units (bars of the 60-measure body), not seconds —
+  // the wheel's natural unit is the measure.
+  const internal = ((t / TPS) % TOT16 + TOT16) % TOT16;
+  const bar = internal / 8;     // 8 sixteenths per alla-breve measure
+  bt.textContent = `bar ${bar.toFixed(1)} / 60`;
+  if(!scrubMode) bs.value = t.toFixed(2);
+  updatePsr();
+  updatePlayheads(t);
+}
+
+function resetVisualProgress(){
+  sP=0; eP=0;
+  for(const n of notes){ n.s=null; setNote(n,'d'); }
+}
+
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(), 0.1);
+  controls.update();
+
+  // Refresh shadow camera target each frame — without this, OrbitControls
+  // rotation can stale the keyL.target.matrixWorld and shadows drift on
+  // view switches.
+  keyL.target.updateMatrixWorld();
+
+  const tNow=Tone.Transport.seconds;
+
+  if(playing){
+    if(tNow + 0.5 < lastT){
+      // Loop wrap detected — bump cycle counter and reset note state machine.
+      cycleCount++;
+      resetVisualProgress();
+    }
+    lastT=tNow;
+    while(sP<sO.length && sO[sP].audio_s<=tNow){ setNote(sO[sP],'p'); sP++; }
+    while(eP<eO.length && eO[eP].audio_e<=tNow){ setNote(eO[eP],'o'); eP++; }
+    uui(tNow);
+  }
+
+  for(let k=0;k<notes.length;k++){
+    const n=notes[k];
+    const a=1-Math.exp(-n.spd*dt);
+    n.mat.opacity += (n.tO-n.mat.opacity)*a;
+    n.mat.emissiveIntensity += (n.tE-n.mat.emissiveIntensity)*a;
+    const cs=n.mesh.scale.x;
+    n.mesh.scale.setScalar(cs+(n.tS-cs)*a);
+  }
+
+  composer.render();
+}
+animate();
+
+async function play(){
+  if(Tone.context.state!=='running') await Tone.start();
+  await Tone.loaded();
+  playing=true;
+  Tone.Transport.start();
+  bp.innerHTML=PAUSE;
+  bp.setAttribute('aria-label','Pause');
+  lastT=Tone.Transport.seconds;
+}
+
+function pause(){
+  playing=false;
+  Tone.Transport.pause();
+  bp.innerHTML=PLAY;
+  bp.setAttribute('aria-label','Play');
+}
+
+function seek(t){
+  const wp=playing;
+  if(Tone.Transport.state==='started'){
+    Tone.Transport.pause();
+    for(const s of synths) s.releaseAll();
+  }
+  Tone.Transport.seconds=t;
+  lastT=t;
+  for(const n of notes) n.s=null;
+  sP=0; eP=0;
+  while(sP<sO.length && sO[sP].audio_s<=t){
+    const n=sO[sP];
+    setNote(n, n.audio_e<=t?'o':'p');
+    sP++;
+  }
+  while(eP<eO.length && eO[eP].audio_e<=t) eP++;
+  for(let i=sP; i<sO.length; i++) setNote(sO[i],'d');
+  uui(t);
+  if(wp){ playing=true; Tone.Transport.start(); }
+}
+
+bp.addEventListener('click',()=>playing?pause():play());
+
+let scrubT;
+bs.addEventListener('input',()=>{
+  scrubMode=true;
+  // Update the readout immediately while dragging.
+  const t = parseFloat(bs.value);
+  const internal = ((t / TPS) % TOT16 + TOT16) % TOT16;
+  bt.textContent = `bar ${(internal/8).toFixed(1)} / 60`;
+  clearTimeout(scrubT);
+  scrubT=setTimeout(()=>{ scrubMode=false; seek(parseFloat(bs.value)); }, 80);
+});
+
+function toggleVoice(v){
+  voiceEnabled[v]=!voiceEnabled[v];
+  document.getElementById('v'+v).setAttribute('aria-pressed', String(voiceEnabled[v]));
+  if(!voiceEnabled[v]) synths[v].releaseAll();
+  // Re-evaluate every note in this voice so dim/full state reflects the toggle.
+  for(const n of notes) if(n.voice===v){ const cs=n.s; n.s=null; setNote(n, cs||'d'); }
+  // Hide / show the voice's ribbon too.
+  if(voiceRibbons[v]) voiceRibbons[v].visible = voiceEnabled[v];
+}
+document.getElementById('v0').addEventListener('click',()=>toggleVoice(0));
+document.getElementById('v1').addEventListener('click',()=>toggleVoice(1));
+document.getElementById('v2').addEventListener('click',()=>toggleVoice(2));
+
+// (No ∞ loop button — the piece has no cadence; loop is permanently on.)
+
+for(const n of notes){ n.s=null; setNote(n,'d'); }
+bs.max=DUR.toFixed(2);
+uui(0);
+
+// URL ?t=N support — convenient for headless screenshots and direct linking
+// to a specific moment in the loop. Skips audio start (no user gesture).
+{
+  const qp = new URLSearchParams(location.search);
+  const tArg = parseFloat(qp.get('t'));
+  if(!isNaN(tArg)){
+    const tt = Math.max(0, Math.min(DUR-0.001, tArg));
+    Tone.Transport.seconds = tt;
+    lastT = tt;
+    sP=0; eP=0;
+    while(sP<sO.length && sO[sP].audio_s<=tt){
+      const n=sO[sP]; setNote(n, n.audio_e<=tt?'o':'p'); sP++;
+    }
+    while(eP<eO.length && eO[eP].audio_e<=tt) eP++;
+    uui(tt);
+  }
+}
+</script>
+</body>
+</html>
