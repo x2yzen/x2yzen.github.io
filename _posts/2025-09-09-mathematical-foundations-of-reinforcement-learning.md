@@ -5,127 +5,169 @@ categories: [ reinforcement_learning ]
 tags: [rl]
 pin: false
 math: true
+mermaid: true
 ---
 
 ## Overview
 
-This blog attempts to clarify the mathematical foundations of the reinforcement learning framework in a concise manner,
-following these principles:
+This post lays out the mathematical foundations of reinforcement learning,
+following three principles:
 
-1. **Minimization**: Introduce only the most essential concepts and algorithms, avoiding improved/hybrid versions
-2. **Clarification**: Use equations rather than natural language to describe algorithms for precise definitions
-3. **Structure**: Present their intrinsic connections and developmental patterns
+1. **Minimalism**: Cover only the essential concepts and algorithms, omitting variants and extensions.
+2. **Clarity**: Define algorithms with equations rather than prose, for precision.
+3. **Structure**: Present their intrinsic connections and developmental progression.
 
-The core problem in reinforcement learning is to find the optimal action policy in an environment that can be abstracted
-as a *Markov decision process*, in order to maximize rewards. There are two main approaches:
+The core problem in reinforcement learning is to find the optimal *policy* in an *environment*
+modeled as a *Markov decision process*, so as to maximize the expected return. There are two main approaches:
 
-1. **Value-based**: Describes the value $q(s,a)$ of each action in each environment state. Indirectly, the optimal
-   policy is to select the action with maximum value in the current environment. These methods belong to classical
-   reinforcement learning theory, solved through dynamic programming to achieve Bellman Optimal Equation, with deep
-   Q-learning being a typical algorithm.
-2. **Policy-based**: Directly describes the optimal policy function, i.e., given any state s, output the optimal
-   action $pi(a|s)$. This approach is closer to solving optimization problems, optimizing expected rewards through
-   standard gradient ascent.
+1. **Value-based**: Describe the value $q(s,a)$ of each (state, action) pair. The optimal policy is then
+   derived implicitly — in each state, take the action with maximum $q(s,a)$. These methods belong to
+   classical reinforcement learning theory, solved through dynamic programming to achieve the Bellman optimality equation.
+2. **Policy-based**: Directly parameterize the policy itself — $\pi(a|s)$ specifies the action distribution
+   given state $s$. This frames learning as a direct optimization problem: maximize expected return via
+   gradient ascent on the policy parameters.
 
-Ultimately, these two methods can be combined through the **actor-critic** algorithmic framework, forming the complete
-theory of modern reinforcement learning.
+These two approaches are unified by the **actor-critic** framework, which underlies most modern
+reinforcement learning algorithms.
+
+The lineage of algorithms covered in this post:
+
+```mermaid
+flowchart TD
+    BE["Bellman equation<br/>eqs (1)–(3)"]
+    BOE["Bellman optimality equation<br/>eqs (4)(5)"]
+    BE --> BOE
+
+    BOE --> ITER["Policy / Value iteration<br/><i>model-based</i>"]
+    BOE --> PG["Policy gradient theorem<br/>eqs (17)–(22)"]
+
+    ITER -->|drop model| NMC["Naive Monte Carlo<br/><i>episode-level</i>"]
+    NMC -->|incremental TD<br/>via Robbins-Monro| QL["Q-learning"]
+    QL -->|tabular ↦ parametric| DQN["Deep Q-learning (DQN)"]
+
+    PG --> REINFORCE["REINFORCE<br/><i>MC value estimate</i>"]
+    REINFORCE -->|replace MC with TD| QAC["Q-actor-critic"]
+    QAC -->|add baseline| A2C["Advantage actor-critic (A2C)"]
+
+    QL -. shared value-estimation .-> QAC
+```
+
+The left branch (value-based) progressively drops assumptions — model, then full
+episodes, then tabular form — to arrive at deep Q-learning. The right branch
+(policy-based) sets up policy gradient and inherits value-estimation techniques
+from the left branch via the actor-critic framework.
 
 ## Value-based methods
 
 ### Bellman Equation
 
-The Bellman Optimal Equation is a special form of the *Bellman Equation*. In the MDP model, the value of a state is
-defined as the reward obtained by following a policy $\pi$ from that state, consisting of *immediate rewards* and
-*future rewards*, where future rewards are actually the values of the next states. Therefore, we can use an equation to
-describe the relationship between the value of any state s and the values of other states:
-
-$$
-V_{\pi}(s) = \sum_{a} \pi(a|s) \left[ \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s'} P(s'|s,a) V_{\pi}(s') \right] \\
-= \mathbb{E}[R + \gamma V_{\pi}(s')] \tag{1}
-$$
-
-This equation is called the Bellman Equation. From the action value perspective, the Bellman Equation has a dual form
-describing the relationship between any action's value and other action values:
+In an MDP, the value of a state under a policy $\pi$ is the expected discounted return
+obtained by following $\pi$ from that state. This return splits into an immediate reward
+and a discounted future return; the latter is, in expectation, the value of the next state
+under $\pi$. The recursion yields an equation relating $v_\pi(s)$ to the values of its successor states:
 
 $$
 \begin{aligned}
-q_{\pi}(s,a) &= \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s'} P(s'|s,a) V_{\pi}(s') \\
+v_{\pi}(s) &= \sum_{a} \pi(a|s) \left[ \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s'} P(s'|s,a) v_{\pi}(s') \right] \\
+&= \mathbb{E}[R + \gamma v_{\pi}(s')]
+\end{aligned} \tag{1}
+$$
+
+This is the *Bellman Equation*. It has a dual form for action values, relating
+$q_\pi(s,a)$ to the values at successor (state, action) pairs:
+
+$$
+\begin{aligned}
+q_{\pi}(s,a) &= \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s'} P(s'|s,a) v_{\pi}(s') \\
 &= \sum_{r} P(r|s,a) \cdot r + \gamma \sum_{s', a'} P(s'|s,a) \pi(a'|s') q_{\pi}(s',a') \\
 &= \mathbb{E}[R + \gamma q_{\pi}(s',a')]
 \end{aligned} \tag{2}
 $$
 
-The transformation relationship between them is:
+The two are related by:
 
 $$
-V_{\pi}(s) = \sum_{a} \pi(a|s) q_{\pi}(s,a) \tag{3}
+v_{\pi}(s) = \sum_{a} \pi(a|s) q_{\pi}(s,a) \tag{3}
 $$
 
 ### Optimality of Bellman Equation
 
-From the Bellman Equation, we can see that state values are defined under a specific policy, so the same state has
-different values under different policies. Therefore, there must exist a policy under which each state's value is no
-less than that state's value under any other policy (otherwise the policy could be adjusted at that state). We define
-this as the optimal policy.
+State values depend on the policy: the same state takes different values under
+different policies. There exists a policy whose value at every state is at
+least as large as under any other policy — the *optimal policy*.
 
-Substituting into the Bellman equation, the state value functions under the optimal policy should satisfy:
-
-$$
-v(s) = \max_{\pi} \left( r_{\pi} + \gamma P_{\pi} V \right)  \tag{4}
-$$
-
-This equation is called the Bellman optimality equation (state value version).
-Obviously, it still has a dual form based on action values:
+Substituting the optimal policy into the Bellman equation, the optimal state
+value function satisfies:
 
 $$
-q(s,a) = r_{t+1} + \gamma \max_{a} q(s_{t+1}, a) \tag{5}
+v = \max_{\pi} \left( r_{\pi} + \gamma P_{\pi} v \right) \tag{4}
 $$
 
-BOE is the core concept and essential problem of reinforcement learning. All following content revolves around these two
-points:
+where $v \in \mathbb{R}^{|\mathcal S|}$ stacks $v(s)$ over states; $r_\pi$ and
+$P_\pi$ are the expected immediate-reward vector and state-transition matrix
+induced by $\pi$, with $(r_\pi)_s = \sum_a \pi(a|s) \sum_r P(r|s,a)\, r$ and
+$(P_\pi)_{s,s'} = \sum_a \pi(a|s) P(s'|s,a)$.
 
-1. How to solve BOE: From the most basic value function iteration → monte-carlo learning, eliminating the requirement
-   for environment model description; monte-carlo learning → temporal difference, achieving incremental updates and
-   improving algorithmic efficiency; the final product is Q-learning.
-2. What specific forms to use for v(s) and q(s,a): From discrete tabular form to parametric function form, gaining
-   conciseness and generalization, combined with 1, finally obtaining deep Q-learning.
+This is the *Bellman optimality equation* (BOE), in its state-value form. The
+dual form for action values, with $q \in \mathbb{R}^{|\mathcal S||\mathcal A|}$
+stacked over $(s,a)$, is:
 
-The following sections will separately introduce methods for solving BOE and forms of value functions.
+$$
+q = r + \gamma P\, \max_a q \tag{5}
+$$
+
+where $r_{(s,a)} = \sum_r P(r|s,a)\, r$, $P_{(s,a), s'} = P(s'|s,a)$, and
+$\max_a q$ denotes the vector of state-wise maxima,
+$(\max_a q)_s = \max_{a'} q(s, a')$.
+
+The BOE *defines* the optimum; everything that follows is about how to solve
+it, along two axes:
+
+1. **Solution method.** Value iteration (requires the environment model) →
+   Monte Carlo learning (model-free, sample-based) → temporal difference
+   (incremental, more efficient), culminating in *Q-learning*.
+2. **Representation of $v(s)$ and $q(s,a)$.** Discrete tabular form →
+   parametric (function-approximation) form, which is compact and generalizes
+   across states. Combined with axis 1, this yields *deep Q-learning*.
 
 ### Solve BOE
 
 #### Iteration Methods
 
-The most basic BOE solution method, applicable when environment models $p(r|s,a)$ and $p(s'|s,a)$ are known.
+When the environment model — $P(r|s,a)$ and $P(s'|s,a)$ — is known, the BOE can be
+solved by direct iteration. The three methods below are all underpinned by the
+*Contraction Mapping Theorem*, which guarantees their convergence.
 
-##### policy evaluation
+##### Policy evaluation
 
-A series of iteration-based solution methods, with effectiveness guaranteed by the *Contraction Mapping Theorem*.
-Bellman Equation (1) holds for every state s, so theoretically it can be solved simultaneously. However, when there are
-too many states, to avoid the computational complexity of solving a huge inverse matrix, iterative methods are often
-used to obtain approximate solutions: simply substitute random initial v values into the right side of the equation
-continuously, and after convergence, the state value under the given policy $\pi$ can be obtained. This process is also
-called _policy evaluation_.
+The Bellman equation (1) is a linear system in $v$ and could in principle be solved
+by matrix inversion, but for large state spaces this is computationally prohibitive.
+An iterative fixed-point procedure is used instead:
 
 $$
 v_{k+1} = r_{\pi} + \gamma P_{\pi} v_{k} \tag{6}
 $$
 
-Bellman Optimal Equation (3) is more tricky: because $\pi$ and v are mutually dependent, but it can be proven that it
-can still be solved by initializing either side and then iterating.
+Starting from any initial $v_0$, this iteration converges (in the limit) to the value
+function $v_\pi$ of the given policy $\pi$. The procedure is called *policy evaluation*.
 
-##### value iteration
+The BOE (4) is harder, because $v$ and $\pi$ are coupled — both are unknown. It can
+still be solved iteratively: initialize one side, alternate updates between $v$ and $\pi$,
+and the procedure converges.
 
-If we choose to initialize v, this method is called *value iteration*, with specific steps:
+##### Value iteration
 
-1. Starting from any given initial state value function v, for state s, calculate q(s,a)
+Initializing $v$ gives *value iteration*. At iteration $k$:
 
-$$
-q_k(s,a) = \sum_{r}p(r|s,a)r + \gamma\sum_{s'}p(s'|s,a)v_k(s') \tag{7}
-$$
+1. **Q computation.** For each state $s$, compute $q_k(s, a)$ from $v_k$:
 
-2. Obviously, by equation (3), the policy that maximizes state s value must greedily select the action a corresponding
-   to the maximum q(s,a)
+   $$
+   q_k(s,a) = \sum_{r} P(r|s,a)\, r + \gamma \sum_{s'} P(s'|s,a)\, v_k(s') \tag{7}
+   $$
+
+2. **Policy improvement.** By eq. (3), $v(s)$ is a $\pi$-weighted average of $q(s,a)$;
+   it is maximized by putting all weight on the action with the largest $q$ — the
+   greedy policy:
 
    $$
    \pi_{k+1}(a|s) =
@@ -135,42 +177,47 @@ $$
    \end{cases} \quad \text{where } a_k^*(s) = \arg\max_a q_k(s, a). \tag{8}
    $$
 
-3. Calculate new v(s), noting that v at this time is not a value function, because the equation it satisfies is v1=f(v0)
-   rather than the standard form v1=f(v1) of the Bellman equation
+3. **Value update.**
 
    $$
    v_{k+1}(s) = \max_{a} q_k(s, a) \tag{9}
    $$
 
-Repeat until the difference between vk+1 and vk is negligible, then we obtain the optimal value for each state and the
-corresponding computable optimal policy (deterministic greedy).
+   The relation $v_{k+1} = f(v_k)$ here is an iteration map, not the fixed-point Bellman
+   equation $v_\pi = f(v_\pi)$. So intermediate $v_k$ is not the value function of any
+   policy; only at convergence (when $v_{k+1} = v_k$) does it coincide with $v^*$.
 
-##### policy iteration
+Repeat until $\|v_{k+1} - v_k\|$ is negligible. The limit is the optimal state value; the
+corresponding optimal policy is the (deterministic greedy) $\pi_{k+1}$ from (8).
 
-Since v and $\pi$ have a one-to-one correspondence, by symmetry, we can also iterate starting from any initial policy.
-This method is called _policy iteration_:
+##### Policy iteration
 
-1. Policy evaluation: Starting from any given initial policy $\pi_{0}$, for each state s, use equation (6) to calculate
-   the corresponding value function $v_{\pi_{0}}$
-2. Policy improvement: For each action a under each state s, use $v_{\pi_{0}}$ to calculate $q_{\pi_{0}}(s,a)$, then
-   update $\pi_{0}$ to deterministic greedy
+Symmetrically, we can iterate starting from a policy. *Policy iteration* repeats, at
+iteration $k$:
 
-Repeat steps 1-2 iteratively until v and $\pi$ converge and correspond to each other. Compared to value iteration,
-policy iteration embeds an inner loop in each outer loop step, requiring the value function to reach convergence.
+1. **Policy evaluation.** Compute $v_{\pi_k}$ for the current policy $\pi_k$ by iterating
+   (6) to convergence.
+2. **Policy improvement.** Compute $q_{\pi_k}(s,a)$ from $v_{\pi_k}$ via (7), and update
+   to the greedy policy $\pi_{k+1}$ as in (8).
 
-#### Monte-Carlo Learning
+Repeat until $\pi$ stabilizes. Each outer step contains an inner loop (the full policy
+evaluation), so policy iteration is more expensive per outer step than value iteration,
+but typically converges in fewer outer steps.
 
-In real-world application scenarios, environment models (states, actions, reward mechanisms, etc.) are often difficult
-to express completely, making value/policy iteration ineffective (they all require environment models to calculate
-action values). However, calculating action values can also be estimated using empirical sampling, thus introducing a
-class of model-free methods collectively called monte-carlo learning.
+#### Monte Carlo Learning
 
-##### Naive Monte-Carlo
+In practice, the environment model — $P(s'|s,a)$ and $P(r|s,a)$ — is often unknown,
+making value/policy iteration inapplicable, since both depend on the model to compute
+action values. Action values can instead be estimated by empirical sampling, leading
+to a class of model-free methods collectively called *Monte Carlo learning*.
 
-The core of the policy iteration algorithm is actually calculating the action value function (because optimal policy is
-simply deterministic greedy on action value). Returning to the most essential definition, action value $q_{\pi}(s,a)$ is
-actually "the total discounted return obtained by executing action a in state s and then following policy $\pi$", so it
-can be estimated by sampling enough episodes and taking the average.
+##### Naive Monte Carlo
+
+Recall that policy iteration is essentially driven by computing $q_\pi(s,a)$: once we
+have it, the optimal policy is deterministic greedy w.r.t. $q$. By definition,
+$q_\pi(s,a)$ is the expected discounted return obtained by taking action $a$ in state
+$s$ and then following $\pi$ — so it can be estimated by averaging the returns of many
+episodes sampled from $(s,a)$ under $\pi$.
 
 ```
 Initialization: Initial guess π₀.
@@ -180,21 +227,21 @@ Aim: Search for an optimal policy.
 While the value estimate has not converged, for the kᵗʰ iteration, do
     For every state s ∈ S, do
         For every action a ∈ A(s), do
-            Collect sufficiently many episodes starting from (s, a) following π₋k
+            Collect sufficiently many episodes starting from (s, a) following π_k
 
     MC-based policy evaluation step:
-        q_{π₋k}(s, a) = average return of all the episodes starting from (s, a)
+        q_{π_k}(s, a) = average return of all the episodes starting from (s, a)
 
     Policy improvement step:
-        a₋k*(s) = argmaxₐ q_{π₋k}(s, a)
-        π_{k+1}(a|s) = 1 if a = a₋k* and π_{k+1}(a|s) = 0 otherwise
+        a_k*(s) = argmaxₐ q_{π_k}(s, a)
+        π_{k+1}(a|s) = 1 if a = a_k*(s) and π_{k+1}(a|s) = 0 otherwise
 ```
 
 ##### Temporal-Difference
 
-Monte-carlo learning requires collecting several complete episodes before each iteration, which is inefficient in
-practical implementation. Actually, an incremental method can be used for continuous iteration. First, introduce the
-required lemma:
+Monte Carlo learning requires a complete episode before each update, which is
+inefficient in practice. We can replace the episode-level update with an
+incremental, step-by-step one. The mathematical tool is the following lemma.
 
 ###### Lemma: Robbins-Monro
 
@@ -207,65 +254,75 @@ Algorithm (Robbins-Monro):
 
 Convergence Conditions:
 (a) 0 < c₁ ≤ ∇g(w) ≤ c₂ for all w        (monotonicity & bounded gradient)
-(b) ∑a_k = ∞ and ∑a_k² < ∞              (step sizes decay appropriately)  
+(b) ∑a_k = ∞ and ∑a_k² < ∞              (step sizes decay appropriately)
 (c) E[η_k|H_k] = 0 and E[η_k²|H_k] < ∞   (zero-mean, finite variance noise)
     where H_k = {w_k, w_{k-1}, ...}
 ```
 
 *Discussion:*
 
-(a) In the first condition, 0 < c₁ ≤ ∇ₓg(w) indicates that g(w) is a **monotonically increasing** function. This
-condition ensures that the root of g(w) = 0 exists and is unique. The inequality ∇ₓg(w) ≤ c₂ indicates that the gradient
-of g(w) is bounded from above. For example, g(w) = tanh(w − 1) satisfies this condition, but g(w) = w³ − 5 does not.
+(a) The bound $0 < c_1 \le \nabla g(w)$ makes $g$ strictly increasing, ensuring
+the root of $g(w)=0$ exists and is unique; $\nabla g(w) \le c_2$ bounds the
+gradient from above. For example, $g(w) = w$ trivially satisfies both bounds;
+$g(w) = w^3 - 5$ fails the upper bound since $\nabla g = 3w^2$ is unbounded.
 
-(b) The second condition of {aₖ} requires that aₖ should converge to zero as k → ∞ but not too fast. One typical choice
-is **aₖ = 1/k.**
+(b) The step-size condition requires $a_k \to 0$ but not too fast. A typical
+choice is $a_k = 1/k$.
 
-(c) The third condition of noise is mild.
+(c) The noise condition is mild.
 
-**Summary:** The RM algorithm essentially states that the root of a monotonic function can be obtained through simple
-iterative function observations (even noisy ones), without knowing the expression, gradient, or other information.
-Combined with a schematic diagram, this is quite intuitive:
-<div align="center">
-<img src="/assets/images/2025-09-09-mathematical-foundations-of-reinforcement-learning/rm_intuition.png" alt="Robbins-Monro Algorithm Intuition" width="500">
-</div>  
+**Summary:** RM finds the root of a monotonic function from noisy observations
+alone, without requiring access to its analytic form or gradient.
 
-As a special form, Robbins-Monro can be used to incrementally estimate mathematical expectation $\mathbb{E}[X]$, by
-setting
+The intuition: since $g$ is increasing through zero at the root $w^*$,
+$\mathrm{sign}\bigl(g(w_k)\bigr) = \mathrm{sign}(w_k - w^*)$, so the update
+$w_{k+1} = w_k - a_k \tilde g(w_k, \eta_k)$ pulls $w$ toward $w^*$ in expectation:
+
+- if $w_k > w^*$, then $\mathbb{E}[\tilde g(w_k, \eta_k)] = g(w_k) > 0$, so the step is **negative** and $w$ decreases;
+- if $w_k < w^*$, then $\mathbb{E}[\tilde g(w_k, \eta_k)] = g(w_k) < 0$, so the step is **positive** and $w$ increases.
+
+The two parts of condition (b) are complementary: $\sum a_k = \infty$ keeps the
+iterate moving when far from $w^*$, while $\sum a_k^2 < \infty$ shrinks the
+steps fast enough for the noise to average out near $w^*$.
+
+As an application, RM can incrementally estimate an expectation $\mathbb{E}[X]$
+by setting
 
 $$
 g(w) = w - \mathbb{E}[X] \tag{10}
 $$
 
-Because
+For a sample $x$ of $X$,
 
 $$
-\tilde{g}(w, \eta) = w - x = w - x + \mathbb{E}[X] - \mathbb{E}[X] = (w - \mathbb{E}[X]) + (\mathbb{E}[X] - x) \stackrel{\triangle}{=} g(w) + \eta \tag{11}
+\tilde{g}(w, \eta) = w - x = (w - \mathbb{E}[X]) + (\mathbb{E}[X] - x) \triangleq g(w) + \eta \tag{11}
 $$
 
-So the root of $g(w)$, which is $\mathbb{E}[X]$, can be estimated using
+so the root of $g(w)$ — namely $\mathbb{E}[X]$ — can be estimated by
 
 $$
 w_{k+1} = w_k - \alpha_k \tilde{g}(w_k, \eta_k) = w_k - \alpha_k(w_k - x_k) \tag{12}
 $$
 
-Additionally, Robbins-Monro is also the mathematical foundation of *stochastic gradient descent*: As an application, we
-can formulate an optimization problem in which the objective function is J(w) as a root-finding problem: g(w) = ∇ₓJ(w) =
-0. In this case, the condition that g(w) is monotonically increasing indicates that J(w) is **convex**, which is a
-commonly adopted assumption in optimization problems.
+RM is also the foundation of *stochastic gradient descent*: an optimization
+problem $\min_w J(w)$ becomes a root-finding problem $g(w) = \nabla J(w) = 0$,
+and the strict monotonicity of $g$ corresponds to (strong) convexity of $J$ —
+a standard assumption.
 
 ###### Q-learning
 
-Using equation (12) to solve BOE:
+Apply RM (12) to the action-value BOE, treating $q$ as the unknown root and
+the bracketed expression as a noisy estimate of the optimum:
 
 $$
-q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_a q(S_{t+1}, a) \mid S_t = s, A_t = a\right] \tag{13}
+q(s, a) = \mathbb{E}\left[R_{t+1} + \gamma \max_{a'} q(S_{t+1}, a') \mid S_t = s, A_t = a\right] \tag{13}
 $$
 
-We can obtain the following algorithm. Compared to monte-carlo learning which must complete an entire episode to update,
-this algorithm can update at each step through the difference between current estimates and (noisy) targets, hence
-called _temporal difference learning_. Specifically, since it solves for optimal action values, it's also called
-*Q-learning*.
+This gives the algorithm below. Unlike Monte Carlo, which must finish an
+episode to compute a return, here each step uses the *TD error* — the
+difference between the current estimate and the (noisy) one-step target — to
+update incrementally. The general scheme is *temporal-difference learning*;
+the variant solving for optimal action values is *Q-learning*.
 
 ```
 Initialize q₀(s,a) for all s ∈ S, a ∈ A (randomly or to zero)
@@ -273,51 +330,51 @@ Initialize behavior policy πᵦ
 
 Repeat (for each episode):
     Generate episode {s₀, a₀, r₁, s₁, a₁, r₂, ...} using πᵦ
-    
+
     For each step t = 0, 1, 2, ... of the episode, do
-        
+
         Update q-value:
-        qₜ₊₁(sₜ, aₜ) = qₜ(sₜ, aₜ) - αₜ(sₜ, aₜ)[qₜ(sₜ, aₜ) - [rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a)]]
-        
+        qₜ₊₁(sₜ, aₜ) = qₜ(sₜ, aₜ) + αₜ(sₜ, aₜ)[rₜ₊₁ + γ max_{a'} qₜ(sₜ₊₁, a') − qₜ(sₜ, aₜ)]
+
         Update target policy:
-        πₜ₊₁(a|sₜ) = 1 if a = arg max_a qₜ₊₁(sₜ, a)
+        πₜ₊₁(a|sₜ) = 1 if a = arg max_{a'} qₜ₊₁(sₜ, a')
         πₜ₊₁(a|sₜ) = 0 otherwise
 
 Until convergence (or maximum number of episodes reached)
-```  
+```
 
 ### Parametric value functions
 
-In previous sections, we assumed that state value function $v(s)$ and action value function $q(s,a)$ are in some *
-*discrete tabular** form. In practical applications, the enumerated values of states and actions can be very large, so
-to save storage and gain generalization, a natural idea is to use **parametric functions**, instead of tables, to
-describe value functions.
+So far we have treated $v(s)$ and $q(s,a)$ as discrete tables. When the state
+and action spaces are large, this is impractical: storing the table is
+infeasible, and it offers no generalization across similar states. The remedy
+is to replace the table with a *parametric function*.
 
-If we use $\hat{q}(s,a,w)$ to represent action value function $q(s,a)$ and want it to be as accurate as possible, a
-common objective is:
-
-$$
-\min_w \mathbb{E}\left[q_t(s,a) - \hat{q}(s,a;w)\right]^2 \tag{14}
-$$
-
-According to gradient descent rules, we can easily obtain the optimization iteration:
+Let $\hat{q}(s, a; w)$ denote a parametric approximation of $q(s,a)$. To make
+it accurate, minimize the mean-squared error:
 
 $$
-w_{t+1} = w_t + \alpha_t \left[q_t(s,a) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{15}
+\min_w \; \mathbb{E}\!\left[\bigl(q(s,a) - \hat{q}(s,a;w)\bigr)^2\right] \tag{14}
 $$
 
-This optimization is still intractable because we don't know the accurate optimization target $q(s,a)$. However,
-according to TD-Learning ideas, $rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t)$ can serve as an estimate of optimal $q(s,a)$.
-Substituting into the above equation:
+Gradient descent gives:
 
 $$
-w_{t+1} = w_t + \alpha_t \left[rₜ₊₁ + γ max_a qₜ(sₜ₊₁, a, w_t) - \hat{q}(s,a;w_t)\right] \nabla_w \hat{q}(s,a;w_t) \tag{16}
+w_{t+1} = w_t + \alpha_t \bigl[q(s,a) - \hat{q}(s,a;w_t)\bigr] \nabla_w \hat{q}(s,a;w_t) \tag{15}
 $$
 
-By iteratively optimizing $\hat{q}(s,a,w)$ according to the above equation, we can finally learn a parametric estimate
-of the optimal action value function. Obviously, this method is a parametric version of Q-learning. Since deep neural
-networks are a common choice for this parametric function, it's also called **deep Q-learning**. Adding some practical
-tricks (experience replay & target network), the algorithm implementation is as follows:
+We don't have access to the true target $q(s,a)$, but by the TD-learning idea
+of (13), $r_{t+1} + \gamma \max_{a'} \hat{q}(s_{t+1}, a'; w_t)$ is a noisy
+estimate of it. Substituting:
+
+$$
+w_{t+1} = w_t + \alpha_t \bigl[r_{t+1} + \gamma \max_{a'} \hat{q}(s_{t+1}, a'; w_t) - \hat{q}(s,a;w_t)\bigr] \nabla_w \hat{q}(s,a;w_t) \tag{16}
+$$
+
+This is the parametric form of Q-learning; with $\hat{q}$ implemented as a deep
+neural network, it is *deep Q-learning* (DQN). Two practical tricks —
+*experience replay* and a periodically-synced *target network* — are added in
+the standard implementation:
 
 ```
 Deep Q-learning (off-policy version)
@@ -343,54 +400,56 @@ For each iteration, do
 
 ## Policy-based methods
 
-Methods represented by policy gradient embody another approach to solving reinforcement learning problems: parametric
-functions can be used not only for value representation, but also for policy, from tabular
-representation $\pi(a_i|s_k)$ → functional representation $\pi(a|s,\theta)$. If we can use some scalar metric to
-describe optimality, we can conveniently obtain the optimal policy by optimizing the parametric policy function.
-_Average state value_ describes the average state value weighted by the Markov steady-state distribution corresponding
-to a policy, and is a frequently used metric:
+Parametrization is not limited to value functions; the policy itself can be
+parametrized: $\pi(a_i|s_k)$ as a table $\to \pi(a|s,\theta)$ as a function of
+$\theta$. Given any scalar measure of policy quality, we then optimize $\theta$
+directly by gradient ascent. A standard choice is the *average state value*,
+weighted by the stationary distribution $\eta_\pi$ of the Markov chain induced
+by $\pi$:
 
 $$
-\bar{v}_{\pi}(s) = \sum_{s \in S} \eta(s) v_\pi(s) = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta) q_\pi(s, a) \tag{17}
+J(\theta) = \sum_{s \in \mathcal S} \eta_\pi(s)\, v_\pi(s) = \sum_{s \in \mathcal S} \eta_\pi(s) \sum_{a \in \mathcal A} \pi(a|s, \theta)\, q_\pi(s, a) \tag{17}
 $$
 
-To perform gradient ascent, we take the derivative of the above equation:
+By the *policy gradient theorem*, the gradient simplifies to the form below
+(the contribution from $\nabla_\theta \eta_\pi$ cancels out):
 
 $$
-\nabla_\theta J(\theta) = \sum_{s \in S} \eta(s) \sum_{a \in A} \nabla_\theta \pi(a|s, \theta) q_\pi(s, a) \tag{18}
+\nabla_\theta J(\theta) = \sum_{s \in \mathcal S} \eta_\pi(s) \sum_{a \in \mathcal A} \nabla_\theta \pi(a|s, \theta)\, q_\pi(s, a) \tag{18}
 $$
 
-Computing this gradient requires traversing all states s and actions a, which is actually intractable. However,
-according to stochastic gradient descent ideas, it can be rewritten as the following sampling-based estimate:
-Since
+This sum is intractable for large $|\mathcal S|, |\mathcal A|$, but the
+log-derivative trick
 
 $$
-\nabla_\theta \pi(a|s, \theta) = \nabla_\theta \ln \pi(a|s, \theta) \cdot \pi(a|s, \theta) \tag{19}
+\nabla_\theta \pi(a|s, \theta) = \pi(a|s, \theta)\, \nabla_\theta \ln \pi(a|s, \theta) \tag{19}
 $$
 
-We have
+rewrites (18) as
 
 $$
-\nabla_\theta J(\theta)  = \sum_{s \in S} \eta(s) \sum_{a \in A} \pi(a|s, \theta)\nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \tag{20}
+\nabla_\theta J(\theta) = \sum_{s \in \mathcal S} \eta_\pi(s) \sum_{a \in \mathcal A} \pi(a|s, \theta)\, \nabla_\theta \ln \pi(a|s, \theta)\, q_\pi(s, a) \tag{20}
 $$
 
-Which can also be written as
+i.e., as an expectation:
 
 $$
-\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \eta, a \sim \pi(s, \theta)} \left[ \nabla_\theta \ln \pi(a|s, \theta) \cdot q_\pi(s, a) \right] \tag{21}
+\nabla_\theta J(\theta) = \mathbb{E}_{s \sim \eta_\pi,\, a \sim \pi(\cdot|s, \theta)} \left[ \nabla_\theta \ln \pi(a|s, \theta)\, q_\pi(s, a) \right] \tag{21}
 $$
 
-That is, the gradient of the objective function is the mathematical expectation of an expression based on $(s,a)$, so we
-can use random sampling $(s_t,a_t)$ of $(s,a)$ to estimate and perform stochastic gradient descent:
+We can therefore estimate it from a sample $(s_t, a_t)$ and perform stochastic
+gradient ascent:
 
 $$
-\theta_{t+1} = \theta_t + \alpha\cdot {q_t(s_t, a_t)} \nabla_\theta \ln\pi(a_t|s_t, \theta_t)=\theta_t + \alpha \left( \frac{q_t(s_t, a_t)}{\pi(a_t|s_t, \theta_t)} \right) \nabla_\theta \pi(a_t|s_t, \theta_t)  \tag{22}
+\theta_{t+1} = \theta_t + \alpha\, q_t(s_t, a_t)\, \nabla_\theta \ln\pi(a_t|s_t, \theta_t) = \theta_t + \alpha\, \frac{q_t(s_t, a_t)}{\pi(a_t|s_t, \theta_t)}\, \nabla_\theta \pi(a_t|s_t, \theta_t) \tag{22}
 $$
 
-Analyzing the above equation, it essentially increases the probability of actions with higher action values, and is
-inversely amplified by the current policy's probability for that action, implicitly expressing some
-exploration-exploitation trade-off.
-Combining (22) with SGD + Monte Carlo estimation of action values gives us a practically runnable algorithm (REINFORCE):
+The first form increases the probability of actions with higher $q$; the
+equivalent second form (with $q/\pi$) shows that less-visited actions get
+amplified updates — a built-in exploration mechanism.
+
+Combining (22) with Monte Carlo estimates of $q_t(s_t, a_t)$ yields the
+*REINFORCE* algorithm:
 
 ```
 Pseudocode: Policy Gradient by Monte Carlo (REINFORCE)
@@ -413,14 +472,14 @@ For the kth iteration, do
 
 ## Actor-critic framework
 
-REINFORCE is a policy-based method, but it also involves value estimation, where the latter determines the magnitude of
-the former's updates. REINFORCE uses the most simple and direct monte-carlo learning to estimate action values, but
-obviously value estimation methods are not limited to one. We can "plug in" various schemes for estimating action values
-from value-based methods into REINFORCE to obtain various variants, collectively called _actor-critic_.
+REINFORCE is policy-based, but each update relies on a value estimate
+$q_t(s_t, a_t)$. REINFORCE uses Monte Carlo for this estimate; replacing it
+with other value-based methods yields the *actor-critic* family.
 
 ### Q-actor-critic
 
-Replacing monte-carlo learning with TD-learning, while fitting both a policy-DNN and a Q-DNN, we get *Q-actor-critic*:
+Using TD-learning instead of Monte Carlo, with a policy network and a Q-network
+fit jointly, gives *Q-actor-critic*:
 
 ```
 Pseudocode: The simplest actor-critic algorithm (QAC)
@@ -443,29 +502,29 @@ At time step t in each episode, do
 
 ### Advantage-actor-critic
 
-Furthermore, it can be proven that equation (23) holds, which allows adding any function that only depends on state (and
-is independent of policy parameter $\theta$) to the critic term in the expected return gradient formula without changing
-the expectation:
+Subtracting any state-dependent baseline $b(S)$ from $q_\pi(S, A)$ in (21)
+leaves the expectation unchanged:
 
 $$
-\mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) q_\pi(S, A) \right] = \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S, \theta_t) (q_\pi(S, A) - b(S)) \right] \tag{23}
+\mathbb{E}_{S \sim \eta_\pi,\, A \sim \pi} \!\left[ \nabla_\theta \ln \pi(A|S, \theta_t)\, q_\pi(S, A) \right] = \mathbb{E}_{S \sim \eta_\pi,\, A \sim \pi} \!\left[ \nabla_\theta \ln \pi(A|S, \theta_t)\, (q_\pi(S, A) - b(S)) \right] \tag{23}
 $$
 
-This enables us to use a method similar to controlled variables (CUPED) to reduce the variance of SGD gradient
-estimation. A common choice for b(s) is the state value function, in which case the overall critic function is called
-advantage:
+This is a *control variate*: it does not bias the gradient estimator but
+reduces its variance. The canonical choice $b(S) = v_\pi(S)$ makes the
+bracketed term the *advantage* $A_\pi(S, A) = q_\pi(S, A) - v_\pi(S)$:
 
 $$
-\theta_{t+1} = \theta_t + \alpha \mathbb{E}\left[ \nabla_\theta \ln \pi(A|S, \theta_t) [q_\pi(S, A) - v_\pi(S)] \right] \tag{24}
+\theta_{t+1} = \theta_t + \alpha\, \mathbb{E}\!\left[ \nabla_\theta \ln \pi(A|S, \theta_t)\, (q_\pi(S, A) - v_\pi(S)) \right] \tag{24}
 $$
 
-In practice, to avoid maintaining 2 critic networks (q&v) simultaneously, the following approximation is commonly used:
+To avoid maintaining two critic networks (one for $q$, one for $v$), the
+advantage is approximated by the one-step TD residual of $v$:
 
 $$
 q_t(s_t, a_t) - v_t(s_t) \approx r_{t+1} + \gamma v_t(s_{t+1}) - v_t(s_t) \tag{25}
 $$
 
-This way, only one value network is needed to complete the algorithm:
+Only a single value network is then needed:
 
 ```
 Advantage actor-critic (A2C) or TD actor-critic

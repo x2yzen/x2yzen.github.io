@@ -9,33 +9,33 @@ math: false
 
 ## Origins
 
-As a veteran gamer whose gaming age nearly equals my actual age, I continue to find surprises and passion in this industry. How this wave of LLMs will impact this imagination-rich field has always been something I wanted to explore. Recently, Cai Haoyu's new work and the development interviews for Balatro sparked a long-held idea of mine: use LLM technology to recreate a classic game and give it a fresh experience.
+The intersection of LLMs and classic, imagination-rich game design remains an under-explored territory. Drawing on recent attention to Cai Haoyu's new work and the Balatro development interviews, this project sets out to revive a classic game through LLM technology and give it a fresh experience.
 
 ## Game Selection
 
-First, the game had to be sufficiently classic (otherwise I wouldn't have the passion). Second, language should ideally be the core gameplay mechanic (since this wave of AI is primarily language models, making it truly AI-native). Finally, it couldn't be too complex (since I'm just a jack-of-all-trades developer). With these criteria in mind, my final choice was actually the first idea that popped up: Capcom's classic courtroom drama series *Ace Attorney* (逆転裁判), one of my favorites.
+The candidate title was required to meet three criteria. First, it had to be sufficiently classic to merit revival. Second, language should be central to its core gameplay, so that LLMs could slot in naturally and the result would be genuinely AI-native. Finally, the scope had to remain manageable for a small team. Capcom's classic courtroom drama series *Ace Attorney* (逆転裁判) was selected on all three counts.
 
 ## Preview
 
-The current demo recreates the first case of the first *Ace Attorney* game ("The First Turnabout"). Story-wise, rookie attorney Phoenix Wright takes the stage with help from his mentor Mia Fey to clear his friend Larry Butz of murder charges. Mechanically, the original's classic multiple-choice courtroom cross-examination segments have been AI-remade—players must use evidence in hand to reason through contradictions in testimony and expose the AI-played perjuring witness.
+The current demo recreates the first case of the original *Ace Attorney* game ("The First Turnabout"). Narratively, rookie attorney Phoenix Wright takes the stage with help from his mentor Mia Fey to clear his friend Larry Butz of murder charges. Mechanically, the classic multiple-choice courtroom cross-examination segments have been AI-remade: evidence in hand must be used to reason through contradictions in testimony and expose the AI-played perjuring witness.
 
 ![Game Cover](/assets/images/2025-04-09-ace-attorney/title.png)  
-*AI-redrawn cover attempting cyberpunk style, complete with AI's signature text rendering flaws*  
+*AI-redrawn cover in an attempted cyberpunk style, complete with AI's signature text-rendering flaws*  
 
 ![Scene Dialogue](/assets/images/2025-04-09-ace-attorney/scene.png)  
 *Heavily AI-flavored scene artwork and character sprites*  
 
 ![Multiple Choice](/assets/images/2025-04-09-ace-attorney/choice.png)  
-*Traditional choice segments*  
+*Traditional multiple-choice segments*  
 
 ![AI Cross-examination](/assets/images/2025-04-09-ace-attorney/query.png)  
 *AI-played witness debate segments*  
 
-The entire game is built on the Ren'Py framework, with most art assets, music, and even code completed by AI—my main contribution was using detailed prompt engineering to keep AI behavior "on-script" and create additional gameplay enjoyment.
+The entire game is built on the Ren'Py framework. Most art assets, music, and code were produced by AI; the human contribution was largely confined to detailed prompt engineering aimed at keeping AI behavior "on-script" and shaping additional gameplay enjoyment.
 
-This wave of AI has indeed brought ordinary players closer to indie game development than ever before, giving us the technical capability to create what we actually want. Studios like FromSoftware and Game Freak have proven that great game developers don't necessarily need to be high-tech programmers (← subtle shade).
+This wave of AI has brought ordinary players closer to indie game development than ever before, providing the technical capability to realize ideas that were previously out of reach. Studios like FromSoftware and Game Freak have long demonstrated that great game developers need not be high-tech programmers.
 
 ## To Do
 
-- I'm working on releasing a web playable version using appropriate methods, and fine-tuning the script to improve the difficulty and enjoyment of AI debates
-- I believe there are many more games that fit the above criteria worth exploring: numerous mechanically similar ACG games (e.g., *Memories Off*), fragmented narrative-driven games (e.g., *Soul-like*, *Rusty Lake*), or even more complex games that build worldviews around abstract language-related concepts (e.g., *Metal Gear Solid V: The Phantom Pain* or *Alan Wake*) could all potentially gain fresh appeal with LLM integration
+- A web-playable release is in progress, along with script fine-tuning intended to improve the difficulty and enjoyment of AI debates.
+- Many other games appear to fit the above criteria and warrant exploration: mechanically similar ACG titles (e.g., *Memories Off*), fragmented narrative-driven games (e.g., *Soul-like* games, *Rusty Lake*), and larger titles built around abstract language-related concepts (e.g., *Metal Gear Solid V: The Phantom Pain*, *Alan Wake*) could all potentially gain fresh appeal with LLM integration.

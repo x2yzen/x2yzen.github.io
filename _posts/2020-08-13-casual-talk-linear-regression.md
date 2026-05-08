@@ -1,5 +1,5 @@
 ---
-title: Casual Talk Linear Regression
+title: A Casual Talk on Linear Regression
 date: 2020-08-13 20:00:00 +0800
 categories: [statistics]
 tags: [statistics]
@@ -16,24 +16,24 @@ This article aims to clearly articulate these insights in a concise manner:
 2. **Linear regression** is a shortcut to deeply understanding the principles of all the aforementioned systems:
    1. **Randomized A/B experiments** are linear regressions with a single discrete variable
    2. Common observational causal inference methods, such as **backdoor adjustment**, are multivariate linear regressions that incorporate control variable sets alongside the treatment itself
-   3. Common **black-box optimization** methods, such as Gaussian Process Regression, are linear regressions in a feature space defined by a kernel
+   3. Common **black-box optimization** methods, such as Bayesian optimization based on Gaussian Process Regression, are linear regressions in a feature space defined by a kernel
 
-## Linear Regression in Bayesian Lens
+## Linear Regression Through a Bayesian Lens
 
 ### Simple Linear Regression
 
 In simple linear regression, the loss function we wish to minimize is:
 
 $$
-L(\omega) = \sum_{i=1}^{n} (y_i - \omega^T x_i)^2 \tag{1.1}
+L(\mathbf{w}) = \sum_{i=1}^{n} (y_i - \mathbf{w}^\top \mathbf{x}_i)^2 \tag{1.1}
 $$
 
 We call this most basic form of linear regression **Ordinary Least Squares (OLS)**.
 
-In practice, we often add terms related to the coefficients $\omega$ to the loss function, called **regularizers**, which are claimed to have the effect of **suppressing overfitting**. For example, adding the sum of squares of coefficient terms:
+In practice, we often add terms related to the coefficients $\mathbf{w}$ to the loss function, called **regularizers**, which are claimed to have the effect of **suppressing overfitting**. For example, adding the sum of squares of coefficient terms:
 
 $$
-L(\omega) = \sum_{i=1}^{n} (y_i - \omega^T x_i)^2 + \lambda \|\omega\|^2 \tag{1.2}
+L(\mathbf{w}) = \sum_{i=1}^{n} (y_i - \mathbf{w}^\top \mathbf{x}_i)^2 + \lambda \|\mathbf{w}\|^2 \tag{1.2}
 $$
 
 Regression with the above loss function as the optimization objective is called [**Ridge Regression**](https://en.wikipedia.org/wiki/Tikhonov_regularization). There are also other regularization methods such as [**LASSO**](https://en.wikipedia.org/wiki/Lasso_(statistics)).
@@ -49,7 +49,7 @@ Although the loss function can be analyzed within the framework of traditional m
 The main setup of Bayesian linear regression is also quite simple:
 
 $$
-y = \omega^T x + \epsilon, \quad \epsilon \sim \mathcal{N}(0, \sigma_n^2) \tag{1.3}
+y = \mathbf{w}^\top \mathbf{x} + \epsilon, \quad \epsilon \sim \mathcal{N}(0, \sigma_n^2) \tag{1.3}
 $$
 
 In one sentence:
@@ -59,7 +59,7 @@ In one sentence:
 The purpose of regression is to obtain the **posterior distribution of coefficients**. Recall Bayes' formula:
 
 $$
-p(\omega | X, y) = \frac{p(y | X, \omega) \cdot p(\omega)}{p(y | X)} \tag{1.4}
+p(\mathbf{w} | X, \mathbf{y}) = \frac{p(\mathbf{y} | X, \mathbf{w}) \cdot p(\mathbf{w})}{p(\mathbf{y} | X)} \tag{1.4}
 $$
 
 It is proportional to the product of **Likelihood** and **Prior**.
@@ -70,7 +70,7 @@ Since samples are independent, we can conveniently obtain the likelihood of the 
 
 $$
 \begin{align}
-p(\mathbf{y}|X, \mathbf{w}) &= \prod_{i=1}^{n} p(y_i|\mathbf{x}_i, \mathbf{w}) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma_n}} \exp\left(-\frac{(y_i - \mathbf{x}_i^{\top}\mathbf{w})^2}{2\sigma_n^2}\right) \\
+p(\mathbf{y}|X, \mathbf{w}) &= \prod_{i=1}^{n} p(y_i|\mathbf{x}_i, \mathbf{w}) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi}\,\sigma_n} \exp\left(-\frac{(y_i - \mathbf{x}_i^{\top}\mathbf{w})^2}{2\sigma_n^2}\right) \\
 &= \frac{1}{(2\pi\sigma_n^2)^{n/2}} \exp\left(-\frac{1}{2\sigma_n^2}|\mathbf{y} - X^{\top}\mathbf{w}|^2\right) = \mathcal{N}(X^{\top}\mathbf{w}, \sigma_n^2 I) \tag{1.5}
 \end{align}
 $$
@@ -79,7 +79,7 @@ We find that the likelihood can be described using **Euclidean distance**, and u
 
 #### Prior
 
-Now that we have the likelihood, we only need to specify a prior belief for $\omega$ to complete the task. Without loss of generality, let's continue using a normal distribution to describe the prior:
+Now that we have the likelihood, we only need to specify a prior belief for $\mathbf{w}$ to complete the task. Without loss of generality, let's continue using a normal distribution to describe the prior:
 
 $$
 \mathbf{w} \sim \mathcal{N}(\mathbf{0}, \Sigma_p). \tag{1.6}
@@ -95,30 +95,34 @@ $$
 
 Note that:
 
-1. **Multiplying exponentials only requires adding their exponents**
-2. **Since exp is monotonic, optimizing it is equivalent to optimizing its exponent**
+1. **The product of exponentials equals the exponential of the sum**
+2. **Since exp is monotonic, optimizing it is equivalent to optimizing its argument**
 
 Looking more carefully, the exponent of the above expression is exactly the form of ridge regression—the likelihood constitutes the Euclidean distance term, and the prior constitutes the regularization term:
 
 $$
-\underset{w}{\text{min}}\  ||Xw-y||_2^2 + \alpha ||w||_2^2 \tag{1.8}
+\underset{\mathbf{w}}{\min}\  \|X^\top \mathbf{w} - \mathbf{y}\|_2^2 + \alpha \|\mathbf{w}\|_2^2 \tag{1.8}
 $$
 
-Thus we finally have our epiphany: so-called ridge regression is nothing more than adding a Gaussian prior belief to the parameters $w$. As for why adding a regularization term helps suppress overfitting, it becomes quite simple and direct: overfitting occurs because, if we don't add a regularization term, it's equivalent to believing that any value of $w$ is equally likely before observing the data—this means having no prior, or an uninformative prior. In this case, we can only fully accept what the data (likelihood) tells us, ultimately leading us to pay excessive attention to every detail in the data, thus memorizing some noise effects. The addition of prior belief is a compromise with the data: we don't completely trust what the data tells us, but weight it according to our prior belief, thus achieving some effect in suppressing overfitting. Following this idea, another commonly used regularization term, L1 LASSO (least absolute shrinkage and selection operator), can also be easily derived to correspond to a Laplace prior, and the reason L1 can produce sparser coefficients and have a selection effect is simply that the Laplace prior assigns more probability density near zero.
+Thus we finally have our epiphany: so-called ridge regression is nothing more than adding a Gaussian prior belief to the parameters $\mathbf{w}$.
 
-Continuing to simplify the above expression, we can see that the ultimate goal of regression: the posterior distribution of $\omega$ is still a **Gaussian distribution** (this property is also called **Gaussian-Gaussian conjugacy**):
+From this angle, why a regularization term suppresses overfitting also becomes simple and direct. Without regularization, we are implicitly assuming that any value of $\mathbf{w}$ is equally likely before observing the data—an uninformative prior. In that case, we have no choice but to fully accept what the data (likelihood) tells us, ultimately paying excessive attention to every detail and memorizing some of the noise. Adding a prior is a compromise with the data: we no longer trust the data unconditionally, but weight what it says against our prior belief, thereby suppressing overfitting.
+
+Following this idea, the other commonly used regularizer, L1 LASSO (least absolute shrinkage and selection operator), can be easily derived to correspond to a Laplace prior. The reason L1 produces sparser coefficients and acts as a selection mechanism is simply that the Laplace prior assigns more probability density near zero.
+
+Continuing to simplify the above expression, we can see that the ultimate goal of regression: the posterior distribution of $\mathbf{w}$ is still a **Gaussian distribution** (this property is also called **Gaussian-Gaussian conjugacy**):
 
 $$
-p(\omega | X, y) \sim \mathcal{N}(\bar{\omega} = \sigma_n^{-2} A^{-1} Xy, A^{-1}) \tag{1.9}
+p(\mathbf{w} | X, \mathbf{y}) \sim \mathcal{N}\big(\bar{\mathbf{w}} = \sigma_n^{-2} A^{-1} X\mathbf{y},\, A^{-1}\big) \tag{1.9}
 $$
 
 where:
 
 $$
-A = \sigma_n^{-2} X^T X + \Sigma_p^{-1} \tag{1.10}
+A = \sigma_n^{-2} X X^\top + \Sigma_p^{-1} \tag{1.10}
 $$
 
-After obtaining the posterior distribution of $\omega$, we can weight-average the likelihood over each value of $\omega$. For any newly given input $x_*$, we can give its predicted value $f_*$, which, unsurprisingly, is still a **Gaussian distribution** (Gaussian-Gaussian conjugacy).
+After obtaining the posterior distribution of $\mathbf{w}$, we can weight-average the likelihood over each value of $\mathbf{w}$. For any newly given input $\mathbf{x}_*$, we can give its predicted value $f_*$, which, unsurprisingly, is still a **Gaussian distribution** (Gaussian-Gaussian conjugacy).
 
 $$
 \begin{align}
@@ -139,31 +143,31 @@ $$f(\mathbf{x}) = \mathbf{x}^{\top}\mathbf{w}, \qquad y = f(\mathbf{x}) + \varep
 
 $$\varepsilon \sim \mathcal{N}(0, \sigma_n^2) \tag{2.2}$$
 
-Let variable $x$ be a nominal variable, where the first part is the one-hot encoding of the experimental variant, and the latter part is an augmented bias term fixed at 1, used to multiply with the intercept term of linear regression:
+Let variable $\mathbf{x}$ be a nominal variable, where the first part is the one-hot encoding of the experimental variant, and the last entry is an augmented bias term fixed at 1, used to multiply the intercept term of the linear regression:
 
-$$\tilde{x} = (variant - one - hot - encoding; 1)^T \tag{2.3}$$
+$$\tilde{\mathbf{x}}_i = \big(\,\text{one-hot}(\text{variant}_i),\; 1\,\big)^\top \tag{2.3}$$
 
-For example, if an experiment has two groups, $x$ has two values representing which group the data comes from:
+For example, if an experiment has two groups, $\tilde{\mathbf{x}}$ takes two distinct values representing which group the data comes from:
 
-$$\tilde{x}_1^{\top} = (1, 0, ; 1)^T, \tilde{x}_2^{\top} = (0, 1, ; 1)^T \tag{2.4}$$
+$$\tilde{\mathbf{x}}_1 = (1, 0, 1)^\top,\quad \tilde{\mathbf{x}}_2 = (0, 1, 1)^\top \tag{2.4}$$
 
-$$\vec{\omega} = (\omega_1, \omega_2, \omega_3)^T \tag{2.5}$$
+$$\mathbf{w} = (w_1, w_2, w_3)^\top \tag{2.5}$$
 
 Thus we can easily obtain:
 
-$$y_1 = \omega_1 + \omega_3 + \epsilon \tag{2.6}$$
+$$y_1 = w_1 + w_3 + \epsilon \tag{2.6}$$
 
-$$y_2 = \omega_2 + \omega_3 + \epsilon \tag{2.7}$$
+$$y_2 = w_2 + w_3 + \epsilon \tag{2.7}$$
 
-We care about the difference in expectations. Since y1 and y2 are independent, it directly equals the expectation of the difference:
+We care about the difference in group expectations. By linearity of expectation, this difference equals the difference of the corresponding intercepts:
 
-$$\mathbb{E}(y_2 - y_1) = \omega_2 - \omega_1 \tag{2.8}$$
+$$\mathbb{E}[y_2 - y_1] = w_2 - w_1 \tag{2.8}$$
 
-According to the posterior distribution of ω derived in the previous section:
+According to the posterior distribution of $\mathbf{w}$ derived in the previous section:
 
-$$p(\mathbf{w}|X, \mathbf{y}) \sim \mathcal{N}(\bar{\mathbf{w}} = \frac{1}{\sigma_n^2}A^{-1}X\mathbf{y}, A^{-1}) \tag{2.9}$$
+$$p(\mathbf{w}|X, \mathbf{y}) \sim \mathcal{N}\big(\bar{\mathbf{w}} = \tfrac{1}{\sigma_n^2}A^{-1}X\mathbf{y},\, A^{-1}\big) \tag{2.9}$$
 
-We know that ω1 and ω2 form a bivariate Gaussian distribution. Since the marginal distribution of a multivariate Gaussian distribution is still Gaussian, ω1 and ω2 are each also Gaussian distributions. In other words, here we stand from a Bayesian perspective and, through regression, similarly describe the difference between two population expectations as the difference between two normal random variables (which is also Gaussian). Subsequently, following the standard Bayesian inference procedure, we only need to continuously calculate ω2 - ω1 (called the contrast) based on MCMC sampling to obtain an interval estimate for the difference in mathematical expectations between the two groups from a Bayesian perspective.
+We know that $w_1$ and $w_2$ form a bivariate Gaussian distribution. Since the marginal of a multivariate Gaussian is still Gaussian, $w_1$ and $w_2$ are themselves Gaussian. In other words, from a Bayesian perspective, regression similarly describes the difference between two population expectations as the difference of two normal random variables (which is also Gaussian). Following the standard Bayesian inference procedure, we only need to draw $w_2 - w_1$ (called the *contrast*) repeatedly from the posterior—e.g., via MCMC sampling—to obtain a Bayesian interval estimate for the difference in expectations between the two groups.
 
 At this point, we have demonstrated that **randomized A/B experiments are essentially a form of linear regression where the independent variable is a nominal variable**.
 
@@ -228,11 +232,11 @@ At this point, we have shown that the commonly used statistical adjustment in ob
 
 In practical business, we often encounter scenarios requiring "black-box optimization," such as certain hyperparameters in recommendation systems and certain key parameters in quantitative strategies, which are tuned through repeated online experiments observing metric changes. The common requirement of such tasks is iteratively exploring a (possibly infinite) parameter space in order to identify optimal configurations in a resource-efficient manner.
 
-The vast search space and extremely limited exploration budget make random search or grid search infeasible, so machine learning-guided approaches are often adopted. Bayesian optimization based on Gaussian processes is one of the most commonly used models in this scenario. It typically assumes the objective follows a Gaussian process with a certain "kernel" in the sample space, thereby using already explored data points to predict unexplored space, then trading off exploration and exploitation to select the next round of exploration, hoping to quickly converge to the global optimum. Some popular open-source components, such as Meta's [Adaptive Experiment](https://github.com/facebook/Ax/tree/main?tab=readme-ov-file), are built on this basis.
+The vast search space and extremely limited exploration budget make random search or grid search infeasible, so machine learning-guided approaches are often adopted. Bayesian optimization based on Gaussian processes is one of the most commonly used models in this scenario. It typically assumes the objective follows a Gaussian process with a certain "kernel" in the sample space, thereby using already explored data points to predict unexplored space, then trading off exploration and exploitation to select the next round of exploration, hoping to quickly converge to the global optimum. Some popular open-source components, such as Meta's [Ax (Adaptive Experimentation Platform)](https://github.com/facebook/Ax/tree/main?tab=readme-ov-file), are built on this basis.
 
 In this section, we will elucidate the essence of kernel methods, represented by Gaussian processes, from the perspective of linear regression.
 
-### In Name of a Kernel
+### In the Name of a Kernel
 
 First, let's rewrite equation (1.11) to some extent, defining a function:
 
@@ -254,7 +258,7 @@ For now, this form seems more complex. As for why we do this, we'll explain in t
 
 ### Gaussian Process
 
-In the previous section, we derived the posterior of parameter $w$ in the linear regression model from likelihood and prior in an inferential manner. We further used the posterior distribution to obtain the predictive distribution for predicting the function value corresponding to each point, and after some matrix transformations, we found that the predictive distribution can be written in the form of kernel functions.
+In the previous section, we derived the posterior of parameter $\mathbf{w}$ in the linear regression model from likelihood and prior in an inferential manner. We further used the posterior distribution to obtain the predictive distribution for predicting the function value corresponding to each point, and after some matrix transformations, we found that the predictive distribution can be written in the form of kernel functions.
 
 In this section, we use stochastic processes for prediction. A stochastic process is a mathematical concept that describes a distribution over functions. Loosely speaking, you can think of a "function" as a very long vector, and a stochastic process defines how each element of this vector takes values. A Gaussian process is a special type of stochastic process where any finite sample set forms a multivariate Gaussian distribution. This means that extracting any (denote $n$) finite samples from this infinitely long vector forms an $n$-variate Gaussian distribution. The mean and covariance between any two points of this multivariate Gaussian distribution are denoted as two functions $m$ and $k$:
 
@@ -309,7 +313,7 @@ $$x \rightarrow (x^2, x, \frac{1}{2}) \tag{4.15}$$
 
 The remaining regression part is completely identical. This suggests that if we call the left side of the above arrow the sample space and the right side a feature space derived from the samples, then the Gaussian process defined by the above kernel function is fundamentally a linear regression using polynomial features of the samples.
 
-So what is the purpose of this mapping? Because in most cases, the expressiveness of raw samples themselves is extremely limited. For example, in the original sample space, $x$ and $y$ clearly don't have a linear relationship, so we can't directly use linear regression to describe it. Now we choose to expand each $x$ into a polynomial feature vector $(x,x^2)$, and we may find that in this new 3-dimensional feature space, there's a relatively obvious linear relationship between the target value and the two basis vectors, fluctuating around a 2-dimensional plane. This suggests that in this polynomial feature space, we can use linear regression to describe the relationship between $(x,x^2)$ and $y$. In the semantics of traditional linear regression, this set of operations is called *polynomial regression*. Correspondingly, in the semantics of Gaussian processes, the related kernel function is called *polynomial kernel*.
+So what is the purpose of this mapping? Because in most cases, the expressiveness of raw samples themselves is extremely limited. For example, in the original sample space, $x$ and $y$ clearly don't have a linear relationship, so we can't directly use linear regression to describe it. Now we choose to expand each $x$ into a polynomial feature vector $(1, x, x^2)$, and we may find that in this new 3-dimensional feature space, there's a relatively obvious linear relationship between the target value and the basis vectors, fluctuating around a 2-dimensional plane. This suggests that in this polynomial feature space, we can use linear regression to describe the relationship between $(1, x, x^2)$ and $y$. In the semantics of traditional linear regression, this set of operations is called *polynomial regression*. Correspondingly, in the semantics of Gaussian processes, the related kernel function is called the *polynomial kernel*.
 
 #### Gaussian Feature Space
 
@@ -335,17 +339,17 @@ $$k(x_p, x_q) = \sigma_p^2 \int_{-\infty}^{\infty} \exp\left(-\frac{(x_p - c)^2}
 
 $$= \sqrt{\pi}\ell\sigma_p^2 \exp\left(-\frac{(x_p - x_q)^2}{2(\sqrt{2}\ell)^2}\right) \tag{4.21}$$
 
-The final result, ignoring some constant terms, is exactly the form of the squared exponential kernel. Considering the definition of integration:
+The final result, ignoring some constant terms, is exactly the form of the squared exponential kernel. Recall that an integral can be viewed as the limit of a Riemann sum. Discretizing $c$ at evenly spaced points $\{c_i\}_{i=1}^{N}$ with spacing $\Delta c$, we have:
 
-$$\sigma_p^2 \int_{-\infty}^{\infty} exp\left(-\frac{(x_p - c)^2}{2l^2}\right) exp\left(-\frac{(x_q - c)^2}{2l^2}\right) = \lim_{N \to \infty} \frac{\sigma_p}{N} \sum_{c=1}^{N} \phi_c(x_p)\phi_c(x_q) \tag{4.22}$$
+$$\int_{-\infty}^{\infty} \phi_c(x_p)\,\phi_c(x_q)\,dc \;=\; \lim_{\substack{N \to \infty \\ \Delta c \to 0}} \sum_{i=1}^{N} \phi_{c_i}(x_p)\,\phi_{c_i}(x_q)\,\Delta c \tag{4.22}$$
 
-The right side can be written as an inner product:
+For each fixed $N$, the summation on the right is, up to the constant spacing $\Delta c$, the inner product of two $N$-dimensional vectors:
 
-$$\sum_{c=1}^{N} \phi_c(x_p)\phi_c(x_q) = (\phi_1(x_p), \phi_2(x_p), ...\phi_N(x_p)) \cdot (\phi_1(x_q), \phi_2(x_q), ...\phi_N(x_q)) \tag{4.23}$$
+$$\sum_{i=1}^{N} \phi_{c_i}(x_p)\,\phi_{c_i}(x_q) \;=\; \big(\phi_{c_1}(x_p),\dots,\phi_{c_N}(x_p)\big) \cdot \big(\phi_{c_1}(x_q),\dots,\phi_{c_N}(x_q)\big) \tag{4.23}$$
 
 In other words, the squared exponential kernel actually defines a mapping from the sample space to an infinite-dimensional feature space:
 
-$$x_p \to (\phi_1(x_p), \phi_2(x_p), ...\phi_N(x_p)) \tag{4.24}$$
+$$x_p \to \big(\phi_{c_1}(x_p),\, \phi_{c_2}(x_p),\, \dots\big) \tag{4.24}$$
 
 Then performs regression in this infinite-dimensional feature space.
 
@@ -359,7 +363,7 @@ in linear regression with:
 
 $$k(\vec{x}_1, \vec{x}_2) = \phi(\vec{x}_1)^T \Sigma_p \phi(\vec{x}_2) \tag{4.26}$$
 
-Additionally, it's worth mentioning that we only "equivalently" completed the feature space mapping through the kernel, without actually constructing a feature space and performing regression. Carefully comparing the results before and after the kernel trick, we can see: if we denote the number of samples as n and the number of features corresponding to each sample in the feature space as N, before the kernel trick, the matrix we need to invert has size $N*N$, while after the kernel trick it's $n*n$. Considering that the time complexity of general matrix inversion is $O(n^3)$, for some complex feature spaces (such as infinite-dimensional ones), when n is much smaller than N, using kernels greatly reduces computational load and even makes impossible computations possible. Therefore, this magical ingenious operation is called the *kernel trick*.
+Additionally, it's worth mentioning that we only "equivalently" completed the feature space mapping through the kernel, without actually constructing a feature space and performing regression. Carefully comparing the results before and after the kernel trick, we can see: if we denote the number of samples as n and the number of features corresponding to each sample in the feature space as N, before the kernel trick, the matrix we need to invert has size $N*N$, while after the kernel trick it's $n*n$. Considering that the time complexity of general matrix inversion is $O(n^3)$, for some complex feature spaces (such as infinite-dimensional ones), when n is much smaller than N, using kernels greatly reduces computational load and even makes impossible computations possible. Therefore, this ingenious shortcut is called the *kernel trick*.
 
 ## Conclusion
 
@@ -368,5 +372,5 @@ Additionally, it's worth mentioning that we only "equivalently" completed the fe
                     │                                                                                              |                                 
 Regression ─────────┼──> Nominal + Control Variable Regression ───> Long Regression ───> Observational System ─────┤──> Generalized Causal Inference System
                     │                                                                                              |                                 
-                    └──> Regression within Admitted Space ────> Kernel Methods  ──> Optimization System ───────────┘
+                    └──> Regression within Feature Space ─────> Kernel Methods  ──> Optimization System ───────────┘
 ```
