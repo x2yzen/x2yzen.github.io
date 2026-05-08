@@ -47,6 +47,8 @@
   .views{position:absolute;right:10px;top:10px;display:flex;gap:6px}
   .vbtn-sm{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.6);backdrop-filter:blur(4px);border:0.5px solid var(--color-border-secondary);color:var(--color-text-primary);cursor:pointer}
   @media (prefers-color-scheme: dark){.vbtn-sm{background:rgba(0,0,0,0.45)}}
+  #stage:fullscreen{aspect-ratio:auto;width:100vw;height:100vh;border-radius:0;border:none}
+  #stage:-webkit-full-screen{aspect-ratio:auto;width:100vw;height:100vh;border-radius:0;border:none}
   .hint{font-size:11px;color:var(--color-text-tertiary);margin:6px 4px 14px;text-align:right}
   .bc{display:flex;align-items:center;gap:12px;padding:8px 4px 12px}
   .bp{width:36px;height:36px;border-radius:50%;padding:0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -78,6 +80,7 @@
     <button class="vbtn-sm" data-view="3q">3/4</button>
     <button class="vbtn-sm" data-view="top">top</button>
     <button class="vbtn-sm" data-view="front">front</button>
+    <button class="vbtn-sm" id="vbtn-fs" aria-label="Toggle fullscreen">full</button>
   </div>
 </div>
 
@@ -350,6 +353,16 @@ function setView(name){
 setView('3q');
 document.querySelectorAll('[data-view]').forEach(b=>{
   b.addEventListener('click',()=>setView(b.dataset.view));
+});
+
+// Fullscreen toggle — label flips on fullscreenchange so state survives ESC.
+const fsBtn=document.getElementById('vbtn-fs');
+fsBtn.addEventListener('click',()=>{
+  if(!document.fullscreenElement) stage.requestFullscreen();
+  else document.exitFullscreen();
+});
+document.addEventListener('fullscreenchange',()=>{
+  fsBtn.textContent=document.fullscreenElement?'exit':'full';
 });
 
 // === voice styling — red (forward) / blue (reverse) for the colour-swap demo ===
