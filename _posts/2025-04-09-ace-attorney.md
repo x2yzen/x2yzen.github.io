@@ -1,9 +1,8 @@
 ---
 title: Ace Attorney x LLM - Phoenix Wright Returns
-date: 2025-04-08 23:37:00 +0800
+date: 2025-04-09 23:37:00 +0800
 categories: [game]
-tags: [llm,fun]
-pin: false
+tags: [llm, fun]
 math: false
 ---  
 

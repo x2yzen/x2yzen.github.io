@@ -3,7 +3,6 @@ title: Vitrines for Bach's Musical Offering
 date: 2026-05-07 09:00:00 +0800
 categories: [art]
 tags: [music, visualization, bach]
-pin: false
 math: false
 ---
 Render each canon in J. S. Bach's *Musical Offering* (BWV 1079) as a small interactive instrument inside a glass vitrine. The structural rule that defines each canon — palindrome, inversion, augmentation, modulation, perpetual cycle — becomes a literal geometric constraint you can rotate, scrub, and listen to.

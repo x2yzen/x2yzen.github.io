@@ -3,7 +3,6 @@ title: Whitebox Transformer From Scratch
 date: 2024-11-25 19:26:00 +0800
 categories: [language_model]
 tags: [transformer, pytorch]
-pin: false
 math: false
 ---
 

@@ -3,7 +3,6 @@ title: A Casual Talk on Linear Regression
 date: 2020-08-13 20:00:00 +0800
 categories: [statistics]
 tags: [statistics]
-pin: false
 math: true
 ---
 
