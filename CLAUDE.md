@@ -26,8 +26,8 @@ Required front matter (copy from any existing post):
 ```yaml
 ---
 title: <Title>
-date: YYYY-MM-DD HH:MM:SS -0700      # site tz is America/Los_Angeles; write dates in Pacific (-0700 PDT / -0800 PST). Future-dated posts (relative to site tz at build time) are silently dropped by Jekyll.
-categories: [<one_category>]          # singular; existing values: language_model, statistics, game, reinforcement_learning
+date: YYYY-MM-DD HH:MM:SS +ZZZZ      # any timezone is fine (site tz is America/Los_Angeles, used only for sorting). The hard rule: the resulting instant must NOT be in the future relative to site tz at build time, or Jekyll silently drops the post.
+categories: [<one_category>]          # singular; existing values: language_model, statistics, game, reinforcement_learning, art
 tags: [<tag1>, <tag2>]
 pin: false
 math: true|false                      # set true to load MathJax for this post
