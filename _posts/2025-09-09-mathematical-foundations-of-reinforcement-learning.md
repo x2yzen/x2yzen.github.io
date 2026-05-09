@@ -1,5 +1,6 @@
 ---
 title: Mathematical Foundations of Reinforcement Learning
+description: "A minimal, equation-driven walkthrough of reinforcement learning — value-based and policy-based methods unified through the actor-critic framework."
 date: 2025-09-09 10:00:00 -0700
 categories: [reinforcement_learning]
 tags: [rl]

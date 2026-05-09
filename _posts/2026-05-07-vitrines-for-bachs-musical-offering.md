@@ -1,5 +1,6 @@
 ---
 title: Vitrines for Bach's Musical Offering
+description: "Each canon in J. S. Bach's Musical Offering (BWV 1079) rendered as an interactive 3D vitrine — the canon's structural rule made geometric and audible."
 date: 2026-05-07 09:00:00 +0800
 categories: [art]
 tags: [music, visualization, bach]

@@ -1,5 +1,6 @@
 ---
 title: Ace Attorney x LLM - Phoenix Wright Returns
+description: "An AI-native remake of Capcom's Ace Attorney: courtroom cross-examinations reasoned through by LLMs, with AI-redrawn art and dialogue."
 date: 2025-04-09 23:37:00 +0800
 categories: [game]
 tags: [llm, fun]

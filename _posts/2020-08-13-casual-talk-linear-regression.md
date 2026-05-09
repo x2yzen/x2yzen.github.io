@@ -1,5 +1,6 @@
 ---
 title: A Casual Talk on Linear Regression
+description: "A/B tests, causal inference, and Bayesian optimization all reduce to linear regression. A Bayesian lens on their shared mathematical core."
 date: 2020-08-13 20:00:00 +0800
 categories: [statistics]
 tags: [statistics]
