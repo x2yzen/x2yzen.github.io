@@ -1,9 +1,9 @@
 ---
-title: Whitebox Transformer From Scratch
+title: "Reading Notes: Whitebox Transformer From Scratch"
 description: "An intuitive walkthrough of the decoder-only Transformer: a hand-drawn schematic of the full pipeline, then a from-scratch PyTorch implementation."
 date: 2024-11-25 19:26:00 +0800
 categories: [language_model]
-tags: [transformer, pytorch]
+tags: [transformer, pytorch, reading-notes]
 math: false
 ---
 

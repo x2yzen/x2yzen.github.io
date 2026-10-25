@@ -5,7 +5,14 @@ date: 2020-08-13 20:00:00 +0800
 categories: [statistics]
 tags: [statistics]
 math: true
+lang: en
+translations:
+  current: en
+  zh: /posts/casual-talk-linear-regression/zh/
+  en: /posts/casual-talk-linear-regression/
 ---
+
+{% include language-switch.html %}
 
 ## Introduction
 
