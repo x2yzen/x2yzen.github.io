@@ -1,4 +1,6 @@
-{% if page.translations %}
+{% if page.translations.zh and page.translations.en %}
 <link rel="alternate" hreflang="zh-CN" href="{{ page.translations.zh | absolute_url }}">
 <link rel="alternate" hreflang="en" href="{{ page.translations.en | absolute_url }}">
+<link rel="alternate" hreflang="x-default" href="{{ page.translations.en | absolute_url }}">
 {% endif %}
+<link rel="stylesheet" href="{{ '/assets/css/reading.css' | relative_url }}">

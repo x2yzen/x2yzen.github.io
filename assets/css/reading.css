@@ -1,0 +1,6 @@
+/* Give the article outline the right rail when a table of contents exists. */
+@media (min-width: 1200px) {
+  #panel-wrapper:has(> #toc-wrapper) > .access {
+    display: none;
+  }
+}

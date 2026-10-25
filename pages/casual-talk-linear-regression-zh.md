@@ -4,7 +4,8 @@ title: 闲话线性回归
 description: "从贝叶斯视角理解线性回归，再看 A/B 实验、观察性因果推断和贝叶斯优化为何共享同一个数学内核。"
 date: 2020-08-13 20:00:00 +0800
 permalink: /posts/casual-talk-linear-regression/zh/
-categories: [statistics]
+categories: [Statistics]
+toc: true
 tags: [statistics]
 lang: zh-CN
 math: true

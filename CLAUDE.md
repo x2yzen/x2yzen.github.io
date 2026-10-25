@@ -27,7 +27,7 @@ Required front matter (copy from any existing post):
 ---
 title: <Title>
 date: YYYY-MM-DD HH:MM:SS +ZZZZ      # any timezone is fine (site tz is America/Los_Angeles, used only for sorting). The hard rule: the resulting instant must NOT be in the future relative to site tz at build time, or Jekyll silently drops the post.
-categories: [<one_category>]          # singular; existing values: language_model, statistics, game, reinforcement_learning, art
+categories: [<one_category>]          # singular; existing values: "Language Models", Statistics, Game, "Reinforcement Learning", Art
 tags: [<tag1>, <tag2>]
 pin: false
 math: true|false                      # set true to load MathJax for this post
@@ -35,6 +35,8 @@ math: true|false                      # set true to load MathJax for this post
 ```
 
 Post images go in `assets/images/<post-slug>/` and are referenced as `/assets/images/<post-slug>/<file>`. Keep the directory name in sync with the post filename's slug.
+
+For bilingual articles, keep the English version as the canonical post URL and place the Chinese translation under `/zh/`. Add the language switch only to articles with both versions.
 
 `last_modified_at` is set automatically by `_plugins/posts-lastmod-hook.rb` from `git log` — do not set it manually. This means the displayed "last modified" only updates after the change is committed.
 

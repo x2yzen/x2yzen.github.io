@@ -1,7 +1,9 @@
-<nav class="mb-4" aria-label="Article language">
-  <small>
-    {% if page.translations.current == 'zh' %}<strong lang="zh-CN">中文</strong>{% else %}<a lang="zh-CN" href="{{ page.translations.zh | relative_url }}">中文</a>{% endif %}
-    <span aria-hidden="true"> · </span>
-    {% if page.translations.current == 'en' %}<strong lang="en">English</strong>{% else %}<a lang="en" href="{{ page.translations.en | relative_url }}">English</a>{% endif %}
-  </small>
+{% if page.translations.zh and page.translations.en %}
+<nav class="mb-4" aria-label="Switch article language">
+  {% if page.translations.current == 'en' %}
+  <a class="btn btn-sm btn-outline-secondary" lang="zh-CN" href="{{ page.translations.zh | relative_url }}">中文</a>
+  {% else %}
+  <a class="btn btn-sm btn-outline-secondary" lang="en" href="{{ page.translations.en | relative_url }}">English</a>
+  {% endif %}
 </nav>
+{% endif %}

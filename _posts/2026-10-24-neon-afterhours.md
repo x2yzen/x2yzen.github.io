@@ -2,7 +2,7 @@
 title: Neon Afterhours 霓虹餘燼
 description: "Clock out, put on a disc, and step into a fast, lethal Hong Kong action movie. Play the public beta in your browser."
 date: 2026-10-24 12:00:00 -0700
-categories: [game]
+categories: [Game]
 tags: [indie-game, pixel-art, godot]
 math: false
 ---
